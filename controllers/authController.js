@@ -1,4 +1,6 @@
+const crypto = require('crypto');
 const { promisify } = require('util');
+
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
@@ -25,13 +27,54 @@ const createSendToken = (user, statusCode, req, res) => {
 
 exports.register = catchAsync(async (req, res, next) => {
   const { name, email, password, passwordConfirm } = req.body;
+
+  // 1) Generate the random validate email token
   const user = await User.create({
     name,
     email,
     password,
     passwordConfirm,
   });
-  createSendToken(user, 201, req, res);
+  const validateEmailToken = user.createValidateEmailToken();
+  await user.save({ validateBeforeSave: false });
+
+  // 2) Send it to user's email (TO DO)
+  try {
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to email!',
+      token: validateEmailToken,
+    });
+  } catch (err) {
+    return next(
+      new AppError('There was an error sending the email. Try again later!'),
+      500
+    );
+  }
+});
+
+exports.validateEmail = catchAsync(async (req, res, next) => {
+  // 1) Get user based on the token
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    validateEmailToken: hashedToken,
+  });
+
+  // 2) If token has not expired, and there is user, set `validatedWithEmail` to `true`
+  if (!user) {
+    return next(new AppError('Token is invalid or has expired', 400));
+  }
+  user.validatedWithEmail = true;
+  user.validateEmailToken = undefined;
+
+  await user.save({ validateBeforeSave: false });
+
+  // 4) Log the user in, send JWT
+  createSendToken(user, 200, req, res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {

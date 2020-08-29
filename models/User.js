@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -15,6 +16,12 @@ const userSchema = new mongoose.Schema({
     unique: [true, 'this email is already registered'],
     validate: [validator.isEmail, 'please provide a valid email'],
   },
+  validatedWithEmail: {
+    type: Boolean,
+    default: false,
+    select: false,
+  },
+  validateEmailToken: String,
   password: {
     type: String,
     required: [true, 'password is a required field'],
@@ -22,7 +29,7 @@ const userSchema = new mongoose.Schema({
   },
   passwordConfirm: {
     type: String,
-    required: [true, 'password is a required field'],
+    required: [true, 'password confirmation is a required field'],
     validate: {
       validator: function (val) {
         return val === this.password;
@@ -62,6 +69,18 @@ userSchema.pre('save', async function (next) {
 
   next();
 });
+
+// Create validate email token
+userSchema.methods.createValidateEmailToken = function () {
+  const validateToken = crypto.randomBytes(32).toString('hex');
+
+  this.validateEmailToken = crypto
+    .createHash('sha256')
+    .update(validateToken)
+    .digest('hex');
+
+  return validateToken;
+};
 
 const User = mongoose.model('User', userSchema);
 
