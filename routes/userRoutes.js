@@ -1,15 +1,11 @@
 const express = require('express');
+const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-// @route    GET /api/v1/users
-// @desc     Test route
+// @route    POST /api/v1/register
+// @desc     Register user
 // @access   Public
-router.route('/').get((req, res) =>
-  res.status(200).json({
-    status: 'success',
-    message: 'users route',
-  })
-);
+router.route('/register').post(authController.register);
 
 module.exports = router;

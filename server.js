@@ -1,21 +1,33 @@
-const express = require('express');
+/*eslint-disable*/
+const app = require('./app');
 const connectDB = require('./db');
 
-const authRouter = require('./routes/authRoutes');
-const usersRouter = require('./routes/userRoutes');
-const postsRouter = require('./routes/postRoutes');
-const profilesRouter = require('./routes/profileRoutes');
-
-const app = express();
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
 
 // Connect database
 connectDB();
 
-// Mounting routes
-app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', usersRouter);
-app.use('/api/v1/posts', postsRouter);
-app.use('/api/v1/profiles', profilesRouter);
-
+// Running server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`The server is running on port ${PORT} ✔ `));
+const server = app.listen(PORT, () =>
+  console.log(`The server is running on port ${PORT} ✔ `)
+);
+
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+process.on('SIGTERM', () => {
+  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated!');
+  });
+});
