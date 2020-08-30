@@ -3,9 +3,6 @@ const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 
 const router = express.Router();
-// AUTH routes
-router.route('/register').post(authController.register);
-router.route('/validate-email/:token').post(authController.validateEmail);
 
 // CRUD routes
 router
