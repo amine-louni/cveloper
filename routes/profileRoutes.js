@@ -11,9 +11,7 @@ router
   .get(profileController.getAllProfiles)
   .post(profileController.createProfile);
 
-router
-  .route('/me')
-  .get(profileController.getMyProfile, profileController.getOneProfile);
+router.route('/me').get(profileController.getMyProfileByUserId);
 
 router
   .route('/:id')

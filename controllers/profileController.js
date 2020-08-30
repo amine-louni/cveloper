@@ -1,5 +1,6 @@
 const Profile = require('../models/Profile');
 const handlerFactory = require('../utils/handlerFactory');
+const catchAsync = require('../utils/catchAsync');
 
 exports.setProfileUsersIds = (req, res, next) => {
   // Allow nested routes
@@ -15,8 +16,15 @@ exports.getOneProfile = handlerFactory.getOne(Profile, {
 exports.createProfile = handlerFactory.createOne(Profile);
 exports.updateProfile = handlerFactory.updateOne(Profile);
 exports.deleteProfile = handlerFactory.deleteOne(Profile);
-exports.getMyProfile = (req, res, next) => {
-  req.params.id = req.currentUser._id;
+exports.getMyProfileByUserId = catchAsync(async (req, res, next) => {
+  const myProfile = await Profile.findOne({
+    user: req.currentUser._id,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    doc: myProfile,
+  });
 
   next();
-};
+});

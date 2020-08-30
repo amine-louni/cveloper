@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ProfileSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    ref: 'User',
     required: [true, 'a profile must belong to a user'],
   },
   company: {
@@ -112,5 +112,13 @@ const ProfileSchema = new mongoose.Schema({
   },
 });
 
+ProfileSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'user',
+    select: '-__v -passwordChangedAt',
+  });
+
+  next();
+});
 const Profile = mongoose.model('profile', ProfileSchema);
 module.exports = Profile;
