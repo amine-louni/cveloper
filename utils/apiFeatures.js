@@ -3,62 +3,56 @@
  * Each method return this to enable chaining
  */
 
-class ApiFeatures {
-  //BUILDING THE QUERY
-  constructor(mongoQuery, queryString) {
-    this.mongoQuery = mongoQuery;
+class APIFeatures {
+  constructor(query, queryString) {
+    this.query = query;
     this.queryString = queryString;
   }
 
   filter() {
-    // 1 - A ) Basic Filtering
     const queryObj = { ...this.queryString };
-    const excludes = ['sort', 'limit', 'fields', 'page'];
-    excludes.forEach((el) => delete queryObj[el]);
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
 
-    // 1 - B ) Advanced Filtering with (gt,lt, gte,lte)
+    // 1B) Advanced filtering
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(lte|gte|lt|gt)\b/g, (match) => `$${match}`);
-    this.mongoQuery = this.mongoQuery.find(JSON.parse(queryStr));
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    this.query = this.query.find(JSON.parse(queryStr));
 
     return this;
   }
 
   sort() {
-    //  2 ) Sorting
     if (this.queryString.sort) {
-      this.mongoQuery = this.mongoQuery.sort(
-        this.queryString.sort.split(',').join(' ')
-      );
+      const sortBy = this.queryString.sort.split(',').join(' ');
+      this.query = this.query.sort(sortBy);
     } else {
-      this.mongoQuery = this.mongoQuery.sort('-createdAt');
+      this.query = this.query.sort('-createdAt');
     }
 
     return this;
   }
 
-  selectFields() {
-    // 3 ) Selecting Fields
+  limitFields() {
     if (this.queryString.fields) {
-      this.mongoQuery = this.mongoQuery.select(
-        this.queryString.fields.split(',').join(' ')
-      );
+      const fields = this.queryString.fields.split(',').join(' ');
+      this.query = this.query.select(fields);
     } else {
-      this.mongoQuery = this.mongoQuery.select('-__v');
+      this.query = this.query.select('-__v');
     }
 
     return this;
   }
 
   paginate() {
-    // 4 ) Pagination | query.skip(int).limit(int)
-    const limit = this.queryString.limit * 1 || 100;
     const page = this.queryString.page * 1 || 1;
-    const skips = (page - 1) * limit;
-    this.mongoQuery = this.mongoQuery.skip(skips).limit(limit);
+    const limit = this.queryString.limit * 1 || 100;
+    const skip = (page - 1) * limit;
+
+    this.query = this.query.skip(skip).limit(limit);
 
     return this;
   }
 }
-
-module.exports = ApiFeatures;
+module.exports = APIFeatures;

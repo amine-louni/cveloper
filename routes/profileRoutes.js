@@ -1,17 +1,24 @@
 const express = require('express');
 const authController = require('../controllers/authController');
+const profileController = require('../controllers/profileController');
 
 const router = express.Router();
 
-// @route    GET /api/v1/profile
-// @desc     Test route
-// @access   Public
 router.use(authController.protect);
-router.route('/').get((req, res) =>
-  res.status(200).json({
-    status: 'success',
-    message: 'profile route',
-  })
-);
+
+router
+  .route('/')
+  .get(profileController.getAllProfiles)
+  .post(profileController.createProfile);
+
+router
+  .route('/me')
+  .get(profileController.getMyProfile, profileController.getOneProfile);
+
+router
+  .route('/:id')
+  .get(profileController.getOneProfile)
+  .patch(profileController.updateProfile)
+  .delete(profileController.deleteProfile);
 
 module.exports = router;
