@@ -27,3 +27,25 @@ exports.getMyProfileByUserId = catchAsync(async (req, res, next) => {
 
   next();
 });
+exports.addProfileExperience = catchAsync(async (req, res, next) => {
+  const profile = await Profile.findOne({ user: req.currentUser._id });
+  profile.experience.unshift(req.body);
+  await profile.save();
+  res.status(200).json({
+    doc: profile,
+  });
+});
+exports.removeExperience = catchAsync(async (req, res, next) => {
+  const profile = await Profile.findOne({ user: req.currentUser._id });
+
+  const filteredExperience = Array.from(profile.experience).filter((el) => {
+    return el.id !== req.params.id;
+  });
+
+  profile.experience = filteredExperience;
+  await profile.save();
+  res.status(201).json({
+    status: 'success',
+    doc: profile,
+  });
+});
