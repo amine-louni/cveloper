@@ -115,7 +115,7 @@ const ProfileSchema = new mongoose.Schema({
 ProfileSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
-    select: '-__v -passwordChangedAt',
+    select: 'name avatar ',
   });
 
   next();

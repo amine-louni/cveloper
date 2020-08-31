@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
+const Profile = require('./Profile');
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -79,6 +81,14 @@ userSchema.pre(/^find/, function (next) {
   // this points to the current query
   this.find({ active: { $ne: false } });
   next();
+});
+// delete a profile when deleting its user
+userSchema.pre(/^findByIdAndDelete/, async function (next) {
+  try {
+    await Profile.findOneAndRemove({ user: this._id });
+  } catch (err) {
+    console.log(err);
+  }
 });
 // verify password
 userSchema.methods.correctPassword = async function (
