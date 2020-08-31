@@ -84,6 +84,7 @@ userSchema.pre(/^find/, function (next) {
 // delete a profile when deleting its user
 userSchema.pre(/^findByIdAndDelete/, async function (next) {
   try {
+    //@ todo delete posts
     await Profile.findOneAndRemove({ user: this._id });
   } catch (err) {
     console.log(err);
