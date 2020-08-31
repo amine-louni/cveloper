@@ -5,56 +5,58 @@ const bcrypt = require('bcryptjs');
 
 const Profile = require('./Profile');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'name is a required field'],
-    minlength: [2, 'name must have at least 2 characters'],
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: [true, 'email is a required field'],
-    unique: [true, 'this email is already registered'],
-    validate: [validator.isEmail, 'please provide a valid email'],
-  },
-  validatedWithEmail: {
-    type: Boolean,
-    default: false,
-  },
-  validateEmailToken: String,
-  password: {
-    type: String,
-    required: [true, 'password is a required field'],
-    minlength: [8, 'password must have at least 8 characters'],
-  },
-  passwordConfirm: {
-    type: String,
-    required: [true, 'password confirmation is a required field'],
-    validate: {
-      validator: function (val) {
-        return val === this.password;
-      },
-      message: 'the passwords are not equal',
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'name is a required field'],
+      minlength: [2, 'name must have at least 2 characters'],
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, 'email is a required field'],
+      unique: [true, 'this email is already registered'],
+      validate: [validator.isEmail, 'please provide a valid email'],
+    },
+    validatedWithEmail: {
+      type: Boolean,
+      default: false,
+    },
+    validateEmailToken: String,
+    password: {
+      type: String,
+      required: [true, 'password is a required field'],
+      minlength: [8, 'password must have at least 8 characters'],
+    },
+
+    avatar: {
+      type: String,
+      default: 'default.jpg',
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
     },
   },
-  avatar: {
-    type: String,
-    default: 'default.jpg',
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-
-  passwordChangedAt: Date,
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-  active: {
-    type: Boolean,
-    default: true,
-    select: false,
-  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+userSchema.virtual('userProfile', {
+  ref: 'Profile',
+  foreignField: 'user',
+  localField: '_id',
 });
 
 // Encrypting the password before save
@@ -64,9 +66,6 @@ userSchema.pre('save', async function (next) {
 
   // Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
-
-  // Delete passwordConfirm field
-  this.passwordConfirm = undefined;
 
   next();
 });

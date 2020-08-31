@@ -5,8 +5,9 @@ const APIFeatures = require('./ApiFeatures');
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     // To allow for nested GET posts on a profile (hack)
-
-    const features = new APIFeatures(Model.find(), req.query)
+    let filter = {};
+    if (req.params.userId) filter = { user: req.params.userId };
+    const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
       .limitFields()

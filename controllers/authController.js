@@ -36,7 +36,7 @@ exports.register = catchAsync(async (req, res, next) => {
     passwordConfirm,
   });
   const validateEmailToken = user.createValidateEmailToken();
-  await user.save({ validateBeforeSave: false });
+  await user.save();
 
   // 2) Send it to user's email (TO DO)
   try {

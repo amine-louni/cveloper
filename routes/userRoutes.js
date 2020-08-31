@@ -1,8 +1,11 @@
 const express = require('express');
 const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
+const profileRouter = require('./profileRoutes');
 
 const router = express.Router();
+
+router.use('/:userId/profiles', profileRouter);
 
 router.route('/').get(userController.getAllUsers);
 

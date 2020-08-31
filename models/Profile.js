@@ -120,5 +120,5 @@ ProfileSchema.pre(/^find/, function (next) {
 
   next();
 });
-const Profile = mongoose.model('profile', ProfileSchema);
+const Profile = mongoose.model('Profile', ProfileSchema);
 module.exports = Profile;

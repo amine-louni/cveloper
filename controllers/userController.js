@@ -4,7 +4,10 @@ const handlerFactory = require('../utils/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllUsers = handlerFactory.getAll(User);
-exports.getOneUser = handlerFactory.getOne(User);
+exports.getOneUser = handlerFactory.getOne(User, {
+  path: 'userProfile',
+  select: '-password',
+});
 exports.deleteOneUser = handlerFactory.deleteOne(User);
 exports.getMe = (req, res, next) => {
   req.params.id = req.currentUser._id;
