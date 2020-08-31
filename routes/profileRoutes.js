@@ -10,17 +10,17 @@ router.use(authController.protect);
 // POST users/15415f45a7a8f/profiles
 router
   .route('/')
-  .get(profileController.getAllProfiles)
-  .post(profileController.setTheUserId, profileController.createProfile);
-
-router
-  .route('/me')
-  .get(profileController.setTheUserId, profileController.getAllProfiles);
+  .get(authController.protect, profileController.getAllProfiles)
+  .post(
+    authController.protect,
+    profileController.setTheUserId,
+    profileController.createProfile
+  );
 
 router
   .route('/:id')
   .get(profileController.getOneProfile)
-  .patch(profileController.setTheUserId, profileController.updateProfile)
-  .delete(profileController.setTheUserId, profileController.deleteProfile);
+  .patch(profileController.updateProfile)
+  .delete(profileController.deleteProfile);
 
 module.exports = router;

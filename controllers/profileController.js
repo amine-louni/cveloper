@@ -11,9 +11,8 @@ exports.createProfile = handlerFactory.createOne(Profile);
 exports.updateProfile = handlerFactory.updateOne(Profile);
 exports.deleteProfile = handlerFactory.deleteOne(Profile);
 exports.setTheUserId = (req, res, next) => {
-  console.log('setting the user id');
   if (!req.body.user) req.body.user = req.currentUser._id;
-  console.log(req.body);
+
   next();
 };
 exports.getMyProfileByUserId = catchAsync(async (req, res, next) => {
