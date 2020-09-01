@@ -10,20 +10,22 @@ const router = express.Router();
 // GET /profiles/github/:username
 router.route('/github/:username').get(profileController.getGithubProfile);
 
-// AUTHENTICATED ROUTES
-router.use(authController.protect);
-
 // [ GET | POST ] users/:userId/profiles
 // [ GET | POST ] /profiles
 router
   .route('/')
   .get(profileController.getAllProfiles)
-  .post(setTheUserID, profileController.createProfile);
+  .post(authController.protect, setTheUserID, profileController.createProfile);
 
 // GET /profiles/me
 router
   .route('/me')
   .get(authController.protect, profileController.getAllProfiles);
+
+router
+  .route('/update/:id')
+  .patch(authController.protect, profileController.updateMyProfile);
+
 // [ GET | POST | DELETE] /profiles/experience/(:id)
 router
   .route('/experience')
@@ -33,6 +35,7 @@ router
       check('company', 'company is a required field').not().isEmpty(),
       check('from', 'from date is a required field').not().isEmpty(),
     ],
+    authController.protect,
     validationResultHandler(validationResult),
     profileController.addProfileExperience
   );

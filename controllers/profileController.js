@@ -4,6 +4,35 @@ const handlerFactory = require('../utils/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 
+exports.updateMyProfile = catchAsync(async (req, res, next) => {
+  const profile = await Profile.findById(req.params.id);
+
+  if (!profile.user.equals(req.currentUser._id)) {
+    return next(
+      new AppError(
+        "You don't have the permission to perform the action with this item",
+        403
+      )
+    );
+  }
+  if (!profile) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+  const updatedProfile = await Profile.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(201).json({
+    status: 'success',
+    doc: updatedProfile,
+  });
+});
+
 exports.getAllProfiles = handlerFactory.getAll(Profile);
 exports.getOneProfile = handlerFactory.getOne(Profile, {
   path: 'user',
