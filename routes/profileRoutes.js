@@ -17,7 +17,7 @@ router
   .get(profileController.getAllProfiles)
   .post(authController.protect, setTheUserID, profileController.createProfile);
 
-// GET /profiles/me
+// [ GET | PATCH ] /profiles/me/(:id)
 router
   .route('/me')
   .get(authController.protect, profileController.getAllProfiles);
@@ -42,10 +42,7 @@ router
 
 router
   .route('/experience/:id')
-  .delete(
-    authController.restrictTo('admin'),
-    profileController.removeProfileExperience
-  );
+  .delete(authController.protect, profileController.removeProfileExperience);
 
 // [ GET | POST | DELETE] /profiles/education/(:id)
 router
@@ -60,16 +57,20 @@ router
         .isEmpty(),
     ],
     validationResultHandler(validationResult),
-    authController.restrictTo('admin'),
+    authController.protect,
     profileController.addProfileEducation
   );
 
-router.route('/education/:id').delete(profileController.removeProfileEducation);
+router
+  .route('/education/:id')
+  .delete(authController.protect, profileController.removeProfileEducation);
+
 // [ GET | POST ] /profiles/:id
+router.use(authController.protect, authController.restrictTo('admin'));
 router
   .route('/:id')
-  .get(authController.restrictTo('admin'), profileController.getOneProfile)
-  .patch(authController.restrictTo('admin'), profileController.updateProfile)
-  .delete(authController.restrictTo('admin'), profileController.deleteProfile);
+  .get(profileController.getOneProfile)
+  .patch(profileController.updateProfile)
+  .delete(profileController.deleteProfile);
 
 module.exports = router;

@@ -11,11 +11,6 @@ const filterObj = (obj, ...allowedFields) => {
   });
   return newObj;
 };
-exports.getAllUsers = handlerFactory.getAll(User);
-exports.getOneUser = handlerFactory.getOne(User, {
-  path: 'userProfile',
-  select: '-password',
-});
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
@@ -46,12 +41,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteOneUser = handlerFactory.deleteOne(User);
-exports.getMe = (req, res, next) => {
-  req.params.id = req.currentUser._id;
-
-  next();
-};
 exports.deleteOneUserAndItsProfile = catchAsync(async (req, res, next) => {
   await Profile.findOneAndRemove({ user: req.currentUser._id });
   await User.findOneAndRemove({ _id: req.currentUser.id });
@@ -61,3 +50,15 @@ exports.deleteOneUserAndItsProfile = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
+exports.getAllUsers = handlerFactory.getAll(User);
+exports.getOneUser = handlerFactory.getOne(User, {
+  path: 'userProfile',
+  select: '-password',
+});
+exports.deleteOneUser = handlerFactory.deleteOne(User);
+exports.getMe = (req, res, next) => {
+  req.params.id = req.currentUser._id;
+
+  next();
+};

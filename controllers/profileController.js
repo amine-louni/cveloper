@@ -33,15 +33,6 @@ exports.updateMyProfile = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllProfiles = handlerFactory.getAll(Profile);
-exports.getOneProfile = handlerFactory.getOne(Profile, {
-  path: 'user',
-  select: 'name avatar',
-});
-exports.createProfile = handlerFactory.createOne(Profile);
-exports.updateProfile = handlerFactory.updateOne(Profile);
-exports.deleteProfile = handlerFactory.deleteOne(Profile);
-
 exports.getGithubProfile = async (req, res, next) => {
   try {
     const options = {
@@ -65,6 +56,7 @@ exports.getGithubProfile = async (req, res, next) => {
     );
   }
 };
+
 exports.getMyProfileByUserId = catchAsync(async (req, res, next) => {
   const myProfile = await Profile.findOne({
     user: req.currentUser._id,
@@ -77,17 +69,42 @@ exports.getMyProfileByUserId = catchAsync(async (req, res, next) => {
 
   next();
 });
+
 exports.addProfileExperience = catchAsync(async (req, res, next) => {
   const profile = await Profile.findOne({ user: req.currentUser._id });
+
+  if (!profile)
+    return next(new AppError('No document found with that ID', 404));
+
+  if (!profile.user.equals(req.currentUser._id)) {
+    return next(
+      new AppError(
+        "You don't have the permission to perform the action with this item",
+        403
+      )
+    );
+  }
+
   profile.experience.unshift(req.body);
   await profile.save();
   res.status(200).json({
     doc: profile,
   });
 });
+
 exports.removeProfileExperience = catchAsync(async (req, res, next) => {
   const profile = await Profile.findOne({ user: req.currentUser._id });
+  if (!profile)
+    return next(new AppError('No document found with that ID', 404));
 
+  if (!profile.user.equals(req.currentUser._id)) {
+    return next(
+      new AppError(
+        "You don't have the permission to perform the action with this item",
+        403
+      )
+    );
+  }
   const filteredExperience = Array.from(profile.experience).filter((el) => {
     return el.id !== req.params.id;
   });
@@ -102,14 +119,37 @@ exports.removeProfileExperience = catchAsync(async (req, res, next) => {
 
 exports.addProfileEducation = catchAsync(async (req, res, next) => {
   const profile = await Profile.findOne({ user: req.currentUser._id });
+  if (!profile)
+    return next(new AppError('No document found with that ID', 404));
+
+  if (!profile.user.equals(req.currentUser._id)) {
+    return next(
+      new AppError(
+        "You don't have the permission to perform the action with this item",
+        403
+      )
+    );
+  }
   profile.education.unshift(req.body);
   await profile.save();
   res.status(200).json({
     doc: profile,
   });
 });
+
 exports.removeProfileEducation = catchAsync(async (req, res, next) => {
   const profile = await Profile.findOne({ user: req.currentUser._id });
+  if (!profile)
+    return next(new AppError('No document found with that ID', 404));
+
+  if (!profile.user.equals(req.currentUser._id)) {
+    return next(
+      new AppError(
+        "You don't have the permission to perform the action with this item",
+        403
+      )
+    );
+  }
 
   const filteredEducation = Array.from(profile.education).filter((el) => {
     return el.id !== req.params.id;
@@ -122,3 +162,12 @@ exports.removeProfileEducation = catchAsync(async (req, res, next) => {
     doc: profile,
   });
 });
+
+exports.getAllProfiles = handlerFactory.getAll(Profile);
+exports.getOneProfile = handlerFactory.getOne(Profile, {
+  path: 'user',
+  select: 'name avatar',
+});
+exports.createProfile = handlerFactory.createOne(Profile);
+exports.updateProfile = handlerFactory.updateOne(Profile);
+exports.deleteProfile = handlerFactory.deleteOne(Profile);

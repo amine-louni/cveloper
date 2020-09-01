@@ -24,6 +24,7 @@ exports.updateMyPost = catchAsync(async (req, res, next) => {
     doc: updatedPost,
   });
 });
+
 exports.deleteMyPost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
