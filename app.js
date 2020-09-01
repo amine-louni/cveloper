@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const authRouter = require('./routes/authRoutes');
 const usersRouter = require('./routes/userRoutes');
@@ -9,7 +10,8 @@ const app = express();
 
 // Global middlewares
 app.use(express.json({ extended: false, limit: '10kb' }));
-
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 // Mounting routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', usersRouter);

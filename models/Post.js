@@ -45,7 +45,21 @@ const postsSchema = new mongoose.Schema({
 //@TODO
 // Calc likes sum
 // Calc comments sum
+// Get 5 most popular posts
+
 // populate user/likes users/comments users  on pre find
+postsSchema.pre(/^find/, function (next) {
+  // this points to the current query
+  this.populate({
+    path: 'comments',
+    populate: { path: 'user', model: 'User', select: 'name avatar' },
+  }).populate({
+    path: 'likes',
+    populate: { path: 'user', model: 'User', select: 'name avatar' },
+  });
+
+  next();
+});
 
 const Post = mongoose.model('Post', postsSchema);
 
