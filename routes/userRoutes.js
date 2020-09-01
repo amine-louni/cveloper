@@ -14,6 +14,7 @@ router.route('/').get(userController.getAllUsers);
 router
   .route('/me')
   .get(authController.protect, userController.getMe, userController.getOneUser);
+router.route('/update-me').get(authController.protect, userController.updateMe);
 router
   .route('/:id')
   .get(userController.getOneUser)

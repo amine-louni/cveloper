@@ -18,9 +18,22 @@ router
     postController.createPost
   );
 router.route('/me').get(authController.protect, postController.getAllPosts);
+
+router
+  .route('/update/:id')
+  .patch(authController.protect, postController.updateMyPost);
+
 router
   .route('/:id')
   .get(postController.getOnePost)
-  .patch(postController.updatePost)
-  .delete(postController.deletePost);
+  .patch(
+    authController.protect,
+    authController.restrictTo('admin'),
+    postController.updatePost
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin'),
+    postController.deletePost
+  );
 module.exports = router;
