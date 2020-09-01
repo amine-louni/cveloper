@@ -2,12 +2,18 @@ const catchAsync = require('./catchAsync');
 const AppError = require('./AppError');
 const APIFeatures = require('./ApiFeatures');
 
-exports.getAll = (Model) =>
+exports.getAll = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     // To allow for nested GET posts on a profile (hack)
     let filter = {};
     if (req.params.userId) filter = { user: req.params.userId };
-    const features = new APIFeatures(Model.find(filter), req.query)
+    if (req.route.path === '/me') filter = { user: req.currentUser._id };
+
+    // To allow population
+    let mongoQuery = Model.find(filter);
+    if (popOptions) mongoQuery = mongoQuery.populate(popOptions);
+
+    const features = new APIFeatures(mongoQuery, req.query)
       .filter()
       .sort()
       .limitFields()
@@ -25,8 +31,9 @@ exports.getAll = (Model) =>
     });
   });
 
-exports.createOne = (Model) =>
+exports.createOne = (Model, toUser = false) =>
   catchAsync(async (req, res, next) => {
+    if (toUser) req.body.user = req.currentUser._id;
     const doc = await Model.create(req.body);
 
     res.status(201).json({

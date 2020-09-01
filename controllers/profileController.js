@@ -1,6 +1,8 @@
+const request = require('request');
 const Profile = require('../models/Profile');
 const handlerFactory = require('../utils/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/AppError');
 
 exports.getAllProfiles = handlerFactory.getAll(Profile);
 exports.getOneProfile = handlerFactory.getOne(Profile, {
@@ -10,10 +12,29 @@ exports.getOneProfile = handlerFactory.getOne(Profile, {
 exports.createProfile = handlerFactory.createOne(Profile);
 exports.updateProfile = handlerFactory.updateOne(Profile);
 exports.deleteProfile = handlerFactory.deleteOne(Profile);
-exports.setTheUserId = (req, res, next) => {
-  if (!req.body.user) req.body.user = req.currentUser._id;
 
-  next();
+exports.getGithubProfile = async (req, res, next) => {
+  try {
+    const options = {
+      uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_SECRET}`,
+      method: 'GET',
+      headers: { 'user-agent': 'node.js' },
+    };
+    request(options, (err, response, body) => {
+      if (response.statusCode === 200) {
+        return res.status(200).json(JSON.parse(body));
+      }
+      next(
+        new AppError(
+          'Some thing went wrong when fetching data from github api , check your user name'
+        )
+      );
+    });
+  } catch (err) {
+    next(
+      new AppError('Some thing went wrong when fetching data from github api')
+    );
+  }
 };
 exports.getMyProfileByUserId = catchAsync(async (req, res, next) => {
   const myProfile = await Profile.findOne({
@@ -35,7 +56,7 @@ exports.addProfileExperience = catchAsync(async (req, res, next) => {
     doc: profile,
   });
 });
-exports.removeExperience = catchAsync(async (req, res, next) => {
+exports.removeProfileExperience = catchAsync(async (req, res, next) => {
   const profile = await Profile.findOne({ user: req.currentUser._id });
 
   const filteredExperience = Array.from(profile.experience).filter((el) => {
@@ -43,6 +64,29 @@ exports.removeExperience = catchAsync(async (req, res, next) => {
   });
 
   profile.experience = filteredExperience;
+  await profile.save();
+  res.status(201).json({
+    status: 'success',
+    doc: profile,
+  });
+});
+
+exports.addProfileEducation = catchAsync(async (req, res, next) => {
+  const profile = await Profile.findOne({ user: req.currentUser._id });
+  profile.education.unshift(req.body);
+  await profile.save();
+  res.status(200).json({
+    doc: profile,
+  });
+});
+exports.removeProfileEducation = catchAsync(async (req, res, next) => {
+  const profile = await Profile.findOne({ user: req.currentUser._id });
+
+  const filteredEducation = Array.from(profile.education).filter((el) => {
+    return el.id !== req.params.id;
+  });
+
+  profile.education = filteredEducation;
   await profile.save();
   res.status(201).json({
     status: 'success',
