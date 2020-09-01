@@ -27,6 +27,19 @@ router
   .delete(authController.protect, postController.deleteMyPost);
 
 router
+  .route('/likes/:id')
+  .patch(authController.protect, postController.likesHandler);
+
+router
+  .route('/comments/:id')
+  .post(authController.protect, postController.addComment);
+
+router
+  .route('/comments/:post_id/:comment_id')
+  .delete(authController.protect, postController.deleteMyComment)
+  .patch(authController.protect, postController.updateMyComment);
+
+router
   .route('/:id')
   .get(postController.getOnePost)
   .patch(
