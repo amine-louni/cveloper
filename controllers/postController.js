@@ -23,6 +23,24 @@ exports.updateMyPost = catchAsync(async (req, res, next) => {
     doc: updatedPost,
   });
 });
+exports.deleteMyPost = catchAsync(async (req, res, next) => {
+  const post = await Post.findById(req.params.id);
+
+  if (!post.user.equals(req.currentUser._id)) {
+    return next(
+      new AppError(
+        "You don't have the permission to perform the action with this item",
+        403
+      )
+    );
+  }
+
+  await Post.findByIdAndRemove(req.params.id);
+
+  res.status(204).json({
+    status: 'success',
+  });
+});
 
 exports.getAllPosts = handlerFactory.getAll(Post, {
   path: 'user',

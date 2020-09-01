@@ -22,6 +22,9 @@ router.route('/me').get(authController.protect, postController.getAllPosts);
 router
   .route('/update/:id')
   .patch(authController.protect, postController.updateMyPost);
+router
+  .route('/delete/:id')
+  .delete(authController.protect, postController.deleteMyPost);
 
 router
   .route('/:id')
