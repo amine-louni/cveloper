@@ -1,6 +1,5 @@
 import React from 'react';
 
-import './App.css';
 import 'rsuite/lib/styles/index.less';
 import { Button } from 'rsuite';
 function App() {
