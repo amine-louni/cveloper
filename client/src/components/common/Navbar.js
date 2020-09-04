@@ -8,7 +8,7 @@ import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { Avatar, Box } from '@material-ui/core';
-
+import defaultAvatar from '../../assets/img/default.jpg';
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
@@ -112,7 +112,7 @@ export default function PrimarySearchAppBar() {
           </div>
           <div className={classes.userInfos}>
             <Box mx={3}>John doe</Box>
-            <Avatar>JD</Avatar>
+            <Avatar src={defaultAvatar} />
           </div>
           <div className={classes.sectionDesktop}></div>
           <div className={classes.sectionMobile}></div>

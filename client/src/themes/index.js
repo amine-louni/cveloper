@@ -1,11 +1,11 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import deepPurple from '@material-ui/core/colors/deepPurple';
-import teal from '@material-ui/core/colors/teal';
+
+import { indigo, teal } from '@material-ui/core/colors';
 
 export const defaultTheme = createMuiTheme({
   type: 'light',
   palette: {
-    primary: deepPurple,
+    primary: indigo,
     secondary: teal,
   },
   typography: {
@@ -16,7 +16,7 @@ export const defaultTheme = createMuiTheme({
 export const darkTheme = createMuiTheme({
   type: 'dark',
   palette: {
-    primary: deepPurple,
+    primary: indigo,
     secondary: teal,
   },
   typography: {
