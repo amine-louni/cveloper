@@ -6,6 +6,7 @@ import { defaultTheme, darkTheme } from './themes/index';
 import Home from './views/Home';
 import Register from './views/Register';
 import Login from './views/Login';
+import ForgotPassword from './views/ForgotPassword';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/feed" component={Home} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
+          <Route path="/forgot-password" component={ForgotPassword} />
         </Switch>
       </div>
     </ThemeProvider>
