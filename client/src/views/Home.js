@@ -1,5 +1,6 @@
 import React from 'react';
 import NavBar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 import { Container, Grid, Typography } from '@material-ui/core';
 import PostInput from '../components/PostInput';
 import Post from '../components/Post';
@@ -19,6 +20,7 @@ export default function Home() {
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </div>
   );
 }
