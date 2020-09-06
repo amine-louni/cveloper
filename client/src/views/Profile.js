@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, Grid, Container } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
 
 import Intro from '../components/profile/Intro';
 import NavBar from '../components/common/Navbar';
@@ -8,13 +8,11 @@ import Bio from '../components/profile/Bio';
 import History from '../components/profile/History';
 import Repos from '../components/profile/Repos';
 
-const useStyles = makeStyles((theme) => ({}));
 export default function Profile() {
-  const classes = useStyles();
   return (
     <>
       <NavBar />
-      <Grid Container>
+      <Grid container>
         <Grid item xs={9}>
           <Container>
             <Intro />

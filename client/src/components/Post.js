@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
     border: '1px solid #eee',
-    backgroundColor: '#EEE',
+    backgroundColor: theme.palette.type == 'dark' ? '#333' : '#EFEFEF',
   },
 
   iconButton: {

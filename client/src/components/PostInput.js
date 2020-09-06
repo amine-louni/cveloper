@@ -3,7 +3,6 @@ import {
   makeStyles,
   Paper,
   Avatar,
-  TextField,
   Button,
   InputBase,
 } from '@material-ui/core';
@@ -40,11 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PostInput() {
   const classes = useStyles();
-  const [value, setValue] = React.useState('');
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
   return (
     <Paper className={classes.root}>
       <div className={classes.innerWrapper}>
@@ -56,7 +51,6 @@ export default function PostInput() {
             className={classes.input}
             multiline
             rows={4}
-            fullWidth
             placeholder="Write your ideas ... 👋"
             inputProps={{ 'aria-label': 'Type a comment' }}
           />

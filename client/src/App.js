@@ -8,10 +8,31 @@ import Profile from './views/Profile';
 import Register from './views/Register';
 import Login from './views/Login';
 import ForgotPassword from './views/ForgotPassword';
+import { connect } from 'react-redux';
+import { createMuiTheme } from '@material-ui/core/styles';
 
-function App() {
+import { indigo, teal, blue, red } from '@material-ui/core/colors';
+
+function App({ isDark }) {
+  const defaultTheme = createMuiTheme({
+    palette: {
+      type: 'light',
+      primary: indigo,
+      secondary: teal,
+    },
+  });
+
+  const darkTheme = createMuiTheme({
+    palette: {
+      type: 'dark',
+      primary: indigo,
+      secondary: teal,
+    },
+  });
+  let theme = isDark ? darkTheme : defaultTheme;
+  console.log(theme);
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App">
         <Switch>
@@ -26,4 +47,7 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = ({ isDark }) => {
+  return { isDark };
+};
+export default connect(mapStateToProps, null)(App);

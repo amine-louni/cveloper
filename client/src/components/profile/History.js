@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Grid,
-  Card,
-  CardContent,
-  makeStyles,
-  Typography,
-  CardHeader,
-} from '@material-ui/core';
+import { Card, CardContent, makeStyles, Typography } from '@material-ui/core';
 
 import Timeline from '@material-ui/lab/Timeline';
 import TimelineItem from '@material-ui/lab/TimelineItem';
@@ -118,7 +111,7 @@ export default function History() {
                     <Typography display="block" variant="subtitle1">
                       University Of Washington
                     </Typography>
-                    <Typography display="caption" variant="subtitle2">
+                    <Typography variant="subtitle2">
                       Masters degree at Computer Science
                     </Typography>
                     <Typography variant="caption" gutterBottom>

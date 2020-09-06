@@ -92,10 +92,10 @@ export default function Intro() {
                 >
                   john doe
                 </Typography>
-                <Typography display="block" variant="caption" gutterBottom>
+                <Typography variant="caption" gutterBottom>
                   Senior developer at orcloud
                 </Typography>
-                <Typography display="block" variant="subtitle">
+                <Typography display="block" variant="subtitle1">
                   <span color="primary">|</span> Working from home
                 </Typography>
 
@@ -150,16 +150,16 @@ export default function Intro() {
                 edit
               </Button>
               <div>
-                <a href="#">
+                <a href="/">
                   <FacebookIcon style={{ marginLeft: 7, color: '#1877F2' }} />
                 </a>
-                <a href="#">
+                <a href="/">
                   <TwitterIcon style={{ marginLeft: 7, color: '#1DA1F2' }} />
                 </a>
-                <a href="#">
+                <a href="/">
                   <InstagramIcon style={{ marginLeft: 7, color: '#E1306C' }} />
                 </a>
-                <a href="#">
+                <a href="/">
                   <GitHubIcon style={{ marginLeft: 7, color: '#333' }} />
                 </a>
               </div>

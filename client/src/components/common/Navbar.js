@@ -3,12 +3,17 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
+
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+import { Search, Brightness7, Brightness3 } from '@material-ui/icons';
 import { Avatar, Box } from '@material-ui/core';
 import defaultAvatar from '../../assets/img/default.jpg';
+
+import { changeTheme } from '../../actions/';
+import { connect } from 'react-redux';
+
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
@@ -34,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
-      width: 'auto',
+      maxWidth: '500px',
     },
   },
   searchIcon: {
@@ -77,9 +82,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+const Navbar = function ({ isDark, changeTheme }) {
   const classes = useStyles();
 
+  const icon = !isDark ? <Brightness3 /> : <Brightness7 />;
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -96,10 +102,9 @@ export default function PrimarySearchAppBar() {
             Gitbook
           </Typography>
 
-          <div className={classes.grow} />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
-              <SearchIcon />
+              <Search />
             </div>
             <InputBase
               placeholder="Search…"
@@ -110,6 +115,15 @@ export default function PrimarySearchAppBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
+          <div className={classes.grow} />
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="mode"
+            onClick={changeTheme}
+          >
+            {icon}
+          </IconButton>
           <div className={classes.userInfos}>
             <Box mx={3}>John doe</Box>
             <Avatar src={defaultAvatar} />
@@ -120,4 +134,9 @@ export default function PrimarySearchAppBar() {
       </AppBar>
     </div>
   );
-}
+};
+
+const mapStateToProps = ({ isDark }) => {
+  return { isDark };
+};
+export default connect(mapStateToProps, { changeTheme })(Navbar);
