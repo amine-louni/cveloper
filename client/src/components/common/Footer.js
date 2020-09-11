@@ -23,7 +23,7 @@ export default function Footer() {
       >
         {'Copyright © '}
         <Link color="inherit" href="https://material-ui.com/">
-          GITBOOK
+          cveloper
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}
