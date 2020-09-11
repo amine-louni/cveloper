@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline',
   },
   commentText: {
-    backgroundColor: theme.palette.type == 'dark' ? '#333' : '#EFEFEF',
+    backgroundColor: theme.palette.type === 'dark' ? '#333' : '#EFEFEF',
     padding: theme.spacing(2),
     borderRadius: theme.spacing(2),
     margin: 0,

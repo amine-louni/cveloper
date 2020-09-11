@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { defaultTheme, darkTheme } from './themes/index';
+
 import Home from './views/Home';
 import Profile from './views/Profile';
 import Register from './views/Register';

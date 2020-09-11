@@ -2,35 +2,22 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import FormControl from '@material-ui/core/FormControl';
 import MuiTextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
-import Input from '@material-ui/core/Input';
-import Chip from '@material-ui/core/Chip';
+
 import Box from '@material-ui/core/Box';
-import CheckBox from '@material-ui/core/Checkbox';
-import { Autocomplete, ToggleButtonGroup } from 'formik-material-ui-lab';
+import { Autocomplete } from 'formik-material-ui-lab';
 
-import {
-  fieldToTextField,
-  TextField,
-  TextFieldProps,
-  Select,
-  Switch,
-} from 'formik-material-ui';
+import AddEducationDialog from './diloags/AddEducationDialog';
 
-import {
-  Card,
-  CardContent,
-  Checkbox,
-  InputLabel,
-  LinearProgress,
-  ListItemText,
-} from '@material-ui/core';
+import { TextField } from 'formik-material-ui';
+
+import { Card, CardContent, LinearProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -41,17 +28,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 const names = [
   'Oliver Hansen',
@@ -67,7 +43,13 @@ const names = [
 ];
 export default function AccountProfile() {
   const classes = useStyles();
-
+  const [openEduDialog, setOpenEduDialog] = React.useState(false);
+  const handleClickOpenEdu = () => {
+    setOpenEduDialog(true);
+  };
+  const handleCloseEdu = () => {
+    setOpenEduDialog(false);
+  };
   const initialValues = {
     company: '',
     website: '',
@@ -76,6 +58,7 @@ export default function AccountProfile() {
     skills: [],
     githubUsername: '',
     personName: '',
+    name: '',
   };
   const validationSchema = Yup.object({
     company: Yup.string().required('Required field'),
@@ -105,13 +88,27 @@ export default function AccountProfile() {
       <div style={{ marginTop: 25, marginBottom: 25 }}></div>
       <Card>
         <CardContent>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleClickOpenEdu}
+          >
+            Add an education
+          </Button>
+          <AddEducationDialog
+            openEduDialog={openEduDialog}
+            handleClickOpenEdu={openEduDialog}
+            handleCloseEdu={handleCloseEdu}
+          />
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
-            render={({ submitForm, isSubmitting, touched, errors }) => (
+          >
+            {({ submitForm, isSubmitting, touched, errors }) => (
               <Form>
                 {isSubmitting && <LinearProgress />}
+
                 <FormControl className={classes.formControl}>
                   <Field
                     component={TextField}
@@ -148,7 +145,7 @@ export default function AccountProfile() {
                 </FormControl>
                 <FormControl className={classes.formControl}>
                   <Field
-                    name="autocomplete"
+                    name="skills"
                     multiple
                     component={Autocomplete}
                     options={names}
@@ -173,7 +170,7 @@ export default function AccountProfile() {
                 </Box>
               </Form>
             )}
-          />
+          </Formik>
         </CardContent>
       </Card>
     </div>

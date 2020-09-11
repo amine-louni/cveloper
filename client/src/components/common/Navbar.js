@@ -3,34 +3,16 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
 
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-import MenuItem from '@material-ui/core/MenuItem';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-
-import MenuList from '@material-ui/core/MenuList';
 import {
   Search,
-  Brightness7,
-  Brightness4,
-  Message,
-  Notifications,
-  People,
   Brightness3,
   WbSunny,
-  MessageOutlined,
   NotificationsOutlined,
-  ChatBubbleOutline,
   PeopleOutline,
   MailOutline,
 } from '@material-ui/icons';
@@ -110,28 +92,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = function ({ isDark, changeTheme }) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open] = React.useState(false);
   const anchorRef = React.useRef(null);
-  const [checks, setChecks] = React.useState({
-    checkedA: true,
-    checkedB: true,
-  });
-
-  const handleChecks = (event) => {
-    setChecks({ ...checks, [event.target.name]: event.target.checked });
-  };
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
@@ -143,11 +105,6 @@ const Navbar = function ({ isDark, changeTheme }) {
     prevOpen.current = open;
   }, [open]);
 
-  const icon = !isDark ? (
-    <Brightness4 />
-  ) : (
-    <Brightness7 style={{ color: 'gold' }} />
-  );
   return (
     <div className={classes.grow}>
       <AppBar position="static">

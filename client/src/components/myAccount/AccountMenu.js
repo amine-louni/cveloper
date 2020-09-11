@@ -6,13 +6,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,11 +32,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AccountMenu() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
 
   return (
     <List

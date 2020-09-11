@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import { Container, Grid, Typography, Paper } from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 import PostInput from '../components/Post/PostInput';
 import Post from '../components/Post/Post';
 export default function Home() {
