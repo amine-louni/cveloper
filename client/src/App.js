@@ -8,10 +8,11 @@ import Profile from './views/Profile';
 import Register from './views/Register';
 import Login from './views/Login';
 import ForgotPassword from './views/ForgotPassword';
+import MyAccount from './views/Myaccount';
 import { connect } from 'react-redux';
 import { createMuiTheme } from '@material-ui/core/styles';
 
-import { indigo, teal, blue, red } from '@material-ui/core/colors';
+import { indigo, teal } from '@material-ui/core/colors';
 
 function App({ isDark }) {
   const defaultTheme = createMuiTheme({
@@ -20,6 +21,9 @@ function App({ isDark }) {
       primary: indigo,
       secondary: teal,
     },
+    typography: {
+      fontFamily: 'Poppins',
+    },
   });
 
   const darkTheme = createMuiTheme({
@@ -27,6 +31,9 @@ function App({ isDark }) {
       type: 'dark',
       primary: indigo,
       secondary: teal,
+    },
+    typography: {
+      fontFamily: 'Poppins',
     },
   });
   let theme = isDark ? darkTheme : defaultTheme;
@@ -38,6 +45,7 @@ function App({ isDark }) {
         <Switch>
           <Route path="/feed" component={Home} />
           <Route path="/me" component={Profile} />
+          <Route path="/my-account" component={MyAccount} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />

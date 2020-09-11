@@ -6,7 +6,7 @@ import {
   Button,
   InputBase,
 } from '@material-ui/core';
-import defaultAvatar from '../assets/img/default.jpg';
+import defaultAvatar from '../../assets/img/default.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
