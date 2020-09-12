@@ -37,7 +37,7 @@ function App({ isDark }) {
     },
   });
   let theme = isDark ? darkTheme : defaultTheme;
-  console.log(theme);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
