@@ -14,6 +14,7 @@ import Box from '@material-ui/core/Box';
 import { Autocomplete } from 'formik-material-ui-lab';
 
 import AddEducationDialog from './diloags/AddEducationDialog';
+import AddExperienceDialog from './diloags/AddExperienceDialog';
 
 import { TextField } from 'formik-material-ui';
 
@@ -44,11 +45,19 @@ const names = [
 export default function AccountProfile() {
   const classes = useStyles();
   const [openEduDialog, setOpenEduDialog] = React.useState(false);
+  const [openExpDialog, setOpenExpDialog] = React.useState(false);
   const handleClickOpenEdu = () => {
     setOpenEduDialog(true);
   };
   const handleCloseEdu = () => {
     setOpenEduDialog(false);
+  };
+
+  const handleClickOpenExp = () => {
+    setOpenExpDialog(true);
+  };
+  const handleCloseExp = () => {
+    setOpenExpDialog(false);
   };
   const initialValues = {
     company: '',
@@ -91,6 +100,19 @@ export default function AccountProfile() {
           <Button
             variant="outlined"
             color="primary"
+            onClick={handleClickOpenExp}
+          >
+            Add an experience
+          </Button>
+          <AddExperienceDialog
+            openExpDialog={openExpDialog}
+            closeExp={handleCloseExp}
+            openExp={handleClickOpenExp}
+          />
+
+          <Button
+            variant="outlined"
+            color="primary"
             onClick={handleClickOpenEdu}
           >
             Add an education
@@ -100,6 +122,7 @@ export default function AccountProfile() {
             handleClickOpenEdu={openEduDialog}
             handleCloseEdu={handleCloseEdu}
           />
+
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}

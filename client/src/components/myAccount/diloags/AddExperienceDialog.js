@@ -15,11 +15,15 @@ import { DatePicker } from 'formik-material-ui-pickers';
 
 import * as Yup from 'yup';
 
-export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
+export default function AddEducationDialog({
+  openExp,
+  closeExp,
+  openExpDialog,
+}) {
   const initialValues = {
-    school: '',
-    degree: '',
-    fieldofstudy: '',
+    title: '',
+    company: '',
+    location: '',
     from: new Date(),
     to: new Date(),
     description: '',
@@ -27,21 +31,21 @@ export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
   };
 
   const validationSchema = Yup.object({
-    school: Yup.string(),
+    title: Yup.string(),
   });
   const onSubmit = (values, { setSubmitting }) => {
     setTimeout(() => {
       setSubmitting(false);
       console.log('add education');
       alert(JSON.stringify(values, null, 2));
-      handleCloseEdu();
+      closeExp();
     }, 500);
   };
   return (
     <Dialog
-      open={openEduDialog}
-      onClose={handleCloseEdu}
-      aria-labelledby="add-education"
+      open={openExpDialog}
+      onClose={closeExp}
+      aria-labelledby="form-dialog-title"
     >
       <Formik
         initialValues={initialValues}
@@ -51,10 +55,12 @@ export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
         {({ submitForm, isSubmitting, touched, errors, values }) => (
           <Form>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <DialogTitle id="add-education">Add and education</DialogTitle>
+              <DialogTitle id="form-dialog-title">
+                Add an experience
+              </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Add any school, bootcamp, etc that you have attended
+                  Add any title , add brief description for your workspace
                   {/* {values.current ? 'current' : 'false'} */}
                 </DialogContentText>
                 <Box my={3}>
@@ -62,8 +68,8 @@ export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
                     style={{ width: '100%' }}
                     component={TextField}
                     type="text"
-                    name="school"
-                    label="School"
+                    name="title"
+                    label="title"
                   ></Field>
                 </Box>
 
@@ -72,8 +78,8 @@ export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
                     style={{ width: '100%' }}
                     component={TextField}
                     type="text"
-                    name="degree"
-                    label="Degree"
+                    name="company"
+                    label="company"
                   ></Field>
                 </Box>
 
@@ -82,8 +88,8 @@ export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
                     style={{ width: '100%' }}
                     component={TextField}
                     type="text"
-                    name="fieldofstudy"
-                    label="Field of study"
+                    name="location"
+                    label="Location"
                   ></Field>
                 </Box>
                 <Box mt={3}>
@@ -128,7 +134,7 @@ export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
                 </Box>
               </DialogContent>
               <DialogActions>
-                <Button color="primary" onClick={handleCloseEdu}>
+                <Button color="primary" onClick={closeExp}>
                   CANCEL
                 </Button>
                 <Button color="primary" type="submit">
