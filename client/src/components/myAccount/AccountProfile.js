@@ -13,9 +13,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Box from '@material-ui/core/Box';
 import { Autocomplete } from 'formik-material-ui-lab';
 
-import AddEducationDialog from './diloags/AddEducationDialog';
-import AddExperienceDialog from './diloags/AddExperienceDialog';
-
 import { TextField } from 'formik-material-ui';
 
 import { Card, CardContent, LinearProgress } from '@material-ui/core';
@@ -44,21 +41,7 @@ const names = [
 ];
 export default function AccountProfile() {
   const classes = useStyles();
-  const [openEduDialog, setOpenEduDialog] = React.useState(false);
-  const [openExpDialog, setOpenExpDialog] = React.useState(false);
-  const handleClickOpenEdu = () => {
-    setOpenEduDialog(true);
-  };
-  const handleCloseEdu = () => {
-    setOpenEduDialog(false);
-  };
 
-  const handleClickOpenExp = () => {
-    setOpenExpDialog(true);
-  };
-  const handleCloseExp = () => {
-    setOpenExpDialog(false);
-  };
   const initialValues = {
     company: '',
     website: '',
@@ -97,32 +80,6 @@ export default function AccountProfile() {
       <div style={{ marginTop: 25, marginBottom: 25 }}></div>
       <Card>
         <CardContent>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleClickOpenExp}
-          >
-            Add an experience
-          </Button>
-          <AddExperienceDialog
-            openExpDialog={openExpDialog}
-            closeExp={handleCloseExp}
-            openExp={handleClickOpenExp}
-          />
-
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleClickOpenEdu}
-          >
-            Add an education
-          </Button>
-          <AddEducationDialog
-            openEduDialog={openEduDialog}
-            handleClickOpenEdu={openEduDialog}
-            handleCloseEdu={handleCloseEdu}
-          />
-
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}

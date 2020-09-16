@@ -1,5 +1,11 @@
 import React from 'react';
-import { Card, CardContent, makeStyles, Typography } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardContent,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 
 import Timeline from '@material-ui/lab/Timeline';
 import TimelineItem from '@material-ui/lab/TimelineItem';
@@ -7,6 +13,8 @@ import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
 import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
+import AddEducationDialog from './diloags/AddEducationDialog';
+import AddExperienceDialog from './diloags/AddExperienceDialog';
 
 const useStyles = makeStyles((theme) => ({
   root: { marginTop: theme.spacing(2) },
@@ -16,17 +24,49 @@ const useStyles = makeStyles((theme) => ({
       padding: 0,
     },
   },
+  cardTitle: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 }));
 export default function History() {
   const classes = useStyles();
+
+  const [openEduDialog, setOpenEduDialog] = React.useState(false);
+  const [openExpDialog, setOpenExpDialog] = React.useState(false);
+  const handleClickOpenEdu = () => {
+    setOpenEduDialog(true);
+  };
+  const handleCloseEdu = () => {
+    setOpenEduDialog(false);
+  };
+
+  const handleClickOpenExp = () => {
+    setOpenExpDialog(true);
+  };
+  const handleCloseExp = () => {
+    setOpenExpDialog(false);
+  };
   return (
     <div className={classes.root}>
       <Card>
         <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Experience
-          </Typography>
-
+          <div className={classes.cardTitle}>
+            <Typography variant="h5">Experience</Typography>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleClickOpenExp}
+            >
+              Add an experience
+            </Button>
+          </div>
+          <AddExperienceDialog
+            openExpDialog={openExpDialog}
+            closeExp={handleCloseExp}
+            openExp={handleClickOpenExp}
+          />
           <Timeline>
             <TimelineItem className={classes.LeftTimeLine}>
               <TimelineSeparator>
@@ -95,9 +135,21 @@ export default function History() {
 
       <Card className={classes.root}>
         <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Study
-          </Typography>
+          <div className={classes.cardTitle}>
+            <Typography variant="h5">Study</Typography>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleClickOpenEdu}
+            >
+              Add an education
+            </Button>
+          </div>
+          <AddEducationDialog
+            openEduDialog={openEduDialog}
+            handleClickOpenEdu={openEduDialog}
+            handleCloseEdu={handleCloseEdu}
+          />
 
           <Timeline>
             <TimelineItem className={classes.LeftTimeLine}>

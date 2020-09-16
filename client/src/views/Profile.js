@@ -13,7 +13,8 @@ export default function Profile() {
     <>
       <NavBar />
       <Grid container>
-        <Grid item xs={9}>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={10}>
           <Container>
             <Intro />
             <Bio />
@@ -21,7 +22,7 @@ export default function Profile() {
             <Repos />
           </Container>
         </Grid>
-        <Grid item xs={3}></Grid>
+        <Grid item xs={1}></Grid>
       </Grid>
       <Footer />
     </>
