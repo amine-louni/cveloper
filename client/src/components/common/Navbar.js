@@ -20,7 +20,21 @@ import {
   NotificationsOutlined,
   MailOutline,
 } from '@material-ui/icons';
-import { Avatar, Box, Badge, Switch, Button } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Badge,
+  Switch,
+  Button,
+  MenuItem,
+  Menu,
+  ClickAwayListener,
+  Popper,
+  Grow,
+  Paper,
+  MenuList,
+  Divider,
+} from '@material-ui/core';
 import defaultAvatar from '../../assets/img/default.jpg';
 
 import { changeTheme } from '../../actions/';
@@ -110,8 +124,29 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = (props) => {
   const classes = useStyles();
-  const [open] = React.useState(false);
+  const { isDark } = props;
+  console.log('isdark', isDark);
+  const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
 
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
@@ -173,17 +208,84 @@ const Navbar = (props) => {
               </Badge>
             </IconButton>
             {/* <Box mx={6} style={{ display: 'flex', alignItems: 'center' }}>
-            <Switch
-              checked={isDark}
-              onChange={changeTheme}
-              name="checkedA"
-              inputProps={{ 'aria-label': 'secondary checkbox' }}
-            />
-            {!isDark ? <WbSunny /> : ''}
-            {isDark ? <Brightness3 style={{ color: '#555' }} /> : ''}
-          </Box> */}
+              <Switch
+                checked={isDark}
+                onChange={changeTheme}
+                name="checkedA"
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              />
+              {!isDark ? <WbSunny /> : ''}
+              {isDark ? <Brightness3 style={{ color: '#555' }} /> : ''}
+            </Box> */}
             <div className={classes.userInfos}>
-              <Avatar src={defaultAvatar} />
+              <IconButton
+                disableRipple
+                edge={false}
+                ref={anchorRef}
+                aria-controls={open ? 'menu-list-grow' : undefined}
+                aria-haspopup="true"
+                onClick={handleToggle}
+              >
+                <Avatar src={defaultAvatar} />
+              </IconButton>
+              <Popper
+                open={open}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                transition
+                disablePortal
+                style={{ minWidth: 270 }}
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === 'bottom' ? 'center top' : 'center bottom',
+                    }}
+                  >
+                    <Paper>
+                      <MenuList
+                        autoFocusItem={open}
+                        id="menu-list-grow"
+                        onKeyDown={handleListKeyDown}
+                      >
+                        <MenuItem
+                          onClick={handleClose}
+                          style={{ display: 'block' }}
+                        >
+                          <Typography
+                            display="block"
+                            style={{ width: '100%' }}
+                            variant="subtitle1"
+                          >
+                            John Doe
+                          </Typography>{' '}
+                          <Typography display="block" variant="caption">
+                            @john_doe
+                          </Typography>
+                        </MenuItem>
+                        <Divider />
+                        <MenuItem onClick={handleClose}>My account</MenuItem>
+                        <MenuItem onClick={props.changeTheme}>
+                          Dark mode
+                          <Switch
+                            checked={isDark}
+                            inputProps={{ 'aria-label': 'secondary checkbox' }}
+                          />
+                          {!isDark ? (
+                            <WbSunny style={{ color: 'goldenrod' }} />
+                          ) : (
+                            ''
+                          )}
+                          {isDark ? <Brightness3 /> : ''}
+                        </MenuItem>
+                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                      </MenuList>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
             </div>
             <div className={classes.sectionDesktop}></div>
             <div className={classes.sectionMobile}></div>
