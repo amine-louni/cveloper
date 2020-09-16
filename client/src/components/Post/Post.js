@@ -26,6 +26,7 @@ import commentsData from '../../dev-data/comments';
 import defaultAvatar from '../../assets/img/default.jpg';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
+import { CardActionArea, CardMedia } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,12 +50,10 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: theme.palette.secondary,
-    height: theme.spacing(7),
-    width: theme.spacing(7),
+    height: theme.spacing(5),
+    width: theme.spacing(5),
   },
   postActions: {
-    borderTop: '1px solid #ccc',
-    borderBottom: '1px solid #ccc',
     display: 'flex',
 
     alignItems: 'center',
@@ -81,6 +80,10 @@ const useStyles = makeStyles((theme) => ({
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
+  },
+  title: {
+    fontWeight: 'bold',
+    color: theme.palette.type === 'dark' ? '#FFF' : '#000',
   },
 }));
 
@@ -136,48 +139,40 @@ export default function Post() {
           title="John Doe"
           subheader="2 Days ago"
         />
-
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            This impressive paella is a perfect party dish and a fun meal to
-            cook together with your guests. Add 1 cup of frozen peas along with
-            the mussels, if you like.
-          </Typography>
-        </CardContent>
-        <CardActions disableSpacing className={classes.postActions}>
-          <Button
-            aria-label="add to favorites"
-            className={classes.actionBtnLove}
-          >
-            <FavoriteBorder className={classes.marginRight} />
-            <Typography variant="subtitle1">141</Typography>
-          </Button>
-          <Button className={classes.actionBtnComment} aria-label="share">
-            <ChatBubbleOutlineIcon className={classes.marginRight} />
-            <Typography variant="subtitle1">30</Typography>
-          </Button>
-        </CardActions>
-        <PostComment comments={commentsData()} />
-        <div className={classes.commenter}>
-          <Avatar
-            className={classes.marginRight}
-            aria-label="recipe"
-            src={defaultAvatar}
+        <CardActionArea>
+          <CardMedia
+            component="img"
+            alt="Contemplative Reptile"
+            height="200"
+            image="https://source.unsplash.com/user/erondu/1600x900"
+            title="Contemplative Reptile"
           />
 
-          <Paper
-            component="form"
-            elevation={0}
-            className={classes.commentField}
-          >
-            <InputBase
-              multiline
-              className={classes.input}
-              placeholder="Type your comment ... 🖌"
-              inputProps={{ 'aria-label': 'Type a comment' }}
-            />
-          </Paper>
-        </div>
+          <CardContent>
+            <Typography
+              variant="h5"
+              className={classes.title}
+              color="textSecondary"
+              component="h2"
+            >
+              Where do you host server-side code?
+            </Typography>
+            <div>#html #css #react #formik</div>
+          </CardContent>
+          <CardActions className={classes.postActions}>
+            <Button
+              aria-label="add to favorites"
+              className={classes.actionBtnLove}
+            >
+              <FavoriteBorder className={classes.marginRight} />
+              <Typography variant="subtitle1">141</Typography>
+            </Button>
+            <Button className={classes.actionBtnComment} aria-label="share">
+              <ChatBubbleOutlineIcon className={classes.marginRight} />
+              <Typography variant="subtitle1">30</Typography>
+            </Button>
+          </CardActions>
+        </CardActionArea>
       </Card>
     </>
   );

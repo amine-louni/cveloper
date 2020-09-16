@@ -10,14 +10,14 @@ export default function Home() {
       <NavBar />
       <Container>
         <Grid container spacing={4}>
-          <Grid item md={8}>
+          <Grid item md={3}></Grid>
+
+          <Grid item md={6}>
             <PostInput />
             <Post />
             <Post />
           </Grid>
-          <Grid item md={4}>
-            <Typography>contacts</Typography>
-          </Grid>
+          <Grid item md={3}></Grid>
         </Grid>
       </Container>
       <Footer />
