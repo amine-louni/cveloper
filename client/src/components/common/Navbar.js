@@ -266,7 +266,10 @@ const Navbar = (props) => {
                             </Typography>
                           </MenuItem>
                           <Divider />
-                          <MenuItem onClick={handleClose}>My account</MenuItem>
+                          <MenuItem onClick={handleClose}>My Account</MenuItem>
+                          <MenuItem onClick={handleClose}>
+                            My Dashboard
+                          </MenuItem>
                           <MenuItem onClick={props.changeTheme}>
                             Dark mode
                             <Switch
