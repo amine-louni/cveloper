@@ -244,43 +244,47 @@ const Navbar = (props) => {
                     }}
                   >
                     <Paper>
-                      <MenuList
-                        autoFocusItem={open}
-                        id="menu-list-grow"
-                        onKeyDown={handleListKeyDown}
-                      >
-                        <MenuItem
-                          onClick={handleClose}
-                          style={{ display: 'block' }}
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <MenuList
+                          autoFocusItem={open}
+                          id="menu-list-grow"
+                          onKeyDown={handleListKeyDown}
                         >
-                          <Typography
-                            display="block"
-                            style={{ width: '100%' }}
-                            variant="subtitle1"
+                          <MenuItem
+                            onClick={handleClose}
+                            style={{ display: 'block' }}
                           >
-                            John Doe
-                          </Typography>{' '}
-                          <Typography display="block" variant="caption">
-                            @john_doe
-                          </Typography>
-                        </MenuItem>
-                        <Divider />
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
-                        <MenuItem onClick={props.changeTheme}>
-                          Dark mode
-                          <Switch
-                            checked={isDark}
-                            inputProps={{ 'aria-label': 'secondary checkbox' }}
-                          />
-                          {!isDark ? (
-                            <WbSunny style={{ color: 'goldenrod' }} />
-                          ) : (
-                            ''
-                          )}
-                          {isDark ? <Brightness3 /> : ''}
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
-                      </MenuList>
+                            <Typography
+                              display="block"
+                              style={{ width: '100%' }}
+                              variant="subtitle1"
+                            >
+                              John Doe
+                            </Typography>{' '}
+                            <Typography display="block" variant="caption">
+                              @john_doe
+                            </Typography>
+                          </MenuItem>
+                          <Divider />
+                          <MenuItem onClick={handleClose}>My account</MenuItem>
+                          <MenuItem onClick={props.changeTheme}>
+                            Dark mode
+                            <Switch
+                              checked={isDark}
+                              inputProps={{
+                                'aria-label': 'secondary checkbox',
+                              }}
+                            />
+                            {!isDark ? (
+                              <WbSunny style={{ color: 'goldenrod' }} />
+                            ) : (
+                              ''
+                            )}
+                            {isDark ? <Brightness3 /> : ''}
+                          </MenuItem>
+                          <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        </MenuList>
+                      </ClickAwayListener>
                     </Paper>
                   </Grow>
                 )}
