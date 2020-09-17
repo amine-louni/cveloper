@@ -1,18 +1,9 @@
 import React from 'react';
-import {
-  makeStyles,
-  Paper,
-  Avatar,
-  Button,
-  InputBase,
-  Chip,
-  Typography,
-} from '@material-ui/core';
+import { makeStyles, Paper, Chip, Typography } from '@material-ui/core';
 import defaultAvatar from '../../assets/img/default.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: '2rem',
     padding: theme.spacing(4),
   },
   innerWrapper: {
@@ -45,7 +36,7 @@ export default function PostInput() {
   return (
     <Paper className={classes.root}>
       <Typography variant="subtitle1" gutterBottom>
-        Most popular tags
+        Most popular tags 💥💥
       </Typography>
       <Chip label="#html" />
       <Chip label="#css" />

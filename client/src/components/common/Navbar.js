@@ -266,26 +266,26 @@ const Navbar = (props) => {
                             </Typography>
                           </MenuItem>
                           <Divider />
-                          <MenuItem onClick={handleClose}>My Account</MenuItem>
                           <MenuItem onClick={handleClose}>
-                            My Dashboard
+                            🙄🙄 My Account
+                          </MenuItem>
+                          <MenuItem onClick={handleClose}>
+                            👨‍💻👨‍💻 My Dashboard
+                          </MenuItem>
+                          <MenuItem onClick={handleClose}>
+                            ✍✍ Write a post
+                          </MenuItem>
+                          <MenuItem onClick={handleClose}>
+                            📚📚 Reading a list
                           </MenuItem>
                           <MenuItem onClick={props.changeTheme}>
-                            Dark mode
-                            <Switch
-                              checked={isDark}
-                              inputProps={{
-                                'aria-label': 'secondary checkbox',
-                              }}
-                            />
-                            {!isDark ? (
-                              <WbSunny style={{ color: 'goldenrod' }} />
-                            ) : (
-                              ''
-                            )}
-                            {isDark ? <Brightness3 /> : ''}
+                            🌞🌛 Dark mode
+                            <Switch checked={isDark} />
                           </MenuItem>
-                          <MenuItem onClick={handleClose}>Logout</MenuItem>
+                          <Divider />
+                          <MenuItem onClick={handleClose}>
+                            🏃‍♂️🏃‍♂️ Logout{' '}
+                          </MenuItem>
                         </MenuList>
                       </ClickAwayListener>
                     </Paper>

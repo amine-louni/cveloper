@@ -6,9 +6,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 
 import Avatar from '@material-ui/core/Avatar';
 import defaultAvatar from '../../assets/img/default.jpg';
-const useStyles = makeStyles((theme) => ({
-  root: { marginTop: '2rem' },
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 export default function MyCard() {
   const classes = useStyles();
