@@ -52,11 +52,22 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
   title: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
+    },
+  },
+  cta: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      marginLeft: theme.spacing(3),
+      maxWidth: '500px',
+      display: 'flex',
     },
   },
   search: {
@@ -66,10 +77,11 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
     marginLeft: 0,
     width: '100%',
-    [theme.breakpoints.up('sm')]: {
+
+    [theme.breakpoints.up('md')]: {
       marginLeft: theme.spacing(3),
       maxWidth: '500px',
     },
@@ -82,6 +94,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
   },
   inputRoot: {
     color: 'inherit',
@@ -94,6 +109,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     [theme.breakpoints.up('md')]: {
       width: '20ch',
+    },
+    [theme.breakpoints.down('md')]: {
+      paddingLeft: theme.spacing(2),
     },
   },
   sectionDesktop: {
@@ -112,6 +130,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     marginLeft: 30,
+    [theme.breakpoints.down('md')]: {
+      marginLeft: theme.spacing(1),
+    },
   },
 }));
 
@@ -186,6 +207,7 @@ const Navbar = (props) => {
             <Button
               variant="contained"
               color="default"
+              className={classes.cta}
               style={{ marginRight: 30 }}
               size="small"
               endIcon={<AddCircleOutlineOutlinedIcon />}
