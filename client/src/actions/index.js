@@ -1,3 +1,4 @@
 import { changeTheme } from './themeHandler';
+import { ToggleSideBar } from './mainSideBarHandler';
 
-export { changeTheme };
+export { changeTheme, ToggleSideBar };

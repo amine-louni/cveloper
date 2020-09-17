@@ -13,21 +13,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 
-import {
-  Search,
-  Brightness3,
-  WbSunny,
-  NotificationsOutlined,
-  MailOutline,
-} from '@material-ui/icons';
+import { Search, NotificationsOutlined, MailOutline } from '@material-ui/icons';
 import {
   Avatar,
-  Box,
   Badge,
   Switch,
   Button,
   MenuItem,
-  Menu,
   ClickAwayListener,
   Popper,
   Grow,
@@ -37,8 +29,9 @@ import {
 } from '@material-ui/core';
 import defaultAvatar from '../../assets/img/default.jpg';
 
-import { changeTheme } from '../../actions/';
+import { changeTheme, ToggleSideBar } from '../../actions/';
 import { connect } from 'react-redux';
+import MobileSideBar from './MobileSideBar';
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -124,8 +117,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = (props) => {
   const classes = useStyles();
-  const { isDark } = props;
-  console.log('isdark', isDark);
+  const { isDark, ToggleSideBar } = props;
+
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -164,6 +157,7 @@ const Navbar = (props) => {
         <AppBar color="primary">
           <Toolbar>
             <IconButton
+              onClick={ToggleSideBar}
               edge="start"
               className={classes.menuButton}
               color="inherit"
@@ -171,6 +165,7 @@ const Navbar = (props) => {
             >
               <MenuIcon />
             </IconButton>
+            <MobileSideBar />
             <Typography className={classes.title} variant="h6" noWrap>
               devLink
             </Typography>
@@ -207,16 +202,7 @@ const Navbar = (props) => {
                 <NotificationsOutlined />
               </Badge>
             </IconButton>
-            {/* <Box mx={6} style={{ display: 'flex', alignItems: 'center' }}>
-              <Switch
-                checked={isDark}
-                onChange={changeTheme}
-                name="checkedA"
-                inputProps={{ 'aria-label': 'secondary checkbox' }}
-              />
-              {!isDark ? <WbSunny /> : ''}
-              {isDark ? <Brightness3 style={{ color: '#555' }} /> : ''}
-            </Box> */}
+
             <div className={classes.userInfos}>
               <IconButton
                 disableRipple
@@ -303,7 +289,7 @@ const Navbar = (props) => {
   );
 };
 
-const mapStateToProps = ({ isDark }) => {
-  return { isDark };
+const mapStateToProps = ({ isDark, isMainSideBarOpen }) => {
+  return { isDark, isMainSideBarOpen };
 };
-export default connect(mapStateToProps, { changeTheme })(Navbar);
+export default connect(mapStateToProps, { changeTheme, ToggleSideBar })(Navbar);
