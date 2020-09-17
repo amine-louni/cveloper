@@ -240,8 +240,7 @@ const Navbar = (props) => {
                   <Grow
                     {...TransitionProps}
                     style={{
-                      transformOrigin:
-                        placement === 'bottom' ? 'center top' : 'center bottom',
+                      transformOrigin: placement === 'left top',
                     }}
                   >
                     <Paper>
