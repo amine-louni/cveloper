@@ -6,7 +6,7 @@ import PostInput from '../components/Post/PostInput';
 import Post from '../components/Post/Post';
 import MyCard from '../components/common/myCard';
 import MyAside from '../components/common/MyAside';
-import Trends from '../components/common/Trends';
+import PostCardSm from '../components/common/postCardSm';
 
 export default function Home() {
   return (
@@ -29,10 +29,10 @@ export default function Home() {
             <Typography variant="h6" gutterBottom>
               Trending 🔥🔥
             </Typography>
-            <Trends />
-            <Trends />
-            <Trends />
-            <Trends />
+            <PostCardSm />
+            <PostCardSm />
+            <PostCardSm />
+            <PostCardSm />
           </Grid>
         </Grid>
       </Container>

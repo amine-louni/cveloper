@@ -5,17 +5,14 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
-
+import { Avatar, CardHeader } from '@material-ui/core';
+import defaultAvatar from '../../assets/img/default.jpg';
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
     marginBottom: 8,
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
+
   title: {
     fontSize: 14,
     fontWeight: 'bold',
@@ -23,11 +20,14 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  avatar: {
+    height: 30,
+    width: 30,
+  },
 });
 
-export default function SimpleCard() {
+export default function PostCardSm() {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
   return (
     <Card className={classes.root}>
@@ -41,6 +41,17 @@ export default function SimpleCard() {
             Where do you host your website server side code ?
           </Typography>
         </CardContent>
+        <CardHeader
+          avatar={
+            <Avatar
+              aria-label="recipe"
+              className={classes.avatar}
+              src={defaultAvatar}
+            />
+          }
+          title="Shrimp and Chorizo Paella"
+          subheader="September 14, 2016"
+        />
       </CardActionArea>
     </Card>
   );

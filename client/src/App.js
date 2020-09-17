@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { createMuiTheme } from '@material-ui/core/styles';
 
 import { indigo, teal } from '@material-ui/core/colors';
+import Dashboard from './views/Dashboard';
 
 function App({ isDark }) {
   const defaultTheme = createMuiTheme({
@@ -46,6 +47,7 @@ function App({ isDark }) {
           <Route path="/feed" component={Home} />
           <Route path="/me" component={Profile} />
           <Route path="/my-account" component={MyAccount} />
+          <Route path="/dashboard" component={Dashboard} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />

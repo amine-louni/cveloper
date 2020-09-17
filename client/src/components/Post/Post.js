@@ -20,12 +20,8 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import PostComment from './PostComment';
-
-import commentsData from '../../dev-data/comments';
 import defaultAvatar from '../../assets/img/default.jpg';
-import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
+
 import { CardActionArea, CardMedia } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
