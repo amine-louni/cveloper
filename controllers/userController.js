@@ -87,7 +87,49 @@ exports.deleteOneUserAndItsProfile = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+exports.followUser = catchAsync(async (req, res, next) => {
+  // check if user id valid
 
+  const user = await User.findById(req.params.userId);
+  if (!user) return next(new AppError('There is not user with this id', 403));
+  // check if user id it not already followed
+
+  if (req.currentUser.followingUsers.indexOf(req.params.userId) > 0)
+    return next(new AppError('this user already followed', 403));
+
+  // follow !
+
+  const currentUser = await User.findByIdAndUpdate(req.currentUser.id, {
+    $push: { followingUsers: req.params.userId },
+  });
+
+  res.status(201).json({
+    status: 'success',
+    doc: currentUser,
+  });
+});
+
+exports.unfollowUser = catchAsync(async (req, res, next) => {
+  // check if user id valid
+
+  const user = await User.findById(req.params.userId);
+  if (!user) return next(new AppError('There is not user with this id', 403));
+  // check if user id it not already followed
+
+  if (req.currentUser.followingUsers.indexOf(req.params.userId) < 0)
+    return next(new AppError('this user is not followed', 403));
+
+  // unfollow !
+
+  const currentUser = await User.findByIdAndUpdate(req.currentUser.id, {
+    $pull: { followingUsers: req.params.userId },
+  });
+
+  res.status(201).json({
+    status: 'success',
+    doc: currentUser,
+  });
+});
 exports.getAllUsers = handlerFactory.getAll(User);
 exports.getOneUser = handlerFactory.getOne(User, {
   path: 'userProfile',

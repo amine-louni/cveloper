@@ -35,4 +35,9 @@ router
   .get(userController.getOneUser)
   .delete(authController.protect, userController.deleteOneUser);
 
+// Following Sys
+router
+  .route('/follow/:userId')
+  .patch(authController.protect, userController.followUser)
+  .delete(authController.protect, userController.unfollowUser);
 module.exports = router;

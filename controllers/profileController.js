@@ -56,7 +56,6 @@ exports.getGithubProfile = async (req, res, next) => {
     );
   }
 };
-
 exports.getMyProfileByUserId = catchAsync(async (req, res, next) => {
   const myProfile = await Profile.findOne({
     user: req.currentUser._id,
