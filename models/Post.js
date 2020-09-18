@@ -6,6 +6,18 @@ const postsSchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'post must belong to a user'],
   },
+  title: {
+    type: String,
+    required: [true, 'title must not be empty'],
+    trim: true,
+  },
+  image: {
+    type: String,
+    required: [true, 'title must not be empty'],
+  },
+  tags: {
+    type: [String],
+  },
   text: {
     type: String,
     required: [true, 'post must not be empty'],

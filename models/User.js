@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-
+    readingList: [mongoose.Schema.Types.ObjectId],
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
