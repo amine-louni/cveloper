@@ -35,9 +35,15 @@ router
   .get(userController.getOneUser)
   .delete(authController.protect, userController.deleteOneUser);
 
-// Following Sys
+// Following Sys user
 router
   .route('/follow/:userId')
   .patch(authController.protect, userController.followUser)
   .delete(authController.protect, userController.unfollowUser);
+
+// Following Sys tags
+router
+  .route('/follow-tag/:tagId')
+  .patch(authController.protect, userController.followTag);
+
 module.exports = router;

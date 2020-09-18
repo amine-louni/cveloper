@@ -2,6 +2,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 const User = require('../models/User');
 const Profile = require('../models/Profile');
+const Tag = require('../models/Tag');
 const handlerFactory = require('../utils/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
@@ -114,6 +115,8 @@ exports.unfollowUser = catchAsync(async (req, res, next) => {
 
   const user = await User.findById(req.params.userId);
   if (!user) return next(new AppError('There is not user with this id', 403));
+  if (user._id === req.currentUser._id)
+    return next(new AppError('You can not follow your self', 403));
   // check if user id it not already followed
 
   if (req.currentUser.followingUsers.indexOf(req.params.userId) < 0)
@@ -123,6 +126,49 @@ exports.unfollowUser = catchAsync(async (req, res, next) => {
 
   const currentUser = await User.findByIdAndUpdate(req.currentUser.id, {
     $pull: { followingUsers: req.params.userId },
+  });
+
+  res.status(201).json({
+    status: 'success',
+    doc: currentUser,
+  });
+});
+
+exports.followTag = catchAsync(async (req, res, next) => {
+  // check if tag id valid
+  console.log(req.params.tagId);
+  const tag = await Tag.findById(req.params.tagId);
+  if (!tag) return next(new AppError('There is not tag with this id', 403));
+  // check if user id it not already followed
+
+  if (req.currentUser.followingTags.indexOf(req.params.tagId) > 0)
+    return next(new AppError('this tag already followed', 403));
+
+  // follow !
+
+  await User.findByIdAndUpdate(req.currentUser.id, {
+    $push: { followingTags: req.params.tagId },
+  });
+
+  res.status(201).json({
+    status: 'success',
+  });
+});
+
+exports.unfollowUser = catchAsync(async (req, res, next) => {
+  // check if user id valid
+
+  const tag = await Tag.findById(req.params.tagId);
+  if (!tag) return next(new AppError('There is not user with this id', 403));
+  // check if user id it not already followed
+
+  if (req.currentUser.followingTags.indexOf(req.params.tagId) < 0)
+    return next(new AppError('this tag is not followed', 403));
+
+  // unfollow !
+
+  const currentUser = await User.findByIdAndUpdate(req.currentUser.id, {
+    $pull: { followingTags: req.params.tagId },
   });
 
   res.status(201).json({
