@@ -46,4 +46,11 @@ router
   .route('/follow-tag/:tagId')
   .patch(authController.protect, userController.followTag);
 
+// Add to reading list
+
+router
+  .route('/reading-list/:postId')
+  .patch(authController.protect, userController.addToReadingList)
+  .delete(authController.protect, userController.removeFromReadingList);
+
 module.exports = router;

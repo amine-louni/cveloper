@@ -6,6 +6,7 @@ const Tag = require('../models/Tag');
 const handlerFactory = require('../utils/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
+const Post = require('../models/Post');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -100,13 +101,12 @@ exports.followUser = catchAsync(async (req, res, next) => {
 
   // follow !
 
-  const currentUser = await User.findByIdAndUpdate(req.currentUser.id, {
+  await User.findByIdAndUpdate(req.currentUser.id, {
     $push: { followingUsers: req.params.userId },
   });
 
   res.status(201).json({
     status: 'success',
-    doc: currentUser,
   });
 });
 
@@ -124,13 +124,12 @@ exports.unfollowUser = catchAsync(async (req, res, next) => {
 
   // unfollow !
 
-  const currentUser = await User.findByIdAndUpdate(req.currentUser.id, {
+  await User.findByIdAndUpdate(req.currentUser.id, {
     $pull: { followingUsers: req.params.userId },
   });
 
   res.status(201).json({
     status: 'success',
-    doc: currentUser,
   });
 });
 
@@ -172,6 +171,48 @@ exports.unfollowUser = catchAsync(async (req, res, next) => {
   });
 
   res.status(201).json({
+    status: 'success',
+    doc: currentUser,
+  });
+});
+
+exports.addToReadingList = catchAsync(async (req, res, next) => {
+  const { postId } = req.params;
+  const post = await Post.findById(postId);
+  if (!post) return next(new AppError('there is no post with this id', 404));
+  const user = await User.findById(req.currentUser._id);
+  if (!user) return next(new AppError('there is no user with this id', 404));
+
+  if (req.currentUser.readingList.indexOf(req.params.postId) > 0)
+    return next(new AppError('this post already added', 403));
+
+  // add to reading list !
+
+  await User.findByIdAndUpdate(req.currentUser.id, {
+    $push: { readingList: req.params.postId },
+  });
+
+  return res.status(200).json({
+    status: 'success',
+  });
+});
+exports.removeFromReadingList = catchAsync(async (req, res, next) => {
+  const { postId } = req.params;
+  const post = await Post.findById(postId);
+  if (!post) return next(new AppError('there is no post with this id', 404));
+  const user = await User.findById(req.currentUser._id);
+  if (!user) return next(new AppError('there is no user with this id', 404));
+
+  if (req.currentUser.readingList.indexOf(req.params.postId) < 0)
+    return next(new AppError('this post is not the reading list', 403));
+
+  // remove from
+
+  const currentUser = await User.findByIdAndUpdate(req.currentUser.id, {
+    $pull: { readingList: req.params.postId },
+  });
+
+  return res.status(200).json({
     status: 'success',
     doc: currentUser,
   });
