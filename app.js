@@ -4,6 +4,7 @@ const authRouter = require('./routes/authRoutes');
 const usersRouter = require('./routes/userRoutes');
 const postsRouter = require('./routes/postRoutes');
 const profilesRouter = require('./routes/profileRoutes');
+const tagsRouter = require('./routes/tagRoutes');
 const globalErrHandler = require('./controllers/errorController');
 
 const app = express();
@@ -17,6 +18,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/posts', postsRouter);
 app.use('/api/v1/profiles', profilesRouter);
+app.use('/api/v1/tags', tagsRouter);
 
 // Handle not handled routes
 app.use('*', (req, res) => {

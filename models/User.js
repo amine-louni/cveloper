@@ -42,6 +42,8 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    followingUsers: [mongoose.Schema.Types.ObjectId],
+    followingTags: [mongoose.Schema.Types.ObjectId],
     readingList: [mongoose.Schema.Types.ObjectId],
     passwordChangedAt: Date,
     passwordResetToken: String,
