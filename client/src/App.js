@@ -44,13 +44,13 @@ function App({ isDark }) {
       <CssBaseline />
       <div className="App">
         <Switch>
-          <Route path="/feed" component={Home} />
           <Route path="/me" component={Profile} />
           <Route path="/my-account" component={MyAccount} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />
+          <Route exact path="/" component={Home} />
         </Switch>
       </div>
     </ThemeProvider>

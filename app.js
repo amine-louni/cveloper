@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
 const authRouter = require('./routes/authRoutes');
 const usersRouter = require('./routes/userRoutes');
 const postsRouter = require('./routes/postRoutes');
@@ -8,6 +9,13 @@ const tagsRouter = require('./routes/tagRoutes');
 const globalErrHandler = require('./controllers/errorController');
 
 const app = express();
+
+// enable cors
+// implement CORS (Access-Control-Allow-Origin *)
+app.enable('trust proxy');
+app.use(cors());
+// Allow complex requests (DELETE , PATH , ...)
+app.options('*', cors());
 
 // Global middlewares
 app.use(express.json({ extended: false, limit: '10kb' }));
