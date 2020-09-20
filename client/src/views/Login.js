@@ -22,6 +22,7 @@ import Toast from '../components/common/Toast';
 
 import { auth } from '../http';
 import Alert from '@material-ui/lab/Alert';
+import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -117,8 +118,6 @@ export default function SignInSide() {
               }}
               validationSchema={validationSchema}
               onSubmit={(values, { setSubmitting }) => {
-                setSubmitting(false);
-                console.log('values', values);
                 login(values);
               }}
             >
@@ -148,6 +147,7 @@ export default function SignInSide() {
                     id="password"
                     autoComplete="current-password"
                   />
+
                   <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
@@ -157,9 +157,11 @@ export default function SignInSide() {
                     fullWidth
                     variant="contained"
                     color="primary"
+                    onClick={submitForm}
                     className={classes.submit}
+                    disabled={isSubmitting}
                   >
-                    Log in
+                    {isSubmitting ? <CircularProgress size={24} /> : 'Login'}
                   </Button>
                   <Grid container>
                     <Grid item xs>
