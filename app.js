@@ -9,13 +9,21 @@ const tagsRouter = require('./routes/tagRoutes');
 const globalErrHandler = require('./controllers/errorController');
 
 const app = express();
+// ENGINE SETUP
+
+//GLOBALS MIDDLEWARES
+
+// implement CORS (Access-Control-Allow-Origin *)
+app.use(cors());
+// Allow complex requests (DELETE , PATH , ...)
+app.options('*', cors());
+
+// Serving static files
+//app.use(express.static(path.join(__dirname, '/templates')));
 
 // enable cors
 // implement CORS (Access-Control-Allow-Origin *)
 app.enable('trust proxy');
-app.use(cors());
-// Allow complex requests (DELETE , PATH , ...)
-app.options('*', cors());
 
 // Global middlewares
 app.use(express.json({ extended: false, limit: '10kb' }));

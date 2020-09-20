@@ -1,9 +1,10 @@
 const nodeMailer = require('nodemailer');
+const neh = require('nodemailer-express-handlebars');
 
 module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
-    this.firstName = user.name.split(' ')[0];
+    this.firstName = user.firstName;
     this.url = url;
     this.from = `${process.env.EMAIL_FROM}`;
   }
@@ -21,11 +22,11 @@ module.exports = class Email {
     }
     // 1) Create a transporter
     return nodeMailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
+      host: process.env.MAILTRAP_EMAIL_HOST,
+      port: process.env.MAILTRAP_EMAIL_PORT,
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: process.env.MAILTRAP_EMAIL_USERNAME,
+        pass: process.env.MAILTRAP_EMAIL_PASSWORD,
       },
     });
   }
@@ -55,7 +56,7 @@ module.exports = class Email {
           viewEngine: {
             defaultLayout: null,
           },
-          viewPath: `${__dirname}/../views/emails/`,
+          viewPath: `${__dirname}/../templates/emails/`,
           extName: '.hbs',
         })
       )
@@ -68,5 +69,12 @@ module.exports = class Email {
 
   async sendPasswordReset() {
     await this.send('passwordReset', 'Valid only for 10 min');
+  }
+
+  async sendValidationEmail() {
+    await this.send(
+      'email-validation',
+      'Confirm your email -valid only for 10 min-'
+    );
   }
 };

@@ -7,10 +7,23 @@ const Profile = require('./Profile');
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    userName: {
       type: String,
-      required: [true, 'name is a required field'],
-      minlength: [2, 'name must have at least 2 characters'],
+      minlength: [2, 'user name must have at least 2 characters'],
+      required: [true, 'user name is a required field'],
+      unique: [true, 'This username is already taken 😥😥'],
+      trim: true,
+    },
+    firstName: {
+      type: String,
+      required: [true, 'first name is a required field'],
+      minlength: [2, 'first name must have at least 2 characters'],
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      required: [true, 'last name is a required field'],
+      minlength: [2, 'last name must have at least 2 characters'],
       trim: true,
     },
     email: {

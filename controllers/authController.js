@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
-
+const Email = require('../utils/Email');
 //Helpers
 const createSendToken = (user, statusCode, req, res) => {
   const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_KEY, {
@@ -39,11 +39,20 @@ exports.restrictTo = (...roles) => {
 };
 
 exports.register = catchAsync(async (req, res, next) => {
-  const { name, email, password, passwordConfirm } = req.body;
+  const {
+    userName,
+    lastName,
+    firstName,
+    email,
+    password,
+    passwordConfirm,
+  } = req.body;
 
   // 1) Generate the random validate email token
   const user = await User.create({
-    name,
+    userName,
+    lastName,
+    firstName,
     email,
     password,
     passwordConfirm,
@@ -53,12 +62,17 @@ exports.register = catchAsync(async (req, res, next) => {
 
   // 2) Send it to user's email (TO DO)
   try {
+    const resetURL = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/auth/validate-email/${validateEmailToken}`;
+    await new Email(user, resetURL).sendValidationEmail();
     res.status(200).json({
       status: 'success',
       message: 'Token sent to email!',
       token: validateEmailToken,
     });
   } catch (err) {
+    console.log(err);
     return next(
       new AppError('There was an error sending the email. Try again later!'),
       500
