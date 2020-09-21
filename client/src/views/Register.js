@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setAlert } from '../actions';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
-import MuiTextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
@@ -21,7 +22,7 @@ import Footer from '../components/common/Footer';
 import Toast from '../components/common/Toast';
 
 import { auth } from '../http';
-import Alert from '@material-ui/lab/Alert';
+
 import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Register() {
+const Register = (props) => {
   const classes = useStyles();
   const [toastStatus, setToastStatus] = React.useState({
     type: '',
@@ -56,23 +57,20 @@ export default function Register() {
       const res = await auth.post('/register', body);
       if (res.data.status === 'success') {
         console.log('success', 'registered with success 👌');
-        setToastStatus({
-          message: 'You registered successfully',
-          type: 'success',
-          isOpen: true,
-        });
+        props.setAlert('registered with success 👌', 'success');
         // setOpen(true);
         // setTimeout(() => {
         //   window.location.assign('/');
         // }, 1500);
       }
     } catch (err) {
-      setToastStatus({
-        message: err.response.data.message,
-        type: 'error',
-        isOpen: true,
-      });
-      console.log('error', err.response.data.message);
+      // setToastStatus({
+      //   message: err.response.data.message,
+      //   type: 'error',
+      //   isOpen: true,
+      // });
+      console.log(err.response.data.message);
+      props.setAlert(err.response.data.message, 'error');
     }
   };
   const validationSchema = Yup.object({
@@ -209,15 +207,12 @@ export default function Register() {
           )}
         </Formik>
       </div>
-      <Toast
-        show={toastStatus.isOpen}
-        type={toastStatus.type}
-        text={toastStatus.message}
-      />
 
       <Box mt={5}>
         <Footer />
       </Box>
     </Container>
   );
-}
+};
+
+export default connect(null, { setAlert })(Register);

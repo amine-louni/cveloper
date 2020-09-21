@@ -14,6 +14,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 
 import { indigo, teal } from '@material-ui/core/colors';
 import Dashboard from './views/Dashboard';
+import Toast from './components/common/Toast';
 
 function App({ isDark }) {
   const defaultTheme = createMuiTheme({
@@ -43,6 +44,7 @@ function App({ isDark }) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App">
+        <Toast />
         <Switch>
           <Route path="/me" component={Profile} />
           <Route path="/my-account" component={MyAccount} />
