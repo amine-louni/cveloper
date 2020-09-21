@@ -19,7 +19,6 @@ import { Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { TextField } from 'formik-material-ui';
 import Footer from '../components/common/Footer';
-import Toast from '../components/common/Toast';
 
 import { auth } from '../http';
 
@@ -47,11 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Register = (props) => {
   const classes = useStyles();
-  const [toastStatus, setToastStatus] = React.useState({
-    type: '',
-    message: '',
-    isOpen: false,
-  });
+
   const register = async (body) => {
     try {
       const res = await auth.post('/register', body);
@@ -74,9 +69,6 @@ const Register = (props) => {
     }
   };
   const validationSchema = Yup.object({
-    email: Yup.string()
-      .required('Required field')
-      .email('Enter a valid email please'),
     userName: Yup.string().required('Required field').min(3),
     firstName: Yup.string().required('Required field').min(3),
     lastName: Yup.string().required('Required field').min(3),

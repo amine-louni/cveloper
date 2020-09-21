@@ -24,11 +24,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MyAside() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
 
   return (
     <List

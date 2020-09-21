@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { TextField, Switch, SimpleFileUpload } from 'formik-material-ui';
+import { TextField } from 'formik-material-ui';
 import { Box, Button, Grid, IconButton } from '@material-ui/core';
 
 import { Formik, Form, Field } from 'formik';

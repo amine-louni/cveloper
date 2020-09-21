@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import { Container, Divider, Grid, Typography } from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 import PostInput from '../components/Post/PostInput';
 import Post from '../components/Post/Post';
 import MyCard from '../components/common/myCard';
@@ -27,7 +27,10 @@ export default function Home() {
           </Grid>
           <Grid item md={3}>
             <Typography variant="h6" gutterBottom>
-              Trending 🔥🔥
+              Trending{' '}
+              <span role="img" aria-label="fires">
+                🔥🔥
+              </span>
             </Typography>
             <PostCardSm />
             <PostCardSm />

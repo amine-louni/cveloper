@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles, Paper, Chip, Typography } from '@material-ui/core';
-import defaultAvatar from '../../assets/img/default.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +35,10 @@ export default function PostInput() {
   return (
     <Paper className={classes.root}>
       <Typography variant="subtitle1" gutterBottom>
-        Most popular tags 💥💥
+        Most popular tags{' '}
+        <span role="img" aria-label="fire">
+          💥💥
+        </span>
       </Typography>
       <Chip label="#html" />
       <Chip label="#css" />

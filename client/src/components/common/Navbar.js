@@ -274,26 +274,22 @@ const Navbar = (props) => {
                             </Typography>
                           </MenuItem>
                           <Divider />
+                          <MenuItem onClick={handleClose}>My Account</MenuItem>
                           <MenuItem onClick={handleClose}>
-                            🙄🙄 My Account
+                            My Dashboard
                           </MenuItem>
                           <MenuItem onClick={handleClose}>
-                            👨‍💻👨‍💻 My Dashboard
+                            Write a post
                           </MenuItem>
                           <MenuItem onClick={handleClose}>
-                            ✍✍ Write a post
-                          </MenuItem>
-                          <MenuItem onClick={handleClose}>
-                            📚📚 Reading a list
+                            Reading a list
                           </MenuItem>
                           <MenuItem onClick={props.changeTheme}>
-                            🌞🌛 Dark mode
+                            Dark mode
                             <Switch checked={isDark} />
                           </MenuItem>
                           <Divider />
-                          <MenuItem onClick={handleClose}>
-                            🏃‍♂️🏃‍♂️ Logout{' '}
-                          </MenuItem>
+                          <MenuItem onClick={handleClose}>Logout </MenuItem>
                         </MenuList>
                       </ClickAwayListener>
                     </Paper>

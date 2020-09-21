@@ -1,14 +1,12 @@
 import React from 'react';
 import Footer from '../components/common/Footer';
 import Navbar from '../components/common/Navbar';
-import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 import StatCard from '../components/dashboard/StatCard';
 import Aside from '../components/dashboard/Aside';
 import MyPosts from '../components/dashboard/Myposts';
 
-const useStyles = makeStyles((theme) => ({}));
 export default function Dashboard() {
-  const classes = useStyles();
   return (
     <div>
       <Navbar />
