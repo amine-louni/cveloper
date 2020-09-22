@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setAlert } from '../actions';
+import { setAlert, register } from '../actions';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
+
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -19,8 +19,6 @@ import { Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { TextField } from 'formik-material-ui';
 import Footer from '../components/common/Footer';
-
-import { auth } from '../http';
 
 import { CircularProgress } from '@material-ui/core';
 
@@ -47,27 +45,6 @@ const useStyles = makeStyles((theme) => ({
 const Register = (props) => {
   const classes = useStyles();
 
-  const register = async (body) => {
-    try {
-      const res = await auth.post('/register', body);
-      if (res.data.status === 'success') {
-        console.log('success', 'registered with success 👌');
-        props.setAlert('registered with success 👌', 'success');
-        // setOpen(true);
-        // setTimeout(() => {
-        //   window.location.assign('/');
-        // }, 1500);
-      }
-    } catch (err) {
-      // setToastStatus({
-      //   message: err.response.data.message,
-      //   type: 'error',
-      //   isOpen: true,
-      // });
-      console.log(err.response.data.message);
-      props.setAlert(err.response.data.message, 'error');
-    }
-  };
   const validationSchema = Yup.object({
     userName: Yup.string().required('Required field').min(3),
     firstName: Yup.string().required('Required field').min(3),
@@ -98,9 +75,9 @@ const Register = (props) => {
             passwordConfirm: '',
           }}
           validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting }) => {
+          onSubmit={async (values, { setSubmitting }) => {
+            await props.register(values);
             setSubmitting(false);
-            register(values);
           }}
         >
           {({ submitForm, isSubmitting, touched, errors }) => (
@@ -108,6 +85,7 @@ const Register = (props) => {
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12}>
                   <Field
+                    disabled={isSubmitting}
                     component={TextField}
                     name="userName"
                     variant="outlined"
@@ -118,6 +96,7 @@ const Register = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Field
+                    disabled={isSubmitting}
                     component={TextField}
                     name="firstName"
                     variant="outlined"
@@ -128,6 +107,7 @@ const Register = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Field
+                    disabled={isSubmitting}
                     component={TextField}
                     variant="outlined"
                     fullWidth
@@ -138,6 +118,7 @@ const Register = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                   <Field
+                    disabled={isSubmitting}
                     component={TextField}
                     variant="outlined"
                     fullWidth
@@ -147,6 +128,7 @@ const Register = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                   <Field
+                    disabled={isSubmitting}
                     component={TextField}
                     variant="outlined"
                     fullWidth
@@ -159,6 +141,7 @@ const Register = (props) => {
 
                 <Grid item xs={12}>
                   <Field
+                    disabled={isSubmitting}
                     component={TextField}
                     variant="outlined"
                     fullWidth
@@ -186,12 +169,13 @@ const Register = (props) => {
               >
                 {isSubmitting ? <CircularProgress size={24} /> : 'Register'}
               </Button>
+              {isSubmitting ? 'true' : 'false'}
               <Grid container justify="flex-end">
                 <Grid item>
                   <RouterLink to="/login">
-                    <Link variant="body2">
+                    <Typography variant="body2">
                       Already have an account? Sign in
-                    </Link>
+                    </Typography>
                   </RouterLink>
                 </Grid>
               </Grid>
@@ -206,5 +190,7 @@ const Register = (props) => {
     </Container>
   );
 };
-
-export default connect(null, { setAlert })(Register);
+const mapStatetoPropos = () => {
+  return;
+};
+export default connect(null, { setAlert, register })(Register);
