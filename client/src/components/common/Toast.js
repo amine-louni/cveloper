@@ -9,8 +9,6 @@ const Alert = (props) => {
 };
 
 const Toast = (props) => {
-  console.log('trigger');
-  console.log(props);
   return (
     <div>
       {props.alerts.map((oneAlert) => (

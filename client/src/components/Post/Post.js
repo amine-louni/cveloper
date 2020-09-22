@@ -8,7 +8,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
@@ -58,12 +57,16 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   actionBtnLove: {
+    display: 'flex',
+    alignItems: 'center',
     '&:hover': {
       color: red[900],
       backgroundColor: 'transparent',
     },
   },
   actionBtnComment: {
+    display: 'flex',
+    alignItems: 'center',
     '&:hover': {
       color: theme.palette.primary.light,
       backgroundColor: 'transparent',
@@ -156,17 +159,17 @@ export default function Post() {
             <div>#html #css #react #formik</div>
           </CardContent>
           <CardActions className={classes.postActions}>
-            <Button
+            <div
               aria-label="add to favorites"
               className={classes.actionBtnLove}
             >
               <FavoriteBorder className={classes.marginRight} />
               <Typography variant="subtitle1">141</Typography>
-            </Button>
-            <Button className={classes.actionBtnComment} aria-label="share">
+            </div>
+            <div className={classes.actionBtnComment} aria-label="share">
               <ChatBubbleOutlineIcon className={classes.marginRight} />
               <Typography variant="subtitle1">30</Typography>
-            </Button>
+            </div>
           </CardActions>
         </CardActionArea>
       </Card>
