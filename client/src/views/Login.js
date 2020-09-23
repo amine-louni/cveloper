@@ -1,27 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { login } from '../actions';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import AlertTitle from '@material-ui/lab/AlertTitle';
+
 import { makeStyles } from '@material-ui/core/styles';
 import { Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { TextField } from 'formik-material-ui';
 import Footer from '../components/common/Footer';
-import Toast from '../components/common/Toast';
 
-import { auth } from '../http';
-import Alert from '@material-ui/lab/Alert';
 import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -60,36 +59,22 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
-export default function SignInSide() {
+function SignInSide(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [openErr, setOpenErr] = React.useState(false);
-  const login = async (body) => {
-    try {
-      const res = await auth.post('/login', body);
-      if (res.data.status === 'success') {
-        console.log('success', 'logged in with success 👌');
-        setOpen(true);
-        setTimeout(() => {
-          window.location.assign('/');
-        }, 1500);
-      }
-    } catch (err) {
-      setOpenErr(true);
-      console.log('error', err.response.data.message);
-    }
-  };
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .required('Required field')
       .email('Enter a valid email please'),
     password: Yup.string().required('Required field').min(8),
   });
+  // Redirect if logged in
+  if (props.isAuth) {
+    return <Redirect to="/" />;
+  }
   return (
     <>
       <Grid container component="main" className={classes.root}>
-        <CssBaseline />
         <Grid item xs={false} sm={4} md={7} className={classes.image} />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className={classes.paper}>
@@ -99,17 +84,6 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            {openErr ? (
-              <Alert severity="error" className={classes.alert}>
-                <AlertTitle>Authentication Error</AlertTitle>
-                <p>Wrong Email or password</p>
-                <RouterLink to="/forgot-password">
-                  <Link variant="body2">Forgot your password ?</Link>
-                </RouterLink>{' '}
-              </Alert>
-            ) : (
-              ''
-            )}
 
             <Formik
               initialValues={{
@@ -117,8 +91,9 @@ export default function SignInSide() {
                 password: '',
               }}
               validationSchema={validationSchema}
-              onSubmit={(values, { setSubmitting }) => {
-                login(values);
+              onSubmit={async (values, { setSubmitting }) => {
+                await props.login(values);
+                setSubmitting(false);
               }}
             >
               {({ submitForm, isSubmitting, touched, errors }) => (
@@ -186,7 +161,10 @@ export default function SignInSide() {
           </div>
         </Grid>
       </Grid>
-      <Toast show={open} type="success" text="You login successfully 👌👌" />
     </>
   );
 }
+const mapStateToProps = (state) => {
+  return { isAuth: state.auth.isAuth };
+};
+export default connect(mapStateToProps, { login })(SignInSide);

@@ -126,9 +126,9 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('incorrect email or password', 401));
   }
 
-  if (!user.validatedWithEmail) {
-    return next(new AppError('please validate your email', 401));
-  }
+  // if (!user.validatedWithEmail) {
+  //   return next(new AppError('please validate your email', 401));
+  // }
 
   // 3) If everything ok, send token to client
   createSendToken(user, 200, req, res);
@@ -273,7 +273,6 @@ exports.isLoggedIn = async (req, res, next) => {
         process.env.ACCESS_TOKEN_KEY
       );
 
-      console.log('valid');
       // 3) Check if user still exists
       const currentUser = await User.findById(decoded.id);
       if (!currentUser) {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setAlert, register } from '../actions';
+import { register } from '../actions';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -56,6 +56,10 @@ const Register = (props) => {
       'Passwords must match'
     ),
   });
+  // Redirect if logged in
+  if (props.isAuth) {
+    return <Redirect to="/" />;
+  }
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
@@ -190,7 +194,7 @@ const Register = (props) => {
     </Container>
   );
 };
-const mapStatetoPropos = () => {
-  return;
+const mapStateToProps = (state) => {
+  return { isAuth: state.auth.isAuth };
 };
-export default connect(null, { setAlert, register })(Register);
+export default connect(mapStateToProps, { register })(Register);

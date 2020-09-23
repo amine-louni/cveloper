@@ -8,5 +8,5 @@ export default combineReducers({
   isDark: theme,
   isMainSideBarOpen: sideBar,
   alert,
-  isAuth,
+  auth: isAuth,
 });

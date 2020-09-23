@@ -1,6 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { logout } from '../../actions';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
+import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Slide from '@material-ui/core/Slide';
 
@@ -30,8 +33,9 @@ import {
 import defaultAvatar from '../../assets/img/default.jpg';
 
 import { changeTheme, ToggleSideBar } from '../../actions/';
-import { connect } from 'react-redux';
+
 import MobileSideBar from './MobileSideBar';
+import { Link } from 'react-router-dom';
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -73,9 +77,9 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: fade(theme.palette.common.black, 0.15),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: fade(theme.palette.common.black, 0.25),
     },
     marginRight: theme.spacing(1),
     marginLeft: 0,
@@ -138,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = (props) => {
   const classes = useStyles();
-  const { isDark, ToggleSideBar } = props;
+  const { isDark, ToggleSideBar, isAuth, loading, user } = props;
 
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -175,7 +179,7 @@ const Navbar = (props) => {
   return (
     <div className={classes.grow}>
       <HideOnScroll {...props}>
-        <AppBar color="primary">
+        <AppBar color="default">
           <Toolbar>
             <IconButton
               onClick={ToggleSideBar}
@@ -204,101 +208,132 @@ const Navbar = (props) => {
               />
             </div>
             <div className={classes.grow} />
-            <Button
-              variant="contained"
-              color="default"
-              className={classes.cta}
-              style={{ marginRight: 30 }}
-              size="small"
-              endIcon={<AddCircleOutlineOutlinedIcon />}
-            >
-              write a post
-            </Button>
-            <IconButton>
-              <Badge badgeContent={4} color="error">
-                <MailOutline />
-              </Badge>
-            </IconButton>
-            <IconButton>
-              <Badge badgeContent={3} color="error">
-                <NotificationsOutlined />
-              </Badge>
-            </IconButton>
+            {isAuth ? (
+              <>
+                <Button
+                  variant="contained"
+                  color="default"
+                  className={classes.cta}
+                  style={{ marginRight: 30 }}
+                  size="small"
+                  endIcon={<AddCircleOutlineOutlinedIcon />}
+                >
+                  write a post
+                </Button>
+                <IconButton>
+                  <Badge badgeContent={4} color="error">
+                    <MailOutline />
+                  </Badge>
+                </IconButton>
+                <IconButton>
+                  <Badge badgeContent={3} color="error">
+                    <NotificationsOutlined />
+                  </Badge>
+                </IconButton>
 
-            <div className={classes.userInfos}>
-              <IconButton
-                disableRipple
-                edge={false}
-                ref={anchorRef}
-                aria-controls={open ? 'menu-list-grow' : undefined}
-                aria-haspopup="true"
-                onClick={handleToggle}
-              >
-                <Avatar src={defaultAvatar} />
-              </IconButton>
-              <Popper
-                open={open}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                transition
-                disablePortal
-                style={{ minWidth: 270 }}
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin: placement === 'left top',
-                    }}
+                <div className={classes.userInfos}>
+                  <IconButton
+                    disableRipple
+                    edge={false}
+                    ref={anchorRef}
+                    aria-controls={open ? 'menu-list-grow' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
                   >
-                    <Paper>
-                      <ClickAwayListener onClickAway={handleClose}>
-                        <MenuList
-                          autoFocusItem={open}
-                          id="menu-list-grow"
-                          onKeyDown={handleListKeyDown}
-                        >
-                          <MenuItem
-                            onClick={handleClose}
-                            style={{ display: 'block' }}
-                          >
-                            <Typography
-                              display="block"
-                              style={{ width: '100%' }}
-                              variant="subtitle1"
+                    <Avatar src={defaultAvatar} />
+                  </IconButton>
+                  <Popper
+                    open={open}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    transition
+                    disablePortal
+                    style={{ minWidth: 270 }}
+                  >
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin: placement === 'left top',
+                        }}
+                      >
+                        <Paper>
+                          <ClickAwayListener onClickAway={handleClose}>
+                            <MenuList
+                              autoFocusItem={open}
+                              id="menu-list-grow"
+                              onKeyDown={handleListKeyDown}
                             >
-                              John Doe
-                            </Typography>{' '}
-                            <Typography display="block" variant="caption">
-                              @john_doe
-                            </Typography>
-                          </MenuItem>
-                          <Divider />
-                          <MenuItem onClick={handleClose}>My Account</MenuItem>
-                          <MenuItem onClick={handleClose}>
-                            My Dashboard
-                          </MenuItem>
-                          <MenuItem onClick={handleClose}>
-                            Write a post
-                          </MenuItem>
-                          <MenuItem onClick={handleClose}>
-                            Reading a list
-                          </MenuItem>
-                          <MenuItem onClick={props.changeTheme}>
-                            Dark mode
-                            <Switch checked={isDark} />
-                          </MenuItem>
-                          <Divider />
-                          <MenuItem onClick={handleClose}>Logout </MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-            </div>
-            <div className={classes.sectionDesktop}></div>
-            <div className={classes.sectionMobile}></div>
+                              <MenuItem
+                                onClick={handleClose}
+                                style={{ display: 'block' }}
+                              >
+                                <Typography
+                                  display="block"
+                                  style={{ width: '100%' }}
+                                  variant="subtitle1"
+                                >
+                                  {`${user.firstName}  ${user.lastName}`}
+                                </Typography>{' '}
+                                <Typography display="block" variant="caption">
+                                  @{user.userName}
+                                </Typography>
+                              </MenuItem>
+                              <Divider />
+                              <MenuItem onClick={handleClose}>
+                                My Account
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                My Dashboard
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                Write a post
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                Reading a list
+                              </MenuItem>
+                              <MenuItem onClick={props.changeTheme}>
+                                Dark mode
+                                <Switch checked={isDark} />
+                              </MenuItem>
+                              <Divider />
+                              <MenuItem onClick={props.logout}>
+                                Logout{' '}
+                              </MenuItem>
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </div>
+                <div className={classes.sectionDesktop}></div>
+                <div className={classes.sectionMobile}></div>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.cta}
+                  size="small"
+                  component={Link}
+                  to={'/login'}
+                >
+                  Login
+                </Button>
+                <Button
+                  variant="contained"
+                  color="default"
+                  className={classes.cta}
+                  size="small"
+                  component={Link}
+                  to={'/register'}
+                >
+                  Register
+                </Button>
+              </>
+            )}
           </Toolbar>
         </AppBar>
       </HideOnScroll>
@@ -307,7 +342,15 @@ const Navbar = (props) => {
   );
 };
 
-const mapStateToProps = ({ isDark, isMainSideBarOpen }) => {
-  return { isDark, isMainSideBarOpen };
+const mapStateToProps = ({ isDark, isMainSideBarOpen, auth }) => {
+  return {
+    isDark,
+    isMainSideBarOpen,
+    isAuth: auth.isAuth,
+    user: auth.user,
+    loading: auth.loading,
+  };
 };
-export default connect(mapStateToProps, { changeTheme, ToggleSideBar })(Navbar);
+export default connect(mapStateToProps, { changeTheme, ToggleSideBar, logout })(
+  Navbar
+);

@@ -4,6 +4,9 @@ import {
   REGISTER_FAIL,
   AUTH_ERROR,
   USER_LOADED,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT,
 } from './types';
 
 import { setAlert } from './alertHandler';
@@ -42,6 +45,7 @@ export const register = (body) => async (dispatch) => {
         type: REGISTER_SUCCESS,
         payload: res.data,
       });
+      dispatch(loadUser());
     }
   } catch (err) {
     console.log(err);
@@ -53,4 +57,36 @@ export const register = (body) => async (dispatch) => {
       });
     }
   }
+};
+
+// Login User
+
+export const login = (body) => async (dispatch) => {
+  try {
+    const res = await auth.post('/login', body);
+    if (res.data.status === 'success') {
+      dispatch(setAlert('logged with success 👌', 'success'));
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data.data,
+      });
+      dispatch(loadUser());
+    }
+  } catch (err) {
+    console.log(err);
+    if (err) {
+      dispatch(setAlert(err.response.data.message, 'error'));
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: err.response.data.message,
+      });
+    }
+  }
+};
+
+// Logout User
+export const logout = () => (dispatch) => {
+  dispatch({ type: LOGOUT });
+  dispatch(setAlert('You Logged out 😥', 'warning'));
 };
