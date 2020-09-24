@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getCurrentUserProfile } from '../../actions';
 import AdvancedFormat from 'dayjs/plugin/advancedFormat'; // ES 2015
+import Skeleton from 'react-loading-skeleton';
 
 import dayjs from 'dayjs';
 import {
@@ -108,22 +109,25 @@ function Intro(props) {
         <div className={classes.avatarSection}>
           <div className={classes.avatarWrapper}>
             <div className={classes.avatarLeft}>
-              <Avatar className={classes.avatar} src={defaultAvatar} />
+              <Avatar
+                className={classes.avatar}
+                src={props.user ? props.user.avatar : ''}
+              />
               <div>
                 <Typography
                   variant="h5"
                   className={classes.userName}
                   display="block"
                 >
-                  {`${props.user ? props.user.firstName : 'loading'}`}{' '}
-                  {`${props.user ? props.user.lastName : 'loading'}`}
+                  {props.user ? props.user.firstName : <Skeleton />}{' '}
+                  {props.user ? props.user.lastName : ''}
                 </Typography>
                 <Typography variant="caption" gutterBottom>
-                  {`${props.profile ? props.profile.title : 'loading'}`} at{' '}
-                  {`${props.profile ? props.profile.company : 'loading'}`}
+                  {props.profile ? props.profile.title : <Skeleton />} at{' '}
+                  {props.profile ? props.profile.company : ''}
                 </Typography>
                 <Typography display="block" variant="subtitle1">
-                  {`${props.profile ? props.profile.status : 'loading'}`}
+                  {props.profile ? props.profile.status : <Skeleton />}
                 </Typography>
 
                 <div className={classes.metaSection}>
@@ -145,17 +149,19 @@ function Intro(props) {
                     <RoomIcon style={{ marginRight: 7 }} />
                     <div>Boston , MY</div>
                   </div>
-                  <div className={classes.infoBox}>
+                  {/* <div className={classes.infoBox}>
                     <CakeOutlinedIcon style={{ marginRight: 7 }} />
                     <div>15 mai</div>
-                  </div>
+                  </div> */}
                   <div className={classes.infoBox}>
                     <EmojiFlagsIcon style={{ marginRight: 7 }} />
                     <div>
                       Joined{' '}
-                      {props.user
-                        ? dayjs(props.user.createdAt).format('MMMM D, YYYY')
-                        : 'loading'}
+                      {props.user ? (
+                        dayjs(props.user.createdAt).format('MMMM D, YYYY')
+                      ) : (
+                        <Skeleton />
+                      )}
                     </div>
                   </div>
                 </div>

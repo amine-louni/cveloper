@@ -1,4 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { getCurrentUserProfile } from '../../actions';
+import AdvancedFormat from 'dayjs/plugin/advancedFormat'; // ES 2015
+
+import dayjs from 'dayjs';
 import {
   Button,
   Card,
@@ -30,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
 }));
-export default function History() {
+function History(props) {
   const classes = useStyles();
 
   const [openEduDialog, setOpenEduDialog] = React.useState(false);
@@ -68,67 +73,42 @@ export default function History() {
             openExp={handleClickOpenExp}
           />
           <Timeline>
-            <TimelineItem className={classes.LeftTimeLine}>
-              <TimelineSeparator>
-                <TimelineDot />
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent>
-                <Card>
-                  <CardContent>
-                    <Typography display="block" variant="subtitle2">
-                      ORCLOUD (Web Developer)
-                    </Typography>
-                    <Typography variant="caption" gutterBottom>
-                      Nov 2015 - Current
-                    </Typography>
+            {props.profile
+              ? props.profile.experience.map((exp) => {
+                  return (
+                    <TimelineItem className={classes.LeftTimeLine}>
+                      <TimelineSeparator>
+                        <TimelineDot />
+                        <TimelineConnector />
+                      </TimelineSeparator>
+                      <TimelineContent>
+                        <Card>
+                          <CardContent>
+                            <Typography display="block" variant="subtitle2">
+                              {exp.company} ({exp.title})
+                            </Typography>
+                            <Typography variant="caption" gutterBottom>
+                              {dayjs(exp.from).format('MMMM , YYYY')} -{' '}
+                              {exp.current
+                                ? 'current'
+                                : dayjs(exp.to).format('MMMM , YYYY')}
+                            </Typography>
 
-                    <hr></hr>
-                    <Typography
-                      component="p"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      I am a Front End developer with industry experience
-                      building websites and web applications. I specialize in
-                      JavaScript I also have experience working on React. Take a
-                      look at my work or get in
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </TimelineContent>
-            </TimelineItem>
-
-            <TimelineItem className={classes.LeftTimeLine}>
-              <TimelineSeparator>
-                <TimelineDot />
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent>
-                <Card>
-                  <CardContent>
-                    <Typography display="block" variant="subtitle2">
-                      Microsoft (Systems Admin)
-                    </Typography>
-                    <Typography variant="caption" gutterBottom>
-                      Da : Nov 2004 - Nov 2011
-                    </Typography>
-
-                    <hr></hr>
-                    <Typography
-                      component="p"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      I am a Front End developer with industry experience
-                      building websites and web applications. I specialize in
-                      JavaScript I also have experience working on React. Take a
-                      look at my work or get in
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </TimelineContent>
-            </TimelineItem>
+                            <hr></hr>
+                            <Typography
+                              component="p"
+                              variant="body1"
+                              color="textSecondary"
+                            >
+                              {exp.description}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </TimelineContent>
+                    </TimelineItem>
+                  );
+                })
+              : 'not found'}
           </Timeline>
         </CardContent>
       </Card>
@@ -152,42 +132,56 @@ export default function History() {
           />
 
           <Timeline>
-            <TimelineItem className={classes.LeftTimeLine}>
-              <TimelineSeparator>
-                <TimelineDot />
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent>
-                <Card>
-                  <CardContent>
-                    <Typography display="block" variant="subtitle1">
-                      University Of Washington
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      Masters degree at Computer Science
-                    </Typography>
-                    <Typography variant="caption" gutterBottom>
-                      Sep 1993 - June 1999
-                    </Typography>
+            {props.profile
+              ? props.profile.education.map((edu) => {
+                  return (
+                    <TimelineItem className={classes.LeftTimeLine}>
+                      <TimelineSeparator>
+                        <TimelineDot />
+                        <TimelineConnector />
+                      </TimelineSeparator>
+                      <TimelineContent>
+                        <Card>
+                          <CardContent>
+                            <Typography display="block" variant="subtitle1">
+                              {edu.school}
+                            </Typography>
+                            <Typography variant="subtitle2">
+                              {edu.degree} degree at {edu.fieldofstudy}
+                            </Typography>
+                            <Typography variant="caption" gutterBottom>
+                              {dayjs(edu.from).format('MMMM , YYYY')} -{' '}
+                              {edu.current
+                                ? 'current'
+                                : dayjs(edu.to).format('MMMM , YYYY')}
+                            </Typography>
 
-                    <hr></hr>
-                    <Typography
-                      component="p"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      I am a Front End developer with industry experience
-                      building websites and web applications. I specialize in
-                      JavaScript I also have experience working on React. Take a
-                      look at my work or get in
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </TimelineContent>
-            </TimelineItem>
+                            <hr></hr>
+                            <Typography
+                              component="p"
+                              variant="body1"
+                              color="textSecondary"
+                            >
+                              {edu.description}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </TimelineContent>
+                    </TimelineItem>
+                  );
+                })
+              : 'loading'}
           </Timeline>
         </CardContent>
       </Card>
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.auth.user,
+    profile: state.userProfile.profile,
+  };
+};
+export default connect(mapStateToProps, { getCurrentUserProfile })(History);
