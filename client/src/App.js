@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import PrivateRoute from './components/routing/PrivateRoute';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 
@@ -54,9 +55,9 @@ function App({ isDark, loadUser }) {
       <div className="App">
         <Toast />
         <Switch>
-          <Route path="/me" component={Profile} />
-          <Route path="/my-account" component={MyAccount} />
-          <Route path="/dashboard" component={Dashboard} />
+          <PrivateRoute path="/me" component={Profile} />
+          <PrivateRoute path="/my-account" component={MyAccount} />
+          <PrivateRoute path="/dashboard" component={Dashboard} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />

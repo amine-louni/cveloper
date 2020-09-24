@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { getCurrentUserProfile } from '../../actions';
+import AdvancedFormat from 'dayjs/plugin/advancedFormat'; // ES 2015
 
+import dayjs from 'dayjs';
 import {
   makeStyles,
   Avatar,
@@ -20,6 +24,7 @@ import CakeOutlinedIcon from '@material-ui/icons/CakeOutlined';
 
 import defaultAvatar from '../../assets/img/default.jpg';
 import EditProfileDialog from './diloags/EditProfileDialog';
+
 const useStyles = makeStyles((theme) => ({
   root: { marginTop: theme.spacing(2) },
   coverSection: {
@@ -72,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
   rightIntro: {},
 }));
 
-export default function Intro() {
+function Intro(props) {
   const classes = useStyles();
 
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
@@ -83,6 +88,11 @@ export default function Intro() {
   const handleCloseEdit = () => {
     setOpenEditDialog(false);
   };
+
+  useEffect(() => {
+    props.getCurrentUserProfile();
+  }, []);
+  dayjs.extend(AdvancedFormat); // use plugin
 
   return (
     <Card className={classes.root}>
@@ -105,39 +115,30 @@ export default function Intro() {
                   className={classes.userName}
                   display="block"
                 >
-                  john doe
+                  {`${props.user ? props.user.firstName : 'loading'}`}{' '}
+                  {`${props.user ? props.user.lastName : 'loading'}`}
                 </Typography>
                 <Typography variant="caption" gutterBottom>
-                  Senior developer at orcloud
+                  {`${props.profile ? props.profile.title : 'loading'}`} at{' '}
+                  {`${props.profile ? props.profile.company : 'loading'}`}
                 </Typography>
                 <Typography display="block" variant="subtitle1">
-                  <span color="primary">|</span> Working from home
+                  {`${props.profile ? props.profile.status : 'loading'}`}
                 </Typography>
 
                 <div className={classes.metaSection}>
                   <div className={classes.skillsWrapper}>
                     <div className={classes.skills}>
-                      <Chip
-                        className={classes.skill}
-                        size="small"
-                        label="HTML"
-                      />
-                      <Chip
-                        className={classes.skill}
-                        size="small"
-                        label="Javascript"
-                      />
-                      <Chip
-                        className={classes.skill}
-                        size="small"
-                        label="Php"
-                      />
-                      <Chip
-                        className={classes.skill}
-                        size="small"
-                        label="Ruby"
-                      />
-                      <Chip className={classes.skill} size="small" label="R" />
+                      {props.profile &&
+                        props.profile.skills.map((skill) => {
+                          return (
+                            <Chip
+                              className={classes.skill}
+                              size="small"
+                              label={skill}
+                            />
+                          );
+                        })}
                     </div>
                   </div>
                   <div className={classes.infoBox}>
@@ -150,7 +151,12 @@ export default function Intro() {
                   </div>
                   <div className={classes.infoBox}>
                     <EmojiFlagsIcon style={{ marginRight: 7 }} />
-                    <div>Joined September, 2018</div>
+                    <div>
+                      Joined{' '}
+                      {props.user
+                        ? dayjs(props.user.createdAt).format('MMMM D, YYYY')
+                        : 'loading'}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -191,3 +197,11 @@ export default function Intro() {
     </Card>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.auth.user,
+    profile: state.userProfile.profile,
+  };
+};
+export default connect(mapStateToProps, { getCurrentUserProfile })(Intro);

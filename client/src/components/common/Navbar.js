@@ -265,7 +265,8 @@ const Navbar = (props) => {
                               onKeyDown={handleListKeyDown}
                             >
                               <MenuItem
-                                onClick={handleClose}
+                                component={Link}
+                                to={'/me'}
                                 style={{ display: 'block' }}
                               >
                                 <Typography
@@ -280,10 +281,18 @@ const Navbar = (props) => {
                                 </Typography>
                               </MenuItem>
                               <Divider />
-                              <MenuItem onClick={handleClose}>
+                              <MenuItem
+                                component={Link}
+                                to={'/my-account/infos'}
+                                style={{ display: 'block' }}
+                              >
                                 My Account
                               </MenuItem>
-                              <MenuItem onClick={handleClose}>
+                              <MenuItem
+                                component={Link}
+                                to={'/dashboard'}
+                                style={{ display: 'block' }}
+                              >
                                 My Dashboard
                               </MenuItem>
                               <MenuItem onClick={handleClose}>

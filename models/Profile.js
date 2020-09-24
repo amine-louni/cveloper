@@ -9,6 +9,10 @@ const ProfileSchema = new mongoose.Schema({
   company: {
     type: String,
   },
+  title: {
+    type: String,
+    default: 'employee',
+  },
   website: {
     type: String,
   },
