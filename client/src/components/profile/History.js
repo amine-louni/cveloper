@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getCurrentUserProfile } from '../../actions';
-import AdvancedFormat from 'dayjs/plugin/advancedFormat'; // ES 2015
 
 import dayjs from 'dayjs';
 import {
