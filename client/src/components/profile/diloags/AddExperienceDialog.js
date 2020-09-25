@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { addExp } from '../../../actions/';
 import Dialog from '@material-ui/core/Dialog';
@@ -39,7 +39,7 @@ function AddExperienceDialog(props) {
   const onSubmit = (values, { setSubmitting }) => {
     setTimeout(() => {
       setSubmitting(false);
-      console.log('add education');
+
       //  alert(JSON.stringify(values, null, 2));
       props.addExp(values);
 

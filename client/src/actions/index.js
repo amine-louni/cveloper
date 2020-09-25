@@ -2,7 +2,7 @@ import { changeTheme } from './themeHandler';
 import { ToggleSideBar } from './mainSideBarHandler';
 import { register, login, logout } from './authHandler';
 import { setAlert, removeAlert } from './alertHandler';
-import { getCurrentUserProfile, addExp } from './profileHandler';
+import { getCurrentUserProfile, addExp, addEdu } from './profileHandler';
 export {
   changeTheme,
   ToggleSideBar,
@@ -13,4 +13,5 @@ export {
   logout,
   getCurrentUserProfile,
   addExp,
+  addEdu,
 };

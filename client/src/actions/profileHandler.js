@@ -49,11 +49,29 @@ export const createInitialProfile = (body) => async (dispatch) => {
 // PATH /experience
 export const addExp = (body) => async (dispatch) => {
   try {
-    const res = await profileHttp.patch('/experience', body);
+    await profileHttp.patch('/experience', body);
 
     dispatch({ type: ADD_EXPERIENCE, payload: body });
     dispatch(
       setAlert('Experience has been added to your profile 🍭', 'success')
+    );
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      setAlert('Error when adding an experience , please try again', 'error')
+    );
+  }
+};
+
+// Add education to profile
+// PATH /education
+export const addEdu = (body) => async (dispatch) => {
+  try {
+    await profileHttp.patch('/education', body);
+
+    dispatch({ type: ADD_EDUCATION, payload: body });
+    dispatch(
+      setAlert('Education has been added to your profile 🍭', 'success')
     );
   } catch (err) {
     console.log(err);

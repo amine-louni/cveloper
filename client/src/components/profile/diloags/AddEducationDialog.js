@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { connect } from 'react-redux';
+import { addEdu } from '../../../actions/';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -15,7 +16,8 @@ import { DatePicker } from 'formik-material-ui-pickers';
 
 import * as Yup from 'yup';
 
-export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
+function AddEducationDialog(props) {
+  const { openEduDialog, handleCloseEdu } = props;
   const initialValues = {
     school: '',
     degree: '',
@@ -27,13 +29,17 @@ export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
   };
 
   const validationSchema = Yup.object({
-    school: Yup.string(),
+    school: Yup.string().required('School is a required field'),
+    degree: Yup.string().required('Degree is a required field'),
+    fieldofstudy: Yup.string().required('Field of study is a required field'),
+    to: Yup.string().required('start date is a required field'),
   });
   const onSubmit = (values, { setSubmitting }) => {
     setTimeout(() => {
       setSubmitting(false);
-      console.log('add education');
-      alert(JSON.stringify(values, null, 2));
+      //console.log('add education');
+      //  alert(JSON.stringify(values, null, 2));
+      props.addEdu(values);
       handleCloseEdu();
     }, 500);
   };
@@ -142,3 +148,4 @@ export default function AddEducationDialog({ openEduDialog, handleCloseEdu }) {
     </Dialog>
   );
 }
+export default connect(null, { addEdu })(AddEducationDialog);
