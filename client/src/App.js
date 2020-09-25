@@ -17,7 +17,7 @@ import { indigo, teal } from '@material-ui/core/colors';
 import Dashboard from './views/Dashboard';
 import Toast from './components/common/Toast';
 import { loadUser } from './actions/authHandler';
-import setAuthToken from './utils/setAuthToken';
+import setAuthToken from './http/setAuthToken';
 
 if (localStorage.token) {
   console.log('token found!');

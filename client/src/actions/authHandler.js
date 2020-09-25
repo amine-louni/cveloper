@@ -1,4 +1,5 @@
 import { auth } from '../http';
+import setAuthToken from '../http/setAuthToken';
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -10,7 +11,7 @@ import {
 } from './types';
 
 import { setAlert } from './alertHandler';
-import setAuthToken from '../utils/setAuthToken';
+import { createInitialProfile } from './profileHandler';
 
 //Load User
 export const loadUser = () => async (dispatch) => {
@@ -40,12 +41,12 @@ export const register = (body) => async (dispatch) => {
       console.log('success', 'registered with success 👌');
       // props.setAlert(', 'success');
       dispatch(setAlert('registered with success 👌', 'success'));
-
       dispatch({
         type: REGISTER_SUCCESS,
         payload: res.data,
       });
       dispatch(loadUser());
+      dispatch(createInitialProfile());
     }
   } catch (err) {
     console.log(err);

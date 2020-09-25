@@ -9,3 +9,7 @@ export const profile = axios.create({
   baseURL: 'http://localhost:9000/api/v1/profiles/',
   headers: { 'Content-type': 'application/json' },
 });
+export const user = axios.create({
+  baseURL: 'http://localhost:9000/api/v1/users/',
+  headers: { 'Content-type': 'application/json' },
+});

@@ -14,12 +14,9 @@ import {
   Chip,
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import RoomIcon from '@material-ui/icons/Room';
-import EmojiFlagsIcon from '@material-ui/icons/EmojiFlags';
 
-import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
-import InstagramIcon from '@material-ui/icons/Instagram';
+
 import GitHubIcon from '@material-ui/icons/GitHub';
 import CakeOutlinedIcon from '@material-ui/icons/CakeOutlined';
 
@@ -29,14 +26,12 @@ import EditProfileDialog from './diloags/EditProfileDialog';
 const useStyles = makeStyles((theme) => ({
   root: { marginTop: theme.spacing(2) },
   coverSection: {
-    height: 150,
-    backgroundRepeat: 'no-repeat',
+    height: 70,
+
     backgroundColor:
       theme.palette.type === 'light'
-        ? theme.palette.grey[50]
-        : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
+        ? theme.palette.primary.main
+        : theme.palette.secondary.main,
   },
   userName: { textTransform: 'capitalize' },
   avatarWrapper: {
@@ -44,38 +39,47 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: theme.spacing(4),
-    marginTop: -140,
+
+    position: 'relative',
   },
   avatar: {
-    height: theme.spacing(17),
-    width: theme.spacing(17),
-    marginBottom: theme.spacing(2),
+    height: theme.spacing(13),
+    width: theme.spacing(13),
+
+    margin: 'auto',
   },
-  avatarLeft: {},
+  wrapper: {
+    position: 'relative',
+  },
+  avatarCenter: {
+    margin: '0 auto',
+    textAlign: 'center',
+    marginTop: -70,
+  },
   bio: {
     textAlign: 'center',
   },
   infoBox: {
     display: 'inline-flex',
     alignItems: 'flex-end',
-    border: '1px solid #555',
-    padding: '6px 16px',
     marginRight: '7px',
-    borderRadius: theme.spacing(3),
   },
   skillsWrapper: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    margin: '7px 0',
+    textAlign: 'center',
   },
   skills: {
     display: 'block',
-    margin: '30px 0',
+    textAlign: 'center',
   },
   skill: {
     marginRight: 7,
   },
-  rightIntro: {},
+  rightIntro: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
 }));
 
 function Intro(props) {
@@ -93,22 +97,14 @@ function Intro(props) {
   useEffect(() => {
     props.getCurrentUserProfile();
   }, []);
-  dayjs.extend(AdvancedFormat); // use plugin
 
   return (
     <Card className={classes.root}>
       <div>
-        <div
-          className={classes.coverSection}
-          style={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
-          }}
-        >
-          cover
-        </div>
-        <div className={classes.avatarSection}>
+        <div className={classes.coverSection}></div>
+        <div className={classes.wrapper}>
           <div className={classes.avatarWrapper}>
-            <div className={classes.avatarLeft}>
+            <div className={classes.avatarCenter}>
               <Avatar
                 className={classes.avatar}
                 src={props.user ? props.user.avatar : ''}
@@ -119,45 +115,60 @@ function Intro(props) {
                   className={classes.userName}
                   display="block"
                 >
-                  {props.user ? props.user.firstName : <Skeleton />}{' '}
-                  {props.user ? props.user.lastName : ''}
+                  {props.user ? props.user.firstName : ''}{' '}
+                  {props.user ? props.user.lastName : ''}{' '}
+                  <span>
+                    <a href="/">
+                      <TwitterIcon
+                        style={{ marginLeft: 7, color: '#1DA1F2' }}
+                      />
+                    </a>
+
+                    <a href="/">
+                      <GitHubIcon style={{ marginLeft: 7, color: '#333' }} />
+                    </a>
+                  </span>
                 </Typography>
                 <Typography variant="caption" gutterBottom>
-                  {props.profile ? props.profile.title : <Skeleton />} at{' '}
-                  {props.profile ? props.profile.company : ''}
+                  {props.profile ? props.profile.title : ''}{' '}
+                  {props.profile ? props.profile.company || '' : ''}
                 </Typography>
                 <Typography display="block" variant="subtitle1">
-                  {props.profile ? props.profile.status : <Skeleton />}
+                  {props.profile ? props.profile.status : ''}
                 </Typography>
 
                 <div className={classes.metaSection}>
-                  <div className={classes.skillsWrapper}>
-                    <div className={classes.skills}>
-                      {props.profile &&
-                        props.profile.skills.map((skill) => {
-                          return (
-                            <Chip
-                              className={classes.skill}
-                              size="small"
-                              label={skill}
-                            />
-                          );
-                        })}
+                  {props.profile && props.profile.skills.length > 0 ? (
+                    <div className={classes.skillsWrapper}>
+                      <div className={classes.skills}>
+                        {props.profile &&
+                          props.profile.skills.map((skill) => {
+                            return (
+                              <Chip
+                                className={classes.skill}
+                                size="small"
+                                label={skill}
+                              />
+                            );
+                          })}
+                      </div>
                     </div>
-                  </div>
-                  <div className={classes.infoBox}>
+                  ) : (
+                    <div className={classes.skillsWrapper}>
+                      Didn't add any skills yet 👻
+                    </div>
+                  )}
+
+                  {/* <div className={classes.infoBox}>
                     <RoomIcon style={{ marginRight: 7 }} />
                     <div>Boston , MY</div>
-                  </div>
-                  {/* <div className={classes.infoBox}>
-                    <CakeOutlinedIcon style={{ marginRight: 7 }} />
-                    <div>15 mai</div>
                   </div> */}
+
                   <div className={classes.infoBox}>
-                    <EmojiFlagsIcon style={{ marginRight: 7 }} />
+                    <CakeOutlinedIcon style={{ marginRight: 7 }} />
                     <div>
-                      Joined{' '}
                       {props.user ? (
+                        'Joined ' +
                         dayjs(props.user.createdAt).format('MMMM D, YYYY')
                       ) : (
                         <Skeleton />
@@ -169,11 +180,10 @@ function Intro(props) {
             </div>
             <div className={classes.rightIntro}>
               <Button
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 onClick={handleOpenEdit}
-                style={{ marginBottom: 30 }}
-                startIcon={<EditIcon />}
+                style={{ margin: 7 }}
               >
                 edit profile
               </Button>
@@ -182,20 +192,6 @@ function Intro(props) {
                 handleClickOpenEdit={openEditDialog}
                 handleCloseEdit={handleCloseEdit}
               />
-              <div>
-                <a href="/">
-                  <FacebookIcon style={{ marginLeft: 7, color: '#1877F2' }} />
-                </a>
-                <a href="/">
-                  <TwitterIcon style={{ marginLeft: 7, color: '#1DA1F2' }} />
-                </a>
-                <a href="/">
-                  <InstagramIcon style={{ marginLeft: 7, color: '#E1306C' }} />
-                </a>
-                <a href="/">
-                  <GitHubIcon style={{ marginLeft: 7, color: '#333' }} />
-                </a>
-              </div>
             </div>
           </div>
         </div>

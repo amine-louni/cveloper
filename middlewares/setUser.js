@@ -1,5 +1,5 @@
 const setTheUserId = (req, res, next) => {
-  if (!req.body.userId) req.body.user = req.currentUser._id;
+  if (!req.body.user) req.body.user = req.currentUser._id;
 
   next();
 };

@@ -73,7 +73,7 @@ function History(props) {
             openExp={handleClickOpenExp}
           />
           <Timeline>
-            {props.profile
+            {props.profile && props.profile.experience.length > 0
               ? props.profile.experience.map((exp) => {
                   return (
                     <TimelineItem className={classes.LeftTimeLine}>
@@ -108,7 +108,7 @@ function History(props) {
                     </TimelineItem>
                   );
                 })
-              : 'not found'}
+              : 'No experience has been added yet 👻'}
           </Timeline>
         </CardContent>
       </Card>
@@ -116,7 +116,7 @@ function History(props) {
       <Card className={classes.root}>
         <CardContent>
           <div className={classes.cardTitle}>
-            <Typography variant="h5">Study</Typography>
+            <Typography variant="h5">Education</Typography>
             <Button
               variant="outlined"
               color="primary"
@@ -132,7 +132,7 @@ function History(props) {
           />
 
           <Timeline>
-            {props.profile
+            {props.profile && props.profile.education.length > 0
               ? props.profile.education.map((edu) => {
                   return (
                     <TimelineItem className={classes.LeftTimeLine}>
@@ -170,7 +170,7 @@ function History(props) {
                     </TimelineItem>
                   );
                 })
-              : 'loading'}
+              : 'No education has been added yet 👻'}
           </Timeline>
         </CardContent>
       </Card>

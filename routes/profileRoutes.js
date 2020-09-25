@@ -3,9 +3,9 @@ const { check, validationResult } = require('express-validator');
 const authController = require('../controllers/authController');
 const profileController = require('../controllers/profileController');
 const validationResultHandler = require('../middlewares/validationResultHandler');
-const setTheUserID = require('../middlewares/setIdParam');
+const setIdParam = require('../middlewares/setIdParam');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 // GET /profiles/github/:username
 router.route('/github/:username').get(profileController.getGithubProfile);
@@ -14,8 +14,12 @@ router.route('/github/:username').get(profileController.getGithubProfile);
 // [ GET | POST ] /profiles
 router
   .route('/')
-  .get(profileController.getAllProfiles)
-  .post(authController.protect, setTheUserID, profileController.createProfile);
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    profileController.getAllProfiles
+  )
+  .post(authController.protect, setIdParam, profileController.createProfile);
 
 // [ GET | PATCH ] /profiles/me/(:id)
 router
