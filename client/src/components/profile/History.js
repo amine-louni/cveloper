@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getCurrentUserProfile } from '../../actions';
 
 import dayjs from 'dayjs';
 import {
@@ -183,4 +182,4 @@ const mapStateToProps = (state) => {
     profile: state.userProfile.profile,
   };
 };
-export default connect(mapStateToProps, { getCurrentUserProfile })(History);
+export default connect(mapStateToProps)(History);

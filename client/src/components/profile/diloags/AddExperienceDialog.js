@@ -1,5 +1,6 @@
-import React from 'react';
-
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { addExp } from '../../../actions/';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -15,11 +16,8 @@ import { DatePicker } from 'formik-material-ui-pickers';
 
 import * as Yup from 'yup';
 
-export default function AddEducationDialog({
-  openExp,
-  closeExp,
-  openExpDialog,
-}) {
+function AddExperienceDialog(props) {
+  const { closeExp, openExpDialog, openExp } = props;
   const initialValues = {
     title: '',
     company: '',
@@ -31,16 +29,24 @@ export default function AddEducationDialog({
   };
 
   const validationSchema = Yup.object({
-    title: Yup.string(),
+    title: Yup.string().required('Job title is required'),
+    company: Yup.string().required('Company title is required'),
+    location: Yup.string(),
+    from: Yup.date(),
+    description: Yup.string(),
+    current: Yup.boolean(),
   });
   const onSubmit = (values, { setSubmitting }) => {
     setTimeout(() => {
       setSubmitting(false);
       console.log('add education');
-      alert(JSON.stringify(values, null, 2));
+      //  alert(JSON.stringify(values, null, 2));
+      props.addExp(values);
+
       closeExp();
     }, 500);
   };
+
   return (
     <Dialog
       open={openExpDialog}
@@ -148,3 +154,5 @@ export default function AddEducationDialog({
     </Dialog>
   );
 }
+
+export default connect(null, { addExp })(AddExperienceDialog);

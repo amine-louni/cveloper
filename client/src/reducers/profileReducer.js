@@ -1,4 +1,4 @@
-import { GET_PROFILE, PROFILE_ERROR } from '../actions/types';
+import { ADD_EXPERIENCE, GET_PROFILE, PROFILE_ERROR } from '../actions/types';
 
 const initialState = {
   profile: null,
@@ -22,6 +22,19 @@ export default function (state = initialState, action) {
         profile: action.payload,
         loading: false,
       };
+
+    case ADD_EXPERIENCE: {
+      console.log('add exp');
+      return {
+        ...state,
+        error: action.payload,
+        profile: {
+          ...state.profile,
+          experience: [...state.profile.experience, action.payload],
+        },
+        loading: false,
+      };
+    }
 
     default:
       return state;
