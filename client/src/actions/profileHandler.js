@@ -7,6 +7,7 @@ import {
   PROFILE_ERROR,
   ADD_EDUCATION,
   ADD_EXPERIENCE,
+  DELETE_EXPERIENCE,
 } from './types';
 
 // Get current user profile
@@ -62,9 +63,26 @@ export const addExp = (body) => async (dispatch) => {
     );
   }
 };
+// DELETE experience
+//{{URL}}/profiles/experience/5f4d52669f30492b48263879
+export const delExp = (id) => async (dispatch) => {
+  try {
+    await profileHttp.delete(`/experience/${id}`);
+
+    dispatch({ type: DELETE_EXPERIENCE, payload: id });
+    dispatch(
+      setAlert('Experience has been removed from your profile 🍭', 'warning')
+    );
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      setAlert('Error when removing an experience , please try again', 'error')
+    );
+  }
+};
 
 // Add education to profile
-// PATH /education
+// PATCH /education
 export const addEdu = (body) => async (dispatch) => {
   try {
     await profileHttp.patch('/education', body);

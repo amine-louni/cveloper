@@ -3,6 +3,7 @@ import {
   GET_PROFILE,
   PROFILE_ERROR,
   ADD_EDUCATION,
+  DELETE_EXPERIENCE,
 } from '../actions/types';
 
 const initialState = {
@@ -51,7 +52,18 @@ export default function (state = initialState, action) {
         loading: false,
       };
     }
-
+    case DELETE_EXPERIENCE: {
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          experience: state.profile.experience.filter(
+            (exp) => exp._id !== action.payload
+          ),
+        },
+        loading: false,
+      };
+    }
     default:
       return state;
   }

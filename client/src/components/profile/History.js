@@ -1,12 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { delExp } from '../../actions';
 
 import dayjs from 'dayjs';
 import {
   Button,
   Card,
   CardContent,
+  CardHeader,
+  IconButton,
   makeStyles,
+  Menu,
+  MenuItem,
   Typography,
 } from '@material-ui/core';
 
@@ -18,6 +23,7 @@ import TimelineContent from '@material-ui/lab/TimelineContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import AddEducationDialog from './diloags/AddEducationDialog';
 import AddExperienceDialog from './diloags/AddExperienceDialog';
+import { MoreVert } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: { marginTop: theme.spacing(2) },
@@ -51,6 +57,16 @@ function History(props) {
   const handleCloseExp = () => {
     setOpenExpDialog(false);
   };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleOpenMore = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMore = () => {
+    setAnchorEl(null);
+  };
   return (
     <div className={classes.root}>
       <Card>
@@ -81,18 +97,53 @@ function History(props) {
                       </TimelineSeparator>
                       <TimelineContent>
                         <Card>
+                          <CardHeader
+                            action={
+                              <>
+                                <IconButton
+                                  aria-label="settings"
+                                  onClick={handleOpenMore}
+                                >
+                                  <MoreVert />
+                                </IconButton>
+                                <Menu
+                                  id="simple-menu"
+                                  anchorEl={anchorEl}
+                                  keepMounted
+                                  open={Boolean(anchorEl)}
+                                  onClose={handleCloseMore}
+                                >
+                                  <MenuItem onClick={handleCloseMore}>
+                                    Update
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() => props.delExp(exp._id)}
+                                  >
+                                    Delete
+                                  </MenuItem>
+                                </Menu>
+                              </>
+                            }
+                            titleTypographyProps={{ variant: 'subtitle' }}
+                            title={
+                              exp.company +
+                              '  ' +
+                              exp.title +
+                              ' (' +
+                              exp.location +
+                              ')'
+                            }
+                            subheaderTypographyProps={{ variant: 'caption' }}
+                            subheader={` ${dayjs(exp.from).format(
+                              'MMMM , YYYY'
+                            )} - 
+                              ${
+                                exp.current
+                                  ? 'current'
+                                  : dayjs(exp.to).format('MMMM , YYYY')
+                              }`}
+                          />
                           <CardContent>
-                            <Typography display="block" variant="subtitle2">
-                              {exp.company} ({exp.title})
-                            </Typography>
-                            <Typography variant="caption" gutterBottom>
-                              {dayjs(exp.from).format('MMMM , YYYY')} -{' '}
-                              {exp.current
-                                ? 'current'
-                                : dayjs(exp.to).format('MMMM , YYYY')}
-                            </Typography>
-
-                            <hr></hr>
                             <Typography
                               component="p"
                               variant="body1"
@@ -154,7 +205,6 @@ function History(props) {
                                 : dayjs(edu.to).format('MMMM , YYYY')}
                             </Typography>
 
-                            <hr></hr>
                             <Typography
                               component="p"
                               variant="body1"
@@ -182,4 +232,4 @@ const mapStateToProps = (state) => {
     profile: state.userProfile.profile,
   };
 };
-export default connect(mapStateToProps)(History);
+export default connect(mapStateToProps, { delExp })(History);
