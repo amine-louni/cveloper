@@ -24,9 +24,16 @@ import TimelineDot from '@material-ui/lab/TimelineDot';
 import AddEducationDialog from './diloags/AddEducationDialog';
 import AddExperienceDialog from './diloags/AddExperienceDialog';
 import { MoreVert } from '@material-ui/icons';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 const useStyles = makeStyles((theme) => ({
-  root: { marginTop: theme.spacing(2) },
+  root: { marginTop: theme.spacing(2), position: 'relative' },
+  MoreVert: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    margin: '7px 14px',
+  },
   LeftTimeLine: {
     '&:before': {
       flex: 0,
@@ -73,8 +80,11 @@ function History(props) {
   const handleCloseMore = () => {
     setAnchorEl(null);
   };
-
   const [expUpdateValues, setExpUpdateValues] = React.useState({});
+  const returnFn = (body) => {
+    console.log(body);
+    setExpUpdateValues(body);
+  };
   return (
     <div className={classes.root}>
       <Card>
@@ -103,45 +113,37 @@ function History(props) {
           />
           <Timeline>
             {props.profile && props.profile.experience.length > 0
-              ? props.profile.experience.map((exp) => {
+              ? props.profile.experience.map((exp, i) => {
                   return (
-                    <TimelineItem className={classes.LeftTimeLine}>
+                    <TimelineItem key={i} className={classes.LeftTimeLine}>
                       <TimelineSeparator>
                         <TimelineDot />
                         <TimelineConnector />
                       </TimelineSeparator>
                       <TimelineContent>
-                        <Card>
-                          <CardHeader
-                            action={
-                              <>
+                        <Card key={i}>
+                          <PopupState
+                            variant="popover"
+                            popupId="demo-popup-menu"
+                          >
+                            {(popupState) => (
+                              <React.Fragment>
                                 <IconButton
+                                  className={classes.MoreVert}
                                   aria-label="settings"
-                                  onClick={handleOpenMore}
+                                  {...bindTrigger(popupState)}
                                 >
                                   <MoreVert />
                                 </IconButton>
                                 <Menu
                                   id="simple-menu"
-                                  anchorEl={anchorEl}
-                                  keepMounted
-                                  open={Boolean(anchorEl)}
-                                  onClose={handleCloseMore}
+                                  {...bindMenu(popupState)}
                                 >
                                   <MenuItem
                                     onClick={() => {
                                       handleClickOpenExpUpdate();
-                                      setExpUpdateValues({
-                                        prevId: exp._id,
-                                        title: exp.title,
-                                        company: exp.company,
-                                        location: exp.location,
-                                        from: exp.from,
-                                        to: exp.to,
-                                        description: exp.description,
-                                        current: exp.current,
-                                      });
-                                      handleCloseMore();
+
+                                      returnFn(exp);
                                     }}
                                   >
                                     Update
@@ -152,28 +154,30 @@ function History(props) {
                                     Delete
                                   </MenuItem>
                                 </Menu>
-                              </>
-                            }
-                            titleTypographyProps={{ variant: 'subtitle' }}
-                            title={
-                              exp.company +
-                              '  ' +
-                              exp.title +
-                              ' (' +
-                              exp.location +
-                              ')'
-                            }
-                            subheaderTypographyProps={{ variant: 'caption' }}
-                            subheader={` ${dayjs(exp.from).format(
-                              'MMMM , YYYY'
-                            )} - 
+                              </React.Fragment>
+                            )}
+                          </PopupState>
+                          <CardContent>
+                            <Typography component="h4" variant="subtitle1">
+                              {exp.company}
+                              {' - '} {exp.location}
+                            </Typography>
+
+                            <Typography component="h4" variant="caption">
+                              {` ${dayjs(exp.from).format('MMMM , YYYY')} - 
                               ${
                                 exp.current
                                   ? 'current'
                                   : dayjs(exp.to).format('MMMM , YYYY')
                               }`}
-                          />
-                          <CardContent>
+                            </Typography>
+                            <Typography
+                              component="h4"
+                              variant="subtitle2"
+                              onClick={() => console.log(exp)}
+                            >
+                              {exp.title}
+                            </Typography>
                             <Typography
                               component="p"
                               variant="body1"
@@ -212,9 +216,9 @@ function History(props) {
 
           <Timeline>
             {props.profile && props.profile.education.length > 0
-              ? props.profile.education.map((edu) => {
+              ? props.profile.education.map((edu, i) => {
                   return (
-                    <TimelineItem className={classes.LeftTimeLine}>
+                    <TimelineItem key={i} className={classes.LeftTimeLine}>
                       <TimelineSeparator>
                         <TimelineDot />
                         <TimelineConnector />

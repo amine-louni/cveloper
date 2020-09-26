@@ -63,7 +63,7 @@ export default function (state = initialState, action) {
         profile: {
           ...state.profile,
           experience: state.profile.experience.map((exp) =>
-            exp._id === action.payload.prevId ? (exp = action.payload) : exp
+            exp._id === action.payload._id ? (exp = action.payload) : exp
           ),
         },
         loading: false,

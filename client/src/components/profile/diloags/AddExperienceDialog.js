@@ -18,7 +18,7 @@ import * as Yup from 'yup';
 
 function AddExperienceDialog(props) {
   const { closeExp, openExpDialog, openExp, update, prevValues } = props;
-  console.log(prevValues);
+
   const initialValues = prevValues || {
     title: '',
     company: '',
@@ -40,10 +40,10 @@ function AddExperienceDialog(props) {
   const onSubmit = (values, { setSubmitting }) => {
     setTimeout(() => {
       setSubmitting(false);
-
+      console.log(values);
       //  alert(JSON.stringify(values, null, 2));
       if (update) {
-        props.putExp(prevValues.prevId, values);
+        props.putExp(prevValues._id, values);
       } else {
         props.addExp(values);
       }
