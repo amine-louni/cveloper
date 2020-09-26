@@ -44,6 +44,7 @@ function History(props) {
 
   const [openEduDialog, setOpenEduDialog] = React.useState(false);
   const [openExpDialog, setOpenExpDialog] = React.useState(false);
+  const [openExpDialogUpdate, setOpenExpDialogUpdate] = React.useState(false);
   const handleClickOpenEdu = () => {
     setOpenEduDialog(true);
   };
@@ -57,7 +58,12 @@ function History(props) {
   const handleCloseExp = () => {
     setOpenExpDialog(false);
   };
-
+  const handleClickOpenExpUpdate = () => {
+    setOpenExpDialogUpdate(true);
+  };
+  const handleCloseExpUpdate = () => {
+    setOpenExpDialogUpdate(false);
+  };
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleOpenMore = (event) => {
@@ -67,6 +73,8 @@ function History(props) {
   const handleCloseMore = () => {
     setAnchorEl(null);
   };
+
+  const [expUpdateValues, setExpUpdateValues] = React.useState({});
   return (
     <div className={classes.root}>
       <Card>
@@ -85,6 +93,13 @@ function History(props) {
             openExpDialog={openExpDialog}
             closeExp={handleCloseExp}
             openExp={handleClickOpenExp}
+          />
+          <AddExperienceDialog
+            update={true}
+            prevValues={expUpdateValues}
+            openExpDialog={openExpDialogUpdate}
+            closeExp={handleCloseExpUpdate}
+            openExp={handleClickOpenExpUpdate}
           />
           <Timeline>
             {props.profile && props.profile.experience.length > 0
@@ -113,7 +128,22 @@ function History(props) {
                                   open={Boolean(anchorEl)}
                                   onClose={handleCloseMore}
                                 >
-                                  <MenuItem onClick={handleCloseMore}>
+                                  <MenuItem
+                                    onClick={() => {
+                                      handleClickOpenExpUpdate();
+                                      setExpUpdateValues({
+                                        prevId: exp._id,
+                                        title: exp.title,
+                                        company: exp.company,
+                                        location: exp.location,
+                                        from: exp.from,
+                                        to: exp.to,
+                                        description: exp.description,
+                                        current: exp.current,
+                                      });
+                                      handleCloseMore();
+                                    }}
+                                  >
                                     Update
                                   </MenuItem>
                                   <MenuItem

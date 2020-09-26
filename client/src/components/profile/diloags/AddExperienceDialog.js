@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addExp } from '../../../actions/';
+import { addExp, putExp } from '../../../actions/';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -17,8 +17,9 @@ import { DatePicker } from 'formik-material-ui-pickers';
 import * as Yup from 'yup';
 
 function AddExperienceDialog(props) {
-  const { closeExp, openExpDialog, openExp } = props;
-  const initialValues = {
+  const { closeExp, openExpDialog, openExp, update, prevValues } = props;
+  console.log(prevValues);
+  const initialValues = prevValues || {
     title: '',
     company: '',
     location: '',
@@ -41,7 +42,11 @@ function AddExperienceDialog(props) {
       setSubmitting(false);
 
       //  alert(JSON.stringify(values, null, 2));
-      props.addExp(values);
+      if (update) {
+        props.putExp(prevValues.prevId, values);
+      } else {
+        props.addExp(values);
+      }
 
       closeExp();
     }, 500);
@@ -62,7 +67,7 @@ function AddExperienceDialog(props) {
           <Form>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DialogTitle id="form-dialog-title">
-                Add an experience
+                {update ? 'Edit ' : 'Add '} an experience
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
@@ -155,4 +160,4 @@ function AddExperienceDialog(props) {
   );
 }
 
-export default connect(null, { addExp })(AddExperienceDialog);
+export default connect(null, { addExp, putExp })(AddExperienceDialog);

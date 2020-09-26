@@ -8,6 +8,7 @@ import {
   ADD_EDUCATION,
   ADD_EXPERIENCE,
   DELETE_EXPERIENCE,
+  PUT_EXPERIENCE,
 } from './types';
 
 // Get current user profile
@@ -63,6 +64,23 @@ export const addExp = (body) => async (dispatch) => {
     );
   }
 };
+
+// PUT experience
+//{{URL}}/profiles/experience/5f4d52669f30492b48263879
+export const putExp = (id, body) => async (dispatch) => {
+  try {
+    await profileHttp.put(`/experience/${id}`, body);
+
+    dispatch({ type: PUT_EXPERIENCE, payload: body });
+    dispatch(setAlert('Experience has been updated  ', 'success'));
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      setAlert('Error when updating an experience , please try again', 'error')
+    );
+  }
+};
+
 // DELETE experience
 //{{URL}}/profiles/experience/5f4d52669f30492b48263879
 export const delExp = (id) => async (dispatch) => {

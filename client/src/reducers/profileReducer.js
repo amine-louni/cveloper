@@ -4,6 +4,7 @@ import {
   PROFILE_ERROR,
   ADD_EDUCATION,
   DELETE_EXPERIENCE,
+  PUT_EXPERIENCE,
 } from '../actions/types';
 
 const initialState = {
@@ -48,6 +49,22 @@ export default function (state = initialState, action) {
         profile: {
           ...state.profile,
           education: [...state.profile.education, action.payload],
+        },
+        loading: false,
+      };
+    }
+
+    case PUT_EXPERIENCE: {
+      console.log(action.payload);
+
+      return {
+        ...state,
+
+        profile: {
+          ...state.profile,
+          experience: state.profile.experience.map((exp) =>
+            exp._id === action.payload.prevId ? (exp = action.payload) : exp
+          ),
         },
         loading: false,
       };

@@ -6,6 +6,7 @@ import {
   getCurrentUserProfile,
   addExp,
   delExp,
+  putExp,
   addEdu,
 } from './profileHandler';
 export {
@@ -20,4 +21,5 @@ export {
   addExp,
   addEdu,
   delExp,
+  putExp,
 };
