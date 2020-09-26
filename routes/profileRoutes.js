@@ -46,6 +46,7 @@ router
 
 router
   .route('/experience/:id')
+  .put(authController.protect, profileController.updateProfileExperience)
   .delete(authController.protect, profileController.removeProfileExperience);
 
 // [ GET | POST | DELETE] /profiles/education/(:id)

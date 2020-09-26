@@ -116,6 +116,30 @@ exports.removeProfileExperience = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.updateProfileExperience = catchAsync(async (req, res, next) => {
+  const profile = await Profile.findOne({ user: req.currentUser._id });
+  if (!profile)
+    return next(new AppError('No document found with that ID', 404));
+  await Profile.findOneAndUpdate(
+    { user: req.currentUser._id, 'experience._id': req.params.id },
+    {
+      $set: {
+        'experience.$': req.body,
+      },
+    },
+    function (err, doc) {
+      console.log(err);
+      if (err)
+        return next(new AppError('Error while updating the document', 500));
+
+      res.status(201).json({
+        status: 'success',
+        doc,
+      });
+    }
+  );
+});
+
 exports.addProfileEducation = catchAsync(async (req, res, next) => {
   const profile = await Profile.findOne({ user: req.currentUser._id });
   if (!profile)
