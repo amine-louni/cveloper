@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { delExp } from '../../actions';
+import { delExp, delEdu } from '../../actions';
 
 import dayjs from 'dayjs';
 import {
@@ -52,6 +52,7 @@ function History(props) {
   const [openEduDialog, setOpenEduDialog] = React.useState(false);
   const [openExpDialog, setOpenExpDialog] = React.useState(false);
   const [openExpDialogUpdate, setOpenExpDialogUpdate] = React.useState(false);
+  const [openEduDialogUpdate, setOpenEduDialogUpdate] = React.useState(false);
   const handleClickOpenEdu = () => {
     setOpenEduDialog(true);
   };
@@ -71,19 +72,21 @@ function History(props) {
   const handleCloseExpUpdate = () => {
     setOpenExpDialogUpdate(false);
   };
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleOpenMore = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClickOpenEduUpdate = () => {
+    setOpenEduDialogUpdate(true);
+  };
+  const handleCloseEduUpdate = () => {
+    setOpenEduDialogUpdate(false);
   };
 
-  const handleCloseMore = () => {
-    setAnchorEl(null);
-  };
   const [expUpdateValues, setExpUpdateValues] = React.useState({});
+  const [eduUpdateValues, setEduUpdateValues] = React.useState({});
   const returnFn = (body) => {
-    console.log(body);
     setExpUpdateValues(body);
+  };
+  const returnFnEdu = (body) => {
+    setEduUpdateValues(body);
   };
   return (
     <div className={classes.root}>
@@ -142,14 +145,17 @@ function History(props) {
                                   <MenuItem
                                     onClick={() => {
                                       handleClickOpenExpUpdate();
-
+                                      popupState.close();
                                       returnFn(exp);
                                     }}
                                   >
                                     Update
                                   </MenuItem>
                                   <MenuItem
-                                    onClick={() => props.delExp(exp._id)}
+                                    onClick={() => {
+                                      props.delExp(exp._id);
+                                      popupState.close();
+                                    }}
                                   >
                                     Delete
                                   </MenuItem>
@@ -171,13 +177,10 @@ function History(props) {
                                   : dayjs(exp.to).format('MMMM , YYYY')
                               }`}
                             </Typography>
-                            <Typography
-                              component="h4"
-                              variant="subtitle2"
-                              onClick={() => console.log(exp)}
-                            >
+                            <Typography component="h4" variant="subtitle2">
                               {exp.title}
                             </Typography>
+
                             <Typography
                               component="p"
                               variant="body1"
@@ -213,7 +216,13 @@ function History(props) {
             handleClickOpenEdu={openEduDialog}
             handleCloseEdu={handleCloseEdu}
           />
-
+          <AddEducationDialog
+            update={true}
+            prevValues={eduUpdateValues}
+            openEduDialog={openEduDialogUpdate}
+            closeEdu={handleCloseEduUpdate}
+            openEdu={handleClickOpenEduUpdate}
+          />
           <Timeline>
             {props.profile && props.profile.education.length > 0
               ? props.profile.education.map((edu, i) => {
@@ -225,6 +234,41 @@ function History(props) {
                       </TimelineSeparator>
                       <TimelineContent>
                         <Card>
+                          <PopupState
+                            variant="popover"
+                            popupId="demo-popup-menu"
+                          >
+                            {(popupState) => (
+                              <React.Fragment>
+                                <IconButton
+                                  className={classes.MoreVert}
+                                  aria-label="settings"
+                                  {...bindTrigger(popupState)}
+                                >
+                                  <MoreVert />
+                                </IconButton>
+                                <Menu
+                                  id="simple-menu"
+                                  {...bindMenu(popupState)}
+                                >
+                                  <MenuItem
+                                    onClick={() => {
+                                      handleClickOpenEduUpdate();
+
+                                      returnFnEdu(edu);
+                                    }}
+                                  >
+                                    Update
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() => props.delEdu(edu._id)}
+                                  >
+                                    Delete
+                                  </MenuItem>
+                                </Menu>
+                              </React.Fragment>
+                            )}
+                          </PopupState>
                           <CardContent>
                             <Typography display="block" variant="subtitle1">
                               {edu.school}
@@ -266,4 +310,4 @@ const mapStateToProps = (state) => {
     profile: state.userProfile.profile,
   };
 };
-export default connect(mapStateToProps, { delExp })(History);
+export default connect(mapStateToProps, { delExp, delEdu })(History);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addEdu } from '../../../actions/';
+import { addEdu, putEdu } from '../../../actions/';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -17,8 +17,9 @@ import { DatePicker } from 'formik-material-ui-pickers';
 import * as Yup from 'yup';
 
 function AddEducationDialog(props) {
-  const { openEduDialog, handleCloseEdu } = props;
-  const initialValues = {
+  const { openEduDialog, closeEdu, update, prevValues } = props;
+  console.log(props.prevValues);
+  const initialValues = prevValues || {
     school: '',
     degree: '',
     fieldofstudy: '',
@@ -35,18 +36,18 @@ function AddEducationDialog(props) {
     to: Yup.string().required('start date is a required field'),
   });
   const onSubmit = (values, { setSubmitting }) => {
-    setTimeout(() => {
-      setSubmitting(false);
-      //console.log('add education');
-      //  alert(JSON.stringify(values, null, 2));
+    setSubmitting(false);
+    if (update) {
+      props.putEdu(prevValues._id, values);
+    } else {
       props.addEdu(values);
-      handleCloseEdu();
-    }, 500);
+    }
+    closeEdu();
   };
   return (
     <Dialog
       open={openEduDialog}
-      onClose={handleCloseEdu}
+      onClose={closeEdu}
       aria-labelledby="add-education"
     >
       <Formik
@@ -134,11 +135,11 @@ function AddEducationDialog(props) {
                 </Box>
               </DialogContent>
               <DialogActions>
-                <Button color="primary" onClick={handleCloseEdu}>
+                <Button color="primary" onClick={closeEdu}>
                   CANCEL
                 </Button>
                 <Button color="primary" type="submit">
-                  ADD
+                  {update ? 'Update' : 'Add'}
                 </Button>
               </DialogActions>
             </MuiPickersUtilsProvider>
@@ -148,4 +149,4 @@ function AddEducationDialog(props) {
     </Dialog>
   );
 }
-export default connect(null, { addEdu })(AddEducationDialog);
+export default connect(null, { addEdu, putEdu })(AddEducationDialog);

@@ -40,7 +40,7 @@ function AddExperienceDialog(props) {
   const onSubmit = (values, { setSubmitting }) => {
     setTimeout(() => {
       setSubmitting(false);
-      console.log(values);
+
       //  alert(JSON.stringify(values, null, 2));
       if (update) {
         props.putExp(prevValues._id, values);

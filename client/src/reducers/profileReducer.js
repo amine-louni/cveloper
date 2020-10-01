@@ -5,6 +5,8 @@ import {
   ADD_EDUCATION,
   DELETE_EXPERIENCE,
   PUT_EXPERIENCE,
+  PUT_EDUCATION,
+  DELETE_EDUCATION,
 } from '../actions/types';
 
 const initialState = {
@@ -76,6 +78,33 @@ export default function (state = initialState, action) {
           ...state.profile,
           experience: state.profile.experience.filter(
             (exp) => exp._id !== action.payload
+          ),
+        },
+        loading: false,
+      };
+    }
+    case PUT_EDUCATION: {
+      console.log(action.payload);
+
+      return {
+        ...state,
+
+        profile: {
+          ...state.profile,
+          education: state.profile.education.map((edu) =>
+            edu._id === action.payload._id ? (edu = action.payload) : edu
+          ),
+        },
+        loading: false,
+      };
+    }
+    case DELETE_EDUCATION: {
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          education: state.profile.education.filter(
+            (edu) => edu._id !== action.payload
           ),
         },
         loading: false,

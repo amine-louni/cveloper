@@ -68,6 +68,7 @@ router
 
 router
   .route('/education/:id')
+  .put(authController.protect, profileController.updateProfileEducation)
   .delete(authController.protect, profileController.removeProfileEducation);
 
 // [ GET | POST ] /profiles/:id

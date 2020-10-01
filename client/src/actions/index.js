@@ -8,6 +8,8 @@ import {
   delExp,
   putExp,
   addEdu,
+  delEdu,
+  putEdu,
 } from './profileHandler';
 export {
   changeTheme,
@@ -22,4 +24,6 @@ export {
   addEdu,
   delExp,
   putExp,
+  delEdu,
+  putEdu,
 };

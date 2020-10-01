@@ -9,6 +9,8 @@ import {
   ADD_EXPERIENCE,
   DELETE_EXPERIENCE,
   PUT_EXPERIENCE,
+  PUT_EDUCATION,
+  DELETE_EDUCATION,
 } from './types';
 
 // Get current user profile
@@ -113,6 +115,39 @@ export const addEdu = (body) => async (dispatch) => {
     console.log(err);
     dispatch(
       setAlert('Error when adding an experience , please try again', 'error')
+    );
+  }
+};
+// PUT education
+//{{URL}}/profiles/education/5f4d52669f30492b48263879
+export const putEdu = (id, body) => async (dispatch) => {
+  try {
+    await profileHttp.put(`/education/${id}`, body);
+
+    dispatch({ type: PUT_EDUCATION, payload: body });
+    dispatch(setAlert('Education has been updated  ', 'success'));
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      setAlert('Error when updating an education , please try again', 'error')
+    );
+  }
+};
+
+// DELETE education
+//{{URL}}/profiles/education/5f4d52669f30492b48263879
+export const delEdu = (id) => async (dispatch) => {
+  try {
+    await profileHttp.delete(`/education/${id}`);
+
+    dispatch({ type: DELETE_EDUCATION, payload: id });
+    dispatch(
+      setAlert('education has been removed from your profile 🍭', 'warning')
+    );
+  } catch (err) {
+    console.log(err);
+    dispatch(
+      setAlert('Error when removing an experience , please try again', 'error')
     );
   }
 };
