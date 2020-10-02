@@ -213,8 +213,8 @@ function History(props) {
           </div>
           <AddEducationDialog
             openEduDialog={openEduDialog}
-            handleClickOpenEdu={openEduDialog}
-            handleCloseEdu={handleCloseEdu}
+            openEdu={openEduDialog}
+            closeEdu={handleCloseEdu}
           />
           <AddEducationDialog
             update={true}
