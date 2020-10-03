@@ -7,6 +7,7 @@ import {
   PUT_EXPERIENCE,
   PUT_EDUCATION,
   DELETE_EDUCATION,
+  CLEAR_PROFILE,
 } from '../actions/types';
 
 const initialState = {
@@ -107,6 +108,14 @@ export default function (state = initialState, action) {
             (edu) => edu._id !== action.payload
           ),
         },
+        loading: false,
+      };
+    }
+    case CLEAR_PROFILE: {
+      return {
+        ...state,
+        profile: null,
+        repos: [],
         loading: false,
       };
     }
