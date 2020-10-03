@@ -1,6 +1,10 @@
+// React + Redux Dependencies
 import React from 'react';
 import { connect } from 'react-redux';
+
+// MUI Dependencies
 import { Card, makeStyles, Typography, CardContent } from '@material-ui/core';
+import Skeleton from 'react-loading-skeleton';
 
 const useStyles = makeStyles((theme) => ({
   root: { marginTop: theme.spacing(2) },
@@ -14,7 +18,11 @@ function Bio(props) {
           Biography
         </Typography>
         <Typography variant="body2">
-          {(props.profile && props.profile.bio) || '404 bio not found 🙊🙉🙈'}
+          {props.loading && props.profile === null ? (
+            <Skeleton />
+          ) : (
+            props.profile.bio || '404 Bio not found ⚠'
+          )}
         </Typography>
       </CardContent>
     </Card>
@@ -23,6 +31,7 @@ function Bio(props) {
 const mapStateToProps = (state) => {
   return {
     profile: state.userProfile.profile,
+    loading: state.userProfile.loading,
   };
 };
 export default connect(mapStateToProps)(Bio);

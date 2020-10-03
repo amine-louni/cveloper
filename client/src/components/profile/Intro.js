@@ -1,10 +1,12 @@
+// React + Redux Dependencies
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getCurrentUserProfile } from '../../actions';
-import AdvancedFormat from 'dayjs/plugin/advancedFormat'; // ES 2015
-import Skeleton from 'react-loading-skeleton';
-
+// 3rd party Dependencies
+import Skeleton from '@material-ui/lab/Skeleton';
 import dayjs from 'dayjs';
+
+// MUI Dependencies
 import {
   makeStyles,
   Avatar,
@@ -13,15 +15,12 @@ import {
   Card,
   Chip,
 } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
 
 import TwitterIcon from '@material-ui/icons/Twitter';
-
 import GitHubIcon from '@material-ui/icons/GitHub';
 import CakeOutlinedIcon from '@material-ui/icons/CakeOutlined';
-
-import defaultAvatar from '../../assets/img/default.jpg';
 import EditProfileDialog from './diloags/EditProfileDialog';
+import defaultAvatar from '../../assets/img/default.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: { marginTop: theme.spacing(2) },
@@ -115,26 +114,46 @@ function Intro(props) {
                   className={classes.userName}
                   display="block"
                 >
-                  {props.user ? props.user.firstName : ''}{' '}
-                  {props.user ? props.user.lastName : ''}{' '}
-                  <span>
-                    <a href="/">
-                      <TwitterIcon
-                        style={{ marginLeft: 7, color: '#1DA1F2' }}
-                      />
-                    </a>
+                  {props.loading && props.user === null ? (
+                    <Skeleton />
+                  ) : (
+                    props.user.firstName
+                  )}{' '}
+                  {props.loading && props.user === null
+                    ? ''
+                    : props.user.lastName}
+                  {props.loading && props.profile === null ? (
+                    ''
+                  ) : (
+                    <span>
+                      <a href="/">
+                        <TwitterIcon
+                          style={{ marginLeft: 7, color: '#1DA1F2' }}
+                        />
+                      </a>
 
-                    <a href="/">
-                      <GitHubIcon style={{ marginLeft: 7, color: '#333' }} />
-                    </a>
-                  </span>
+                      <a href="/">
+                        <GitHubIcon style={{ marginLeft: 7, color: '#333' }} />
+                      </a>
+                    </span>
+                  )}
                 </Typography>
                 <Typography variant="caption" gutterBottom>
-                  {props.profile ? props.profile.title : ''}{' '}
-                  {props.profile ? props.profile.company || '' : ''}
+                  {props.loading && props.profile === null ? (
+                    <Skeleton />
+                  ) : (
+                    props.user.title
+                  )}{' '}
+                  {props.loading && props.profile === null
+                    ? ''
+                    : props.user.company}
                 </Typography>
                 <Typography display="block" variant="subtitle1">
-                  {props.profile ? props.profile.status : ''}
+                  {props.loading && props.profile === null ? (
+                    <Skeleton />
+                  ) : (
+                    props.user.status
+                  )}
                 </Typography>
 
                 <div className={classes.metaSection}>
@@ -155,7 +174,10 @@ function Intro(props) {
                     </div>
                   ) : (
                     <div className={classes.skillsWrapper}>
-                      Didn't add any skills yet 👻
+                      Didn't add any skills yet{' '}
+                      <span role="img" aria-label="No skills added">
+                        👻
+                      </span>
                     </div>
                   )}
 
@@ -167,11 +189,11 @@ function Intro(props) {
                   <div className={classes.infoBox}>
                     <CakeOutlinedIcon style={{ marginRight: 7 }} />
                     <div>
-                      {props.user ? (
+                      {props.loading && props.profile === null ? (
+                        <Skeleton />
+                      ) : (
                         'Joined ' +
                         dayjs(props.user.createdAt).format('MMMM D, YYYY')
-                      ) : (
-                        <Skeleton />
                       )}
                     </div>
                   </div>
@@ -204,6 +226,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.auth.user,
     profile: state.userProfile.profile,
+    loading: state.userProfile.loading,
   };
 };
 export default connect(mapStateToProps, { getCurrentUserProfile })(Intro);
