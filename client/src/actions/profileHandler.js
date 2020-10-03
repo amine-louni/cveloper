@@ -1,4 +1,4 @@
-import { profile as profileHttp, user as userHttp } from '../http';
+import { profile as profileHttp } from '../http';
 import { setAlert } from './alertHandler';
 
 import {

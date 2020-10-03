@@ -23,7 +23,7 @@ router
 
 router
   .route('/update-me')
-  .get(
+  .patch(
     authController.protect,
     userController.uploadUserPhoto,
     userController.resizeUserPhoto,

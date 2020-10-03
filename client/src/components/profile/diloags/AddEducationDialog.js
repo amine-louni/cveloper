@@ -18,7 +18,7 @@ import * as Yup from 'yup';
 
 function AddEducationDialog(props) {
   const { openEduDialog, closeEdu, update, prevValues } = props;
-  console.log(props.prevValues);
+
   const initialValues = prevValues || {
     school: '',
     degree: '',

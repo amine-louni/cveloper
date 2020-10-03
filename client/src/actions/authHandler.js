@@ -1,5 +1,6 @@
-import { auth } from '../http';
+import { auth, user as userHttp } from '../http';
 import setAuthToken from '../http/setAuthToken';
+
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -9,6 +10,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_PROFILE,
+  UPDATE_USER,
 } from './types';
 
 import { setAlert } from './alertHandler';
@@ -92,4 +94,19 @@ export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
   dispatch(setAlert('You Logged out 😥', 'warning'));
+};
+
+// Update current user
+//[PATCH] {{URL}}/users/update-me
+export const updateMe = (body) => async (dispatch) => {
+  try {
+    const res = await userHttp.patch('/update-me', body);
+    dispatch({
+      type: UPDATE_USER,
+      payload: res.data.data.user,
+    });
+    dispatch(setAlert('infos updated successfully 👼', 'success'));
+  } catch (err) {
+    dispatch(setAlert(`Ops! 😣 , ${err.response.data.message}`, 'error'));
+  }
 };
