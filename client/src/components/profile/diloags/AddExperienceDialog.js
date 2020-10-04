@@ -17,7 +17,7 @@ import { DatePicker } from 'formik-material-ui-pickers';
 import * as Yup from 'yup';
 
 function AddExperienceDialog(props) {
-  const { closeExp, openExpDialog, openExp, update, prevValues } = props;
+  const { closeExp, openExpDialog, update, prevValues } = props;
 
   const initialValues = prevValues || {
     title: '',

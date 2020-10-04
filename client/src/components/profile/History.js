@@ -1,8 +1,10 @@
+// React + Redux Dependencies
 import React from 'react';
 import { connect } from 'react-redux';
 import { delExp, delEdu } from '../../actions';
-
+// 3rd party Dependencies
 import dayjs from 'dayjs';
+// MUI Dependencies
 import {
   Button,
   Card,

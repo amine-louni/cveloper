@@ -3,10 +3,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getCurrentUserProfile } from '../../actions';
 // 3rd party Dependencies
-import Skeleton from '@material-ui/lab/Skeleton';
 import dayjs from 'dayjs';
-
 // MUI Dependencies
+import Skeleton from '@material-ui/lab/Skeleton';
 import {
   makeStyles,
   Avatar,
@@ -20,7 +19,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import CakeOutlinedIcon from '@material-ui/icons/CakeOutlined';
 import EditProfileDialog from './diloags/EditProfileDialog';
-import defaultAvatar from '../../assets/img/default.jpg';
+//import defaultAvatar from '../../assets/img/default.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: { marginTop: theme.spacing(2) },
@@ -95,7 +94,7 @@ function Intro(props) {
 
   useEffect(() => {
     props.getCurrentUserProfile();
-  }, []);
+  }, [props]);
 
   return (
     <Card className={classes.root}>

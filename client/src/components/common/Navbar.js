@@ -1,21 +1,19 @@
+// React + Redux Dependencies
 import React from 'react';
 import { connect } from 'react-redux';
 import { logout } from '../../actions';
+
+// 3rd party Dependencies
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Slide from '@material-ui/core/Slide';
-
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
-
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-
 import { Search, NotificationsOutlined, MailOutline } from '@material-ui/icons';
 import {
   Avatar,
@@ -142,7 +140,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = (props) => {
   const classes = useStyles();
-  const { isDark, ToggleSideBar, isAuth, loading, user } = props;
+  const { isDark, ToggleSideBar, isAuth, user } = props;
 
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -174,7 +172,7 @@ const Navbar = (props) => {
     }
 
     prevOpen.current = open;
-  }, [open]);
+  }, [props, open]);
 
   return (
     <div className={classes.grow}>
