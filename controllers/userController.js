@@ -8,13 +8,13 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 const Post = require('../models/Post');
 
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
+// const filterObj = (obj, ...allowedFields) => {
+//   const newObj = {};
+//   Object.keys(obj).forEach((el) => {
+//     if (allowedFields.includes(el)) newObj[el] = obj[el];
+//   });
+//   return newObj;
+// };
 
 const multerStorage = multer.memoryStorage();
 

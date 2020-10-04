@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateMe } from '../../actions';
+import { updateMe, updateMyPassword } from '../../actions';
 
 import { Card, CardContent, Button } from '@material-ui/core';
 //import MUITextField from '@material-ui/core/TextField';
@@ -11,15 +11,22 @@ import { TextField } from 'formik-material-ui';
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
 
-const validationSchema = Yup.object({
-  firstName: Yup.string().required('First name is a required field'),
-  lastName: Yup.string().required('Last name is a required field'),
-  userName: Yup.string().required('User name of study is a required field'),
+const infoValidationSchema = Yup.object({
+  userName: Yup.string().required('Required field').min(3),
+  firstName: Yup.string().required('Required field').min(3),
+  lastName: Yup.string().required('Required field').min(3),
   email: Yup.string()
     .required('Email is a required field')
     .email('Please enter a valid email format 🙏'),
 });
 
+const passValidationSchema = Yup.object({
+  password: Yup.string().required('Required field').min(8),
+  passwordConfirm: Yup.string().oneOf(
+    [Yup.ref('password'), null],
+    'Passwords must match'
+  ),
+});
 function AccountInfos(props) {
   return (
     <div>
@@ -47,7 +54,7 @@ function AccountInfos(props) {
               email:
                 props.loading && props.user === null ? '' : props.user.email,
             }}
-            validationSchema={validationSchema}
+            validationSchema={infoValidationSchema}
             onSubmit={async (values, { setSubmitting }) => {
               await props.updateMe(JSON.stringify(values));
               setSubmitting(false);
@@ -131,50 +138,88 @@ function AccountInfos(props) {
         </CardContent>
       </Card>
 
-      {/* <Card style={{ marginTop: 30 }}>
+      <div style={{ marginTop: 25, marginBottom: 25 }}></div>
+      <Card>
         <CardContent>
-          <form noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password-confirm"
-                  label="Password confirmation"
-                  type="password"
-                  id="password-confirm"
-                  autoComplete="current-password"
-                />
-              </Grid>
-            </Grid>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                marginTop: 15,
-              }}
-            >
-              <Button type="submit" variant="contained" color="primary">
-                Update password
-              </Button>
-            </div>
-          </form>
+          <Formik
+            initialValues={{
+              password: '',
+              passwordCurrent: '',
+              passwordConfirm: '',
+            }}
+            validationSchema={passValidationSchema}
+            onSubmit={async (values, { setSubmitting }) => {
+              console.log('submit update password');
+              await props.updateMyPassword(JSON.stringify(values));
+              setSubmitting(false);
+            }}
+          >
+            {({ submitForm, isSubmitting, touched, errors, values }) => (
+              <Form>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12}>
+                    <Field
+                      component={TextField}
+                      disabled={isSubmitting}
+                      name="passwordCurrent"
+                      variant="outlined"
+                      required
+                      type="password"
+                      fullWidth
+                      id="passwordCurrent"
+                      label="Your current password 🔑"
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Field
+                      component={TextField}
+                      disabled={isSubmitting}
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="password"
+                      label="New password"
+                      name="password"
+                      autoComplete="lname"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Field
+                      component={TextField}
+                      disabled={isSubmitting}
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="passwordConfirm"
+                      label="Confirm your new password"
+                      name="passwordConfirm"
+                      autoComplete="lname"
+                    />
+                  </Grid>
+                </Grid>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginTop: 15,
+                  }}
+                >
+                  <Button
+                    type="submit"
+                    onClick={() => submitForm()}
+                    disabled={isSubmitting}
+                    variant="contained"
+                    color="primary"
+                  >
+                    {isSubmitting ? 'Updating ... 🔃' : '  Update password'}
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </CardContent>
-      </Card> */}
+      </Card>
     </div>
   );
 }
@@ -185,4 +230,6 @@ const mapStateToProps = (state) => {
     loading: state.auth.loading,
   };
 };
-export default connect(mapStateToProps, { updateMe })(AccountInfos);
+export default connect(mapStateToProps, { updateMe, updateMyPassword })(
+  AccountInfos
+);

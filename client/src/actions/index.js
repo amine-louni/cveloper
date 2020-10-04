@@ -1,6 +1,12 @@
 import { changeTheme } from './themeHandler';
 import { ToggleSideBar } from './mainSideBarHandler';
-import { register, login, logout, updateMe } from './authHandler';
+import {
+  register,
+  login,
+  logout,
+  updateMe,
+  updateMyPassword,
+} from './authHandler';
 import { setAlert, removeAlert } from './alertHandler';
 import {
   getCurrentUserProfile,
@@ -27,4 +33,5 @@ export {
   delEdu,
   putEdu,
   updateMe,
+  updateMyPassword,
 };

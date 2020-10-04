@@ -14,7 +14,7 @@ const createSendToken = (user, statusCode, req, res) => {
   });
 
   // Remove password from output
-  user.password = undefined;
+  // user.password = undefined;
 
   res.status(statusCode).json({
     status: 'success',
@@ -192,6 +192,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
+
   const user = await User.findById(req.currentUser.id).select('+password');
 
   // 2) Check if POSTed current password is correct

@@ -11,6 +11,7 @@ import {
   LOGOUT,
   CLEAR_PROFILE,
   UPDATE_USER,
+  UPDATE_PASSWORD,
 } from './types';
 
 import { setAlert } from './alertHandler';
@@ -106,6 +107,19 @@ export const updateMe = (body) => async (dispatch) => {
       payload: res.data.data.user,
     });
     dispatch(setAlert('infos updated successfully 👼', 'success'));
+  } catch (err) {
+    dispatch(setAlert(`Ops! 😣 , ${err.response.data.message}`, 'error'));
+  }
+};
+
+// Update my password
+//[PATCH] {{URL}}/auth/update-password
+export const updateMyPassword = (body) => async (dispatch) => {
+  try {
+    const res = await auth.patch('/update-password', body);
+    dispatch({ type: UPDATE_PASSWORD, payload: res.data.data });
+
+    dispatch(setAlert('password updated successfully 🔑', 'success'));
   } catch (err) {
     dispatch(setAlert(`Ops! 😣 , ${err.response.data.message}`, 'error'));
   }

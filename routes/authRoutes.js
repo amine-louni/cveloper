@@ -10,6 +10,8 @@ router.route('/is-loggedin').get(authController.isLoggedIn);
 router.route('/validate-email/:token').post(authController.validateEmail);
 router.route('/forgot-password').post(authController.forgotPassword);
 router.route('/reset-password/:token').patch(authController.resetPassword);
-router.route('/update-password').patch(authController.updatePassword);
+router
+  .route('/update-password')
+  .patch(authController.protect, authController.updatePassword);
 
 module.exports = router;
