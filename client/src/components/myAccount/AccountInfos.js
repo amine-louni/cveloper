@@ -168,7 +168,6 @@ function AccountInfos(props) {
                       fullWidth
                       id="passwordCurrent"
                       label="Your current password 🔑"
-                      autoFocus
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
