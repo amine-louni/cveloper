@@ -10,6 +10,7 @@ import {
 import { setAlert, removeAlert } from './alertHandler';
 import {
   getCurrentUserProfile,
+  updateMyProfile,
   addExp,
   delExp,
   putExp,
@@ -34,4 +35,5 @@ export {
   putEdu,
   updateMe,
   updateMyPassword,
+  updateMyProfile,
 };

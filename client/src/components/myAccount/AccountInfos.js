@@ -6,10 +6,10 @@ import { Card, CardContent, Button } from '@material-ui/core';
 //import MUITextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { TextField } from 'formik-material-ui';
 // Formik Dependencies
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
+import { TextField } from 'formik-material-ui';
 
 const infoValidationSchema = Yup.object({
   userName: Yup.string().required('Required field').min(3),

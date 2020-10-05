@@ -6,23 +6,14 @@ const ProfileSchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'a profile must belong to a user'],
   },
-  company: {
-    type: String,
-  },
-  title: {
-    type: String,
-    default: 'employee',
-  },
+
   website: {
     type: String,
   },
   location: {
     type: String,
   },
-  status: {
-    type: String,
-    trim: true,
-  },
+
   skills: {
     type: [String],
     default: [],

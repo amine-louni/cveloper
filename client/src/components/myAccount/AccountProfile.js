@@ -1,21 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { getCurrentUserProfile, updateMyProfile } from '../../actions';
+// Formik Dependencies
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-
-import { makeStyles } from '@material-ui/core/styles';
-
-import FormControl from '@material-ui/core/FormControl';
-import MuiTextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import MenuItem from '@material-ui/core/MenuItem';
-
-import Box from '@material-ui/core/Box';
-import { Autocomplete } from 'formik-material-ui-lab';
-
 import { TextField } from 'formik-material-ui';
 
-import { Card, CardContent, LinearProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import { Card, CardContent } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -27,43 +23,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
-export default function AccountProfile() {
+function AccountProfile(props) {
+  React.useEffect(() => {
+    props.getCurrentUserProfile();
+  }, []);
+
   const classes = useStyles();
 
-  const initialValues = {
-    company: '',
-    website: '',
-    status: '',
-    location: '',
-    skills: [],
-    githubUsername: '',
-    personName: '',
-    name: '',
-  };
   const validationSchema = Yup.object({
-    company: Yup.string().required('Required field'),
     website: Yup.string().matches(
       /^((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
       'Enter correct url!'
     ),
   });
-  const onSubmit = (values, { setSubmitting }) => {
-    setTimeout(() => {
-      setSubmitting(false);
-      alert(JSON.stringify(values, null, 2));
-    }, 500);
+  const onSubmit = async (values, { setSubmitting }) => {
+    await props.updateMyProfile(values, props.profile.profile._id);
+    setSubmitting(false);
   };
   return (
     <div>
@@ -81,41 +56,27 @@ export default function AccountProfile() {
       <Card>
         <CardContent>
           <Formik
-            initialValues={initialValues}
+            enableReinitialize={true}
+            initialValues={{
+              website: !props.loading ? props.profile.profile.website : '',
+              bio: !props.loading ? props.profile.profile.bio : '',
+              location: !props.loading ? props.profile.profile.location : '',
+              skills: !props.loading
+                ? props.profile.profile.skills.join(', ')
+                : '',
+              githubUsername: !props.loading
+                ? props.profile.profile.githubUsername
+                : '',
+            }}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
             {({ submitForm, isSubmitting, touched, errors }) => (
               <Form>
-                {isSubmitting && <LinearProgress />}
-
                 <FormControl className={classes.formControl}>
                   <Field
-                    component={TextField}
-                    type="text"
-                    name="status"
-                    label="Status"
-                    select
-                    helperText="Give us an idea of where you are at in your career"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  >
-                    <MenuItem value={'developer'}>Developer</MenuItem>
-                  </Field>
-                </FormControl>
-                <FormControl className={classes.formControl}>
-                  <Field
-                    component={TextField}
-                    type="company"
-                    label="Company"
-                    name="company"
-                    helperText="Could be your own company or one you work for"
-                  />
-                </FormControl>
-
-                <FormControl className={classes.formControl}>
-                  <Field
+                    disabled={isSubmitting}
+                    variant="outlined"
                     component={TextField}
                     type="location"
                     label="location"
@@ -125,27 +86,45 @@ export default function AccountProfile() {
                 </FormControl>
                 <FormControl className={classes.formControl}>
                   <Field
+                    disabled={isSubmitting}
+                    variant="outlined"
+                    component={TextField}
+                    type="website"
+                    label="website"
+                    name="website"
+                    helperText="Your website URL 🔗"
+                  />
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                  <Field
+                    disabled={isSubmitting}
+                    component={TextField}
+                    label="Bio"
+                    name="bio"
+                    multiline
+                    rows={3}
+                    helperText="A short bio"
+                  />
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                  <Field
+                    component={TextField}
+                    label="Skills"
                     name="skills"
-                    multiple
-                    component={Autocomplete}
-                    options={names}
-                    getOptionLabel={(option) => option}
-                    renderInput={(params) => (
-                      <MuiTextField
-                        {...params}
-                        error={touched['skills'] && !!errors['skills']}
-                        helperText={
-                          (touched['skills'] && errors['skills']) ||
-                          'Enter your skills'
-                        }
-                        label="Skills *"
-                      />
-                    )}
+                    multiline
+                    disabled={isSubmitting}
+                    rows={3}
+                    helperText="Write a comma between the skills , Example 💁‍♂️ => (html, css, javascript)"
                   />
                 </FormControl>
                 <Box mt={4}>
-                  <Button variant="contained" color="primary" type="submit">
-                    submit
+                  <Button
+                    variant="contained"
+                    disabled={isSubmitting}
+                    color="primary"
+                    type="submit"
+                  >
+                    {isSubmitting ? 'updating' : 'update'}
                   </Button>
                 </Box>
               </Form>
@@ -156,3 +135,13 @@ export default function AccountProfile() {
     </div>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    profile: state.userProfile,
+    loading: state.userProfile.loading,
+  };
+};
+export default connect(mapStateToProps, {
+  updateMyProfile,
+  getCurrentUserProfile,
+})(AccountProfile);

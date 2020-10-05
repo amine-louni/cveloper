@@ -18,6 +18,10 @@ exports.updateMyProfile = catchAsync(async (req, res, next) => {
   if (!profile) {
     return next(new AppError('No document found with that ID', 404));
   }
+  if (req.body.skills) {
+    req.body.skills = req.body.skills.split(',').map((skill) => skill.trim());
+  }
+
   const updatedProfile = await Profile.findByIdAndUpdate(
     req.params.id,
     req.body,

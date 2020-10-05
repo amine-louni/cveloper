@@ -180,11 +180,6 @@ function Intro(props) {
                     </div>
                   )}
 
-                  {/* <div className={classes.infoBox}>
-                    <RoomIcon style={{ marginRight: 7 }} />
-                    <div>Boston , MY</div>
-                  </div> */}
-
                   <div className={classes.infoBox}>
                     <CakeOutlinedIcon style={{ marginRight: 7 }} />
                     <div>

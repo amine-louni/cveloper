@@ -11,6 +11,7 @@ import {
   PUT_EXPERIENCE,
   PUT_EDUCATION,
   DELETE_EDUCATION,
+  UPDATE_PROFILE,
 } from './types';
 
 // Get current user profile
@@ -46,6 +47,18 @@ export const createInitialProfile = (body) => async (dispatch) => {
       payload: { msg: err.response.data.message, status: 'error' },
     });
     dispatch(setAlert('Error on creating initial profile 🍸', 'error'));
+  }
+};
+
+/// UPDATE my profile
+// {{URL}}/profiles/update/5f4d2c71dfe1dc2a1063c305
+export const updateMyProfile = (body, profileId) => async (dispatch) => {
+  try {
+    const res = await profileHttp.patch(`/update/${profileId}`, body);
+    dispatch({ type: UPDATE_PROFILE, payload: res.data.doc });
+    dispatch(setAlert('Profile updated 🍭', 'success'));
+  } catch (err) {
+    dispatch(setAlert('Error on updating profile 😿', 'error'));
   }
 };
 
