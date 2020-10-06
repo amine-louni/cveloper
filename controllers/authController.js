@@ -57,15 +57,15 @@ exports.register = catchAsync(async (req, res, next) => {
     password,
     passwordConfirm,
   });
-  const validateEmailToken = user.createValidateEmailToken();
+  //const validateEmailToken = user.createValidateEmailToken();
   await user.save();
 
   // 2) Send it to user's email (TO DO)
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/auth/validate-email/${validateEmailToken}`;
-    await new Email(user, resetURL).sendValidationEmail();
+    // const resetURL = `${req.protocol}://${req.get(
+    //   'host'
+    // )}/api/v1/auth/validate-email/${validateEmailToken}`;
+    //await new Email(user, resetURL).sendValidationEmail();
 
     const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: process.env.ACCESS_TOKEN_EXP,
@@ -81,7 +81,6 @@ exports.register = catchAsync(async (req, res, next) => {
       user,
     });
   } catch (err) {
-    console.log(err);
     return next(
       new AppError('There was an error sending the email. Try again later!'),
       500
@@ -143,14 +142,16 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   // 2) Generate the random reset token
   const resetToken = user.createPasswordResetToken();
+
   await user.save({ validateBeforeSave: false });
 
   // 3) Send it to user's email
+  const resetURL = `${req.protocol}://localhost:3000/reset-password/${resetToken}`;
   try {
+    await new Email(user, resetURL).sendPasswordReset();
     res.status(200).json({
       status: 'success',
-      message: 'Token sent to email!',
-      token: resetToken,
+      message: `Token sent to email to ${req.body.email} !`,
     });
   } catch (err) {
     user.passwordResetToken = undefined;

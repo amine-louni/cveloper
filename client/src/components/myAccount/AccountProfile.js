@@ -98,6 +98,16 @@ function AccountProfile(props) {
                 <FormControl className={classes.formControl}>
                   <Field
                     disabled={isSubmitting}
+                    variant="outlined"
+                    component={TextField}
+                    label="Github user name  👩‍💻"
+                    name="githubUsername"
+                    helperText="Please enter your github user name"
+                  />
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                  <Field
+                    disabled={isSubmitting}
                     component={TextField}
                     label="Bio"
                     name="bio"
@@ -117,6 +127,7 @@ function AccountProfile(props) {
                     helperText="Write a comma between the skills , Example 💁‍♂️ => (html, css, javascript)"
                   />
                 </FormControl>
+
                 <Box mt={4}>
                   <Button
                     variant="contained"

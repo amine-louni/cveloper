@@ -12,6 +12,7 @@ import {
   CLEAR_PROFILE,
   UPDATE_USER,
   UPDATE_PASSWORD,
+  RESET_PASSWORD,
 } from './types';
 
 import { setAlert } from './alertHandler';
@@ -43,7 +44,6 @@ export const register = (body) => async (dispatch) => {
     const res = await auth.post('/register', body);
     if (res.data.status === 'success') {
       console.log('success', 'registered with success 👌');
-      // props.setAlert(', 'success');
       dispatch(setAlert('registered with success 👌', 'success'));
       dispatch({
         type: REGISTER_SUCCESS,
@@ -120,6 +120,39 @@ export const updateMyPassword = (body) => async (dispatch) => {
     dispatch({ type: UPDATE_PASSWORD, payload: res.data.data });
 
     dispatch(setAlert('password updated successfully 🔑', 'success'));
+  } catch (err) {
+    dispatch(setAlert(`Ops! 😣 , ${err.response.data.message}`, 'error'));
+  }
+};
+
+// Forgot password
+
+//[PATCH] {{URL}}/auth/forgot-password
+export const forgotPassword = (body) => async (dispatch) => {
+  try {
+    await auth.post('/forgot-password', body);
+    dispatch(
+      setAlert('Please check your email to reset your password', 'default')
+    );
+  } catch (err) {
+    dispatch(setAlert(`Ops! 😣 , ${err.response.data.message}`, 'error'));
+  }
+};
+
+// Reset password
+
+//{{URL}}/auth/reset-password/77efdaddafe5d
+export const resetPassword = (body, resetToken) => async (dispatch) => {
+  try {
+    const res = await auth.patch(`/reset-password/${resetToken}`, body);
+
+    dispatch({
+      type: RESET_PASSWORD,
+      payload: res.data.data,
+    });
+    dispatch(loadUser());
+
+    dispatch(setAlert('You password has updated successfully ✅', 'success'));
   } catch (err) {
     dispatch(setAlert(`Ops! 😣 , ${err.response.data.message}`, 'error'));
   }

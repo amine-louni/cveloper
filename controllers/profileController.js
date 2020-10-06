@@ -132,7 +132,6 @@ exports.updateProfileExperience = catchAsync(async (req, res, next) => {
       },
     },
     function (err, doc) {
-      console.log(err);
       if (err)
         return next(new AppError('Error while updating the document', 500));
 
@@ -156,7 +155,6 @@ exports.updateProfileEducation = catchAsync(async (req, res, next) => {
       },
     },
     function (err, doc) {
-      console.log(err);
       if (err)
         return next(new AppError('Error while updating the education', 500));
 

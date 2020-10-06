@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { forgotPassword } from '../actions/';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-
 import TextField from '@material-ui/core/TextField';
-
 import Link from '@material-ui/core/Link';
-
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -47,9 +47,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Register() {
+function ForgotPassword(props) {
   const classes = useStyles();
-
+  const [email, setEmail] = React.useState('');
+  const [submitting, setSubmitting] = React.useState(false);
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
@@ -65,7 +66,10 @@ export default function Register() {
               <TextField
                 variant="outlined"
                 required
+                disabled={submitting}
                 fullWidth
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 id="email"
                 label="Email Address"
                 name="email"
@@ -77,10 +81,17 @@ export default function Register() {
             type="submit"
             fullWidth
             variant="contained"
+            disabled={submitting}
             color="primary"
             className={classes.submit}
+            onClick={async (e) => {
+              setSubmitting(true);
+              e.preventDefault();
+              await props.forgotPassword(JSON.stringify({ email }));
+              setSubmitting(false);
+            }}
           >
-            Send verification email
+            {submitting ? 'sending ...' : 'Send verification email'}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
@@ -97,3 +108,4 @@ export default function Register() {
     </Container>
   );
 }
+export default connect(null, { forgotPassword })(ForgotPassword);

@@ -138,9 +138,9 @@ function SignInSide(props) {
                   </Button>
                   <Grid container>
                     <Grid item xs>
-                      <Link href="#" variant="body2">
-                        Forgot password?
-                      </Link>
+                      <RouterLink to="/forgot-password">
+                        <Link variant="body2">{'Forgot password?'}</Link>
+                      </RouterLink>
                     </Grid>
                     <Grid item>
                       <RouterLink to="/register">

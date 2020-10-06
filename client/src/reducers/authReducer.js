@@ -8,6 +8,7 @@ import {
   LOGOUT,
   UPDATE_USER,
   UPDATE_PASSWORD,
+  RESET_PASSWORD,
 } from '../actions/types';
 
 const initialState = {
@@ -29,6 +30,7 @@ export default function (state = initialState, action) {
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
     case UPDATE_PASSWORD:
+    case RESET_PASSWORD:
       localStorage.setItem('token', action.payload.token);
       return {
         ...state,

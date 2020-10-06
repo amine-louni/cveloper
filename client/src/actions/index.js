@@ -6,6 +6,8 @@ import {
   logout,
   updateMe,
   updateMyPassword,
+  forgotPassword,
+  resetPassword,
 } from './authHandler';
 import { setAlert, removeAlert } from './alertHandler';
 import {
@@ -36,4 +38,6 @@ export {
   updateMe,
   updateMyPassword,
   updateMyProfile,
+  forgotPassword,
+  resetPassword,
 };

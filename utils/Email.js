@@ -68,7 +68,11 @@ module.exports = class Email {
   }
 
   async sendPasswordReset() {
-    await this.send('passwordReset', 'Valid only for 10 min');
+    await this.send(
+      'password-reset',
+      'Valid only for 10 min',
+      'Click the link below to reset you password'
+    );
   }
 
   async sendValidationEmail() {

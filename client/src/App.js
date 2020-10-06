@@ -10,6 +10,8 @@ import Register from './views/Register';
 import Login from './views/Login';
 import ForgotPassword from './views/ForgotPassword';
 import MyAccount from './views/Myaccount';
+import ResetPassword from './views/ResetPassword';
+import NotFound from './views/Notfound';
 import { connect } from 'react-redux';
 import { createMuiTheme } from '@material-ui/core/styles';
 
@@ -61,7 +63,10 @@ function App({ isDark, loadUser }) {
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />
+          <Route path="/forgot-password" component={ForgotPassword} />
+          <Route path="/reset-password/:resetToken" component={ResetPassword} />
           <Route exact path="/" component={Home} />
+          <Route component={NotFound} />
         </Switch>
       </div>
     </ThemeProvider>
