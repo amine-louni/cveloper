@@ -19,13 +19,14 @@ import { indigo, teal } from '@material-ui/core/colors';
 import Dashboard from './views/Dashboard';
 import Toast from './components/common/Toast';
 import { loadUser } from './actions/authHandler';
+import { getCurrentUserProfile } from './actions';
 import setAuthToken from './http/setAuthToken';
 
 if (localStorage.token) {
   console.log('token found!');
   setAuthToken(localStorage.token);
 }
-function App({ isDark, loadUser }) {
+function App({ isDark, loadUser, getCurrentUserProfile }) {
   const defaultTheme = createMuiTheme({
     palette: {
       type: 'light',
@@ -50,6 +51,7 @@ function App({ isDark, loadUser }) {
   let theme = isDark ? darkTheme : defaultTheme;
   React.useEffect(() => {
     loadUser();
+    getCurrentUserProfile();
   }, [loadUser]);
   return (
     <ThemeProvider theme={theme}>
@@ -76,4 +78,6 @@ function App({ isDark, loadUser }) {
 const mapStateToProps = ({ isDark }) => {
   return { isDark };
 };
-export default connect(mapStateToProps, { loadUser })(App);
+export default connect(mapStateToProps, { loadUser, getCurrentUserProfile })(
+  App
+);

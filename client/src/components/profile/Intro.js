@@ -1,7 +1,7 @@
 // React + Redux Dependencies
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getCurrentUserProfile } from '../../actions';
+
 // 3rd party Dependencies
 import dayjs from 'dayjs';
 // MUI Dependencies
@@ -91,10 +91,6 @@ function Intro(props) {
   const handleCloseEdit = () => {
     setOpenEditDialog(false);
   };
-
-  useEffect(() => {
-    props.getCurrentUserProfile();
-  }, [props]);
 
   return (
     <Card className={classes.root}>
@@ -223,4 +219,4 @@ const mapStateToProps = (state) => {
     loading: state.userProfile.loading,
   };
 };
-export default connect(mapStateToProps, { getCurrentUserProfile })(Intro);
+export default connect(mapStateToProps)(Intro);

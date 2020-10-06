@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getCurrentUserProfile, updateMyProfile } from '../../actions';
+import { updateMyProfile } from '../../actions';
 // Formik Dependencies
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -24,10 +24,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AccountProfile(props) {
-  React.useEffect(() => {
-    props.getCurrentUserProfile();
-  }, []);
-
   const classes = useStyles();
 
   const validationSchema = Yup.object({
@@ -154,5 +150,4 @@ const mapStateToProps = (state) => {
 };
 export default connect(mapStateToProps, {
   updateMyProfile,
-  getCurrentUserProfile,
 })(AccountProfile);
