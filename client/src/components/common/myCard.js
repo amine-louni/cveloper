@@ -15,7 +15,7 @@ function MyCard(props) {
   return props.isAuth ? (
     <Card className={classes.root}>
       <CardHeader
-        avatar={<Avatar src={defaultAvatar} />}
+        avatar={<Avatar variant="rounded" src={defaultAvatar} />}
         title={`${user.firstName} ${user.lastName}`}
         subheader={`@${user.userName}`}
       />

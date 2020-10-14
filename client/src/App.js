@@ -34,7 +34,7 @@ function App({ isDark, loadUser, getCurrentUserProfile }) {
       secondary: teal,
     },
     typography: {
-      fontFamily: 'Poppins',
+      fontFamily: 'Inconsolata',
     },
   });
 
@@ -45,7 +45,7 @@ function App({ isDark, loadUser, getCurrentUserProfile }) {
       secondary: teal,
     },
     typography: {
-      fontFamily: 'Poppins',
+      fontFamily: 'Inconsolata',
     },
   });
   let theme = isDark ? darkTheme : defaultTheme;

@@ -103,6 +103,7 @@ export default function Post() {
         <CardHeader
           avatar={
             <Avatar
+              variant="rounded"
               aria-label="recipe"
               className={classes.avatar}
               src={defaultAvatar}

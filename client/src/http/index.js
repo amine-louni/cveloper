@@ -13,3 +13,7 @@ export const user = axios.create({
   baseURL: 'http://localhost:9000/api/v1/users/',
   headers: { 'Content-type': 'application/json' },
 });
+export const post = axios.create({
+  baseURL: 'http://localhost:9000/api/v1/posts/',
+  headers: { 'Content-type': 'application/json' },
+});

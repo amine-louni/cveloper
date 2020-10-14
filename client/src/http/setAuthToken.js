@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { auth, profile, user } from '../http';
+import { auth, profile, user, post } from '../http';
 
 const setAuthToken = (token) => {
   if (token) {
@@ -7,6 +7,7 @@ const setAuthToken = (token) => {
     auth.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     profile.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     user.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    post.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   } else {
     delete axios.defaults.headers.common['Authorization'];
   }

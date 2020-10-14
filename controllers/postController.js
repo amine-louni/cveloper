@@ -1,7 +1,43 @@
+const multer = require('multer');
+const sharp = require('sharp');
 const Post = require('../models/Post');
 const AppError = require('../utils/AppError');
 const handlerFactory = require('../utils/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload only images.', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadCoverPost = upload.single('cover');
+
+exports.resizeCoverPost = catchAsync(async (req, res, next) => {
+  if (!req.file) return next(new AppError('specify the image', 404));
+
+  req.file.filename = `cover-${req.currentUser._id}-${Date.now()}.jpeg`;
+
+  await await sharp(req.file.buffer)
+    .resize(1000, 420)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/covers/${req.file.filename}`);
+
+  return res.status(200).json({
+    status: 'success',
+    data: `public/img/covers/${req.file.filename}`,
+  });
+});
 
 exports.updateMyPost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);

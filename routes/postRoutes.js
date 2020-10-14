@@ -18,7 +18,13 @@ router
     postController.createPost
   );
 router.route('/me').get(authController.protect, postController.getAllPosts);
+router.route('/update-post-cover').post(
+  authController.protect,
 
+  postController.uploadCoverPost,
+
+  postController.resizeCoverPost
+);
 router
   .route('/update/:id')
   .patch(authController.protect, postController.updateMyPost);

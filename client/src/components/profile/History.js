@@ -116,85 +116,88 @@ function History(props) {
             openExp={handleClickOpenExpUpdate}
           />
           <Timeline>
+            {/* const sortedActivities = activities.sort((a, b) => b.date - a.date) */}
             {props.profile && props.profile.experience.length > 0
-              ? props.profile.experience.map((exp, i) => {
-                  return (
-                    <TimelineItem key={i} className={classes.LeftTimeLine}>
-                      <TimelineSeparator>
-                        <TimelineDot />
-                        <TimelineConnector />
-                      </TimelineSeparator>
-                      <TimelineContent>
-                        <Card key={i}>
-                          <PopupState
-                            variant="popover"
-                            popupId="demo-popup-menu"
-                          >
-                            {(popupState) => (
-                              <React.Fragment>
-                                <IconButton
-                                  className={classes.MoreVert}
-                                  aria-label="settings"
-                                  {...bindTrigger(popupState)}
-                                >
-                                  <MoreVert />
-                                </IconButton>
-                                <Menu
-                                  id="simple-menu"
-                                  {...bindMenu(popupState)}
-                                >
-                                  <MenuItem
-                                    onClick={() => {
-                                      handleClickOpenExpUpdate();
-                                      popupState.close();
-                                      returnFn(exp);
-                                    }}
+              ? props.profile.experience
+                  .sort((a, b) => b.from - a.from)
+                  .map((exp, i) => {
+                    return (
+                      <TimelineItem key={i} className={classes.LeftTimeLine}>
+                        <TimelineSeparator>
+                          <TimelineDot />
+                          <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent>
+                          <Card key={i}>
+                            <PopupState
+                              variant="popover"
+                              popupId="demo-popup-menu"
+                            >
+                              {(popupState) => (
+                                <React.Fragment>
+                                  <IconButton
+                                    className={classes.MoreVert}
+                                    aria-label="settings"
+                                    {...bindTrigger(popupState)}
                                   >
-                                    Update
-                                  </MenuItem>
-                                  <MenuItem
-                                    onClick={() => {
-                                      props.delExp(exp._id);
-                                      popupState.close();
-                                    }}
+                                    <MoreVert />
+                                  </IconButton>
+                                  <Menu
+                                    id="simple-menu"
+                                    {...bindMenu(popupState)}
                                   >
-                                    Delete
-                                  </MenuItem>
-                                </Menu>
-                              </React.Fragment>
-                            )}
-                          </PopupState>
-                          <CardContent>
-                            <Typography component="h4" variant="subtitle1">
-                              {exp.company}
-                              {' - '} {exp.location}
-                            </Typography>
+                                    <MenuItem
+                                      onClick={() => {
+                                        handleClickOpenExpUpdate();
+                                        popupState.close();
+                                        returnFn(exp);
+                                      }}
+                                    >
+                                      Update
+                                    </MenuItem>
+                                    <MenuItem
+                                      onClick={() => {
+                                        props.delExp(exp._id);
+                                        popupState.close();
+                                      }}
+                                    >
+                                      Delete
+                                    </MenuItem>
+                                  </Menu>
+                                </React.Fragment>
+                              )}
+                            </PopupState>
+                            <CardContent>
+                              <Typography component="h4" variant="subtitle1">
+                                {exp.company}
+                                {' - '} {exp.location}
+                              </Typography>
 
-                            <Typography component="h4" variant="caption">
-                              {` ${dayjs(exp.from).format('MMMM , YYYY')} - 
+                              <Typography component="h4" variant="caption">
+                                {` ${dayjs(exp.from).format('MMMM , YYYY')} - 
                               ${
                                 exp.current
                                   ? 'current'
                                   : dayjs(exp.to).format('MMMM , YYYY')
                               }`}
-                            </Typography>
-                            <Typography component="h4" variant="subtitle2">
-                              {exp.title}
-                            </Typography>
+                              </Typography>
+                              <Typography component="h4" variant="subtitle2">
+                                {exp.title}
+                              </Typography>
 
-                            <Typography
-                              component="p"
-                              variant="body1"
-                              color="textSecondary"
-                            >
-                              {exp.description}
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                      </TimelineContent>
-                    </TimelineItem>
-                  );
-                })
+                              <Typography
+                                component="p"
+                                variant="body1"
+                                color="textSecondary"
+                              >
+                                {exp.description}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        </TimelineContent>
+                      </TimelineItem>
+                    );
+                  })
               : 'No experience has been added yet 👻'}
           </Timeline>
         </CardContent>
@@ -226,77 +229,79 @@ function History(props) {
           />
           <Timeline>
             {props.profile && props.profile.education.length > 0
-              ? props.profile.education.map((edu, i) => {
-                  return (
-                    <TimelineItem key={i} className={classes.LeftTimeLine}>
-                      <TimelineSeparator>
-                        <TimelineDot />
-                        <TimelineConnector />
-                      </TimelineSeparator>
-                      <TimelineContent>
-                        <Card>
-                          <PopupState
-                            variant="popover"
-                            popupId="demo-popup-menu"
-                          >
-                            {(popupState) => (
-                              <React.Fragment>
-                                <IconButton
-                                  className={classes.MoreVert}
-                                  aria-label="settings"
-                                  {...bindTrigger(popupState)}
-                                >
-                                  <MoreVert />
-                                </IconButton>
-                                <Menu
-                                  id="simple-menu"
-                                  {...bindMenu(popupState)}
-                                >
-                                  <MenuItem
-                                    onClick={() => {
-                                      handleClickOpenEduUpdate();
-
-                                      returnFnEdu(edu);
-                                    }}
-                                  >
-                                    Update
-                                  </MenuItem>
-                                  <MenuItem
-                                    onClick={() => props.delEdu(edu._id)}
-                                  >
-                                    Delete
-                                  </MenuItem>
-                                </Menu>
-                              </React.Fragment>
-                            )}
-                          </PopupState>
-                          <CardContent>
-                            <Typography display="block" variant="subtitle1">
-                              {edu.school}
-                            </Typography>
-                            <Typography variant="subtitle2">
-                              {edu.degree} degree at {edu.fieldofstudy}
-                            </Typography>
-                            <Typography variant="caption" gutterBottom>
-                              {dayjs(edu.from).format('MMMM , YYYY')} -{' '}
-                              {edu.current
-                                ? 'current'
-                                : dayjs(edu.to).format('MMMM , YYYY')}
-                            </Typography>
-
-                            <Typography
-                              component="p"
-                              variant="body1"
-                              color="textSecondary"
+              ? props.profile.education
+                  .sort((a, b) => b.from - a.from)
+                  .map((edu, i) => {
+                    return (
+                      <TimelineItem key={i} className={classes.LeftTimeLine}>
+                        <TimelineSeparator>
+                          <TimelineDot />
+                          <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent>
+                          <Card>
+                            <PopupState
+                              variant="popover"
+                              popupId="demo-popup-menu"
                             >
-                              {edu.description}
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                      </TimelineContent>
-                    </TimelineItem>
-                  );
-                })
+                              {(popupState) => (
+                                <React.Fragment>
+                                  <IconButton
+                                    className={classes.MoreVert}
+                                    aria-label="settings"
+                                    {...bindTrigger(popupState)}
+                                  >
+                                    <MoreVert />
+                                  </IconButton>
+                                  <Menu
+                                    id="simple-menu"
+                                    {...bindMenu(popupState)}
+                                  >
+                                    <MenuItem
+                                      onClick={() => {
+                                        handleClickOpenEduUpdate();
+
+                                        returnFnEdu(edu);
+                                      }}
+                                    >
+                                      Update
+                                    </MenuItem>
+                                    <MenuItem
+                                      onClick={() => props.delEdu(edu._id)}
+                                    >
+                                      Delete
+                                    </MenuItem>
+                                  </Menu>
+                                </React.Fragment>
+                              )}
+                            </PopupState>
+                            <CardContent>
+                              <Typography display="block" variant="subtitle1">
+                                {edu.school}
+                              </Typography>
+                              <Typography variant="subtitle2">
+                                {edu.degree} degree at {edu.fieldofstudy}
+                              </Typography>
+                              <Typography variant="caption" gutterBottom>
+                                {dayjs(edu.from).format('MMMM , YYYY')} -{' '}
+                                {edu.current
+                                  ? 'current'
+                                  : dayjs(edu.to).format('MMMM , YYYY')}
+                              </Typography>
+
+                              <Typography
+                                component="p"
+                                variant="body1"
+                                color="textSecondary"
+                              >
+                                {edu.description}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        </TimelineContent>
+                      </TimelineItem>
+                    );
+                  })
               : 'No education has been added yet 👻'}
           </Timeline>
         </CardContent>
