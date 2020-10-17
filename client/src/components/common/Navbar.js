@@ -163,17 +163,6 @@ const Navbar = (props) => {
       setOpen(false);
     }
   }
-  const [openCreatePostDialog, handleOpenCreatePostDialog] = React.useState(
-    false
-  );
-
-  const handleOpenCreatePostDialogFn = () => {
-    handleOpenCreatePostDialog(true);
-  };
-
-  const handleCloseCreatePostDialog = () => {
-    handleOpenCreatePostDialog(false);
-  };
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
   React.useEffect(() => {
@@ -183,6 +172,16 @@ const Navbar = (props) => {
 
     prevOpen.current = open;
   }, [props, open]);
+
+  const [openCreate, setOpenCreate] = React.useState(false);
+
+  const handleOpenCreatePostDialogFn = () => {
+    setOpenCreate(true);
+  };
+
+  const handleCloseCreatePostDialogFn = () => {
+    setOpenCreate(false);
+  };
 
   return (
     <>
@@ -226,7 +225,7 @@ const Navbar = (props) => {
                     style={{ marginRight: 30 }}
                     size="small"
                     endIcon={<AddCircleOutlineOutlinedIcon />}
-                    onClick={handleOpenCreatePostDialog}
+                    onClick={handleOpenCreatePostDialogFn}
                   >
                     write a post
                   </Button>
@@ -359,11 +358,7 @@ const Navbar = (props) => {
         <Toolbar />
       </div>
 
-      <CreatePost
-        open={openCreatePostDialog}
-        handleOpen={handleOpenCreatePostDialogFn}
-        handleClose={handleCloseCreatePostDialog}
-      />
+      <CreatePost open={openCreate} onClose={handleCloseCreatePostDialogFn} />
     </>
   );
 };

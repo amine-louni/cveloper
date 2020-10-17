@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { post } from '../../http';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -19,6 +20,7 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 
 import PostPreview from './postPreview/PostPreview';
+import { setAlert } from '../../actions';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -59,7 +61,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          <Typography component={'span'}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -73,14 +75,15 @@ function a11yProps(index) {
   };
 }
 
-export default function CreatePostDialog(props) {
-  const { open, handleClose, handleOpen } = props;
+function CreatePostDialog(props) {
+  const { open, onClose } = props;
+  console.log(open);
   const classes = useStyles();
   const [photoUploadProgress, setPhotoUploadProgress] = useState(0);
 
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleTab = (event, newValue) => {
     setValue(newValue);
   };
   const [markdown, setMarkdown] = React.useState('');
@@ -88,168 +91,205 @@ export default function CreatePostDialog(props) {
     <div>
       <Dialog
         fullScreen
-        open={true}
-        onClose={handleClose}
+        open={open}
+        onClose={onClose}
         TransitionComponent={Transition}
       >
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Create a post{' '}
-              <span role="img" aria-label="pen">
-                📝
-              </span>
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
-          </Toolbar>
-        </AppBar>
+        <Formik
+          initialValues={{
+            cover: '',
+            title: '',
+            tags: '',
+            text: markdown,
+          }}
+          //validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting, resetForm }) => {
+            // await props.login(values);
+            try {
+              const res = await post.post('/', values);
+              setSubmitting(false);
 
-        <Container>
-          <AppBar position="static" variant="outlined" color="default">
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="simple tabs example"
-            >
-              <Tab label="Write" {...a11yProps(0)} />
-              <Tab label="Preview" {...a11yProps(1)} />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={value} index={0}>
-            <Grid container>
-              <Grid item md={9}>
-                <Card variant="outlined">
-                  <CardContent>
-                    <Formik
-                      initialValues={{
-                        cover: '',
-                        title: '',
-                        tags: '',
-                        post: markdown,
-                      }}
-                      //validationSchema={validationSchema}
-                      onSubmit={async (values, { setSubmitting }) => {
-                        // await props.login(values);
-                        setSubmitting(false);
-                      }}
-                    >
-                      {({
-                        submitForm,
-                        isSubmitting,
-                        touched,
-                        errors,
-                        setFieldValue,
-                        values,
-                      }) => (
-                        <Form className={classes.form} noValidate>
-                          <div className={classes.updateCover}>
-                            {values.cover ? (
-                              <img src={values.cover} alt="cover" />
-                            ) : (
-                              ''
-                            )}
-                            <input
-                              accept="image/*"
-                              className={classes.input}
-                              id="contained-button-file"
-                              name="cover"
-                              type="file"
-                              onChange={async (event) => {
-                                setFieldValue(
-                                  'cover',
-                                  URL.createObjectURL(event.target.files[0])
-                                );
+              onClose();
+              resetForm();
+            } catch (err) {
+              console.log(err.response.data.message);
+              props.setAlert(`Ops! ${err.response.data.message}`, 'error');
+            }
+          }}
+        >
+          {({
+            submitForm,
+            isSubmitting,
+            touched,
+            errors,
+            setFieldValue,
 
-                                const form = new FormData();
+            values,
+          }) => (
+            <>
+              <AppBar className={classes.appBar}>
+                <Toolbar>
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    onClick={onClose}
+                    aria-label="close"
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                  <Typography variant="h6" className={classes.title}>
+                    Create a post{' '}
+                    <span role="img" aria-label="pen">
+                      📝
+                    </span>
+                  </Typography>
+                  <Button
+                    autoFocus
+                    type="submit"
+                    color="inherit"
+                    onClick={() => {
+                      submitForm();
+                    }}
+                  >
+                    save
+                  </Button>
+                </Toolbar>
+              </AppBar>
 
-                                form.append('cover', event.target.files[0]);
-                                await post.post('update-post-cover', form, {
-                                  onUploadProgress: function (progressEvent) {
-                                    var percentCompleted = Math.round(
-                                      (progressEvent.loaded * 100) /
-                                        progressEvent.total
-                                    );
-                                    setPhotoUploadProgress(
-                                      Math.round(
-                                        (progressEvent.loaded * 100) /
-                                          progressEvent.total
-                                      )
-                                    );
-                                  },
-                                });
-                              }}
+              <Container>
+                <AppBar position="static" variant="outlined" color="default">
+                  <Tabs
+                    value={value}
+                    onChange={handleTab}
+                    aria-label="simple tabs example"
+                    centered
+                  >
+                    <Tab label="Write" {...a11yProps(0)} />
+                    <Tab label="Preview" {...a11yProps(1)} />
+                  </Tabs>
+                </AppBar>
+                <TabPanel value={value} index={0}>
+                  <Grid container>
+                    <Grid item md={9}>
+                      <Card variant="outlined">
+                        <CardContent>
+                          <Form className={classes.form} noValidate>
+                            <div className={classes.updateCover}>
+                              {values.cover ? (
+                                <img
+                                  style={{ marginRight: 40 }}
+                                  src={`http://localhost:9000/${values.cover}`}
+                                  alt="cover"
+                                />
+                              ) : (
+                                ''
+                              )}
+
+                              {!values.cover ? (
+                                <>
+                                  <input
+                                    accept="image/*"
+                                    className={classes.input}
+                                    id="img-cover"
+                                    name="cover"
+                                    type="file"
+                                    onChange={async (event) => {
+                                      const form = new FormData();
+
+                                      form.append(
+                                        'cover',
+                                        event.target.files[0]
+                                      );
+                                      const res = await post.post(
+                                        'update-post-cover',
+                                        form
+                                      );
+                                      setFieldValue(
+                                        'cover',
+                                        res.data.data.replace('public', '')
+                                      );
+                                    }}
+                                  />
+                                  <label htmlFor="img-cover">
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      component="span"
+                                    >
+                                      Upload a cover image
+                                    </Button>
+                                  </label>
+                                </>
+                              ) : (
+                                <Button
+                                  variant="contained"
+                                  color="error"
+                                  component="span"
+                                  onClick={() => {
+                                    setFieldValue('cover', '');
+                                  }}
+                                >
+                                  remove
+                                </Button>
+                              )}
+                            </div>
+                            <Field
+                              component={TextField}
+                              margin="normal"
+                              required
+                              fullWidth
+                              id="title"
+                              label="Title"
+                              name="title"
+                              autoComplete="title"
+                              autoFocus
                             />
-                            <label htmlFor="contained-button-file">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                component="span"
-                              >
-                                Upload a cover image
-                              </Button>
-                            </label>
-                          </div>
-                          <Field
-                            component={TextField}
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="title"
-                            label="Title"
-                            name="title"
-                            autoComplete="title"
-                            autoFocus
-                          />
-                          <Field
-                            component={TextField}
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="tags"
-                            label="Tags"
-                            helperText="Tags [Add up to 4 tags]"
-                            name="tags"
-                            autoComplete="tags"
-                            autoFocus
-                          />
-                          <Field
-                            component={TextField}
-                            margin="normal"
-                            required
-                            fullWidth
-                            multiline
-                            id="post"
-                            rows={7}
-                            label="Type here ... ✍"
-                            name="post"
-                            autoComplete="post"
-                            autoFocus
-                          />
-                          {setMarkdown(values.post)}
-                        </Form>
-                      )}
-                    </Formik>
-                  </CardContent>
-                </Card>
-                <Grid item md={3}></Grid>
-              </Grid>
-            </Grid>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <PostPreview markdown={markdown} />
-          </TabPanel>
-        </Container>
+                            <Field
+                              component={TextField}
+                              margin="normal"
+                              required
+                              fullWidth
+                              id="tags"
+                              label="Tags"
+                              helperText="Tags [Add up to 4 tags]"
+                              name="tags"
+                              autoComplete="tags"
+                              autoFocus
+                            />
+                            <Field
+                              component={TextField}
+                              margin="normal"
+                              required
+                              fullWidth
+                              style={{ height: 600 }}
+                              multiline
+                              id="post"
+                              rows={30}
+                              label="Type here ... ✍"
+                              name="text"
+                              autoComplete="post"
+                              autoFocus
+                            />
+                            <div style={{ display: 'none' }}>
+                              {setTimeout(() => setMarkdown(values.text), 0)}
+                            </div>
+                          </Form>
+                        </CardContent>
+                      </Card>
+                      <Grid item md={3}></Grid>
+                    </Grid>
+                  </Grid>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <PostPreview markdown={markdown} />
+                </TabPanel>
+              </Container>
+            </>
+          )}
+        </Formik>
       </Dialog>
     </div>
   );
 }
+
+export default connect(null, { setAlert })(CreatePostDialog);

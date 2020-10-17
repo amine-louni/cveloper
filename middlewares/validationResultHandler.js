@@ -9,8 +9,7 @@ const handleValidationResult = (validationResult) => {
         .array()
         .map((el) => el.msg)
         .join(' , ');
-      console.log(errorsString);
-      const message = `validation error : ${errorsString}`;
+      const message = `${errorsString}`;
       return next(new AppError(message, 403));
     }
     next();

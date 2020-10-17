@@ -11,7 +11,11 @@ router
   .route('/')
   .get(postController.getAllPosts)
   .post(
-    [check('text', 'Text is required').not().isEmpty()],
+    [
+      check('title', 'Text is required').not().isEmpty(),
+      check('cover', 'Image cover is required').not().isEmpty(),
+      check('text', 'Text is required').not().isEmpty(),
+    ],
     validationResultHandler(validationResult),
     authController.protect,
     setTheUserID,

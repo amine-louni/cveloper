@@ -11,7 +11,7 @@ const postsSchema = new mongoose.Schema({
     required: [true, 'title must not be empty'],
     trim: true,
   },
-  image: {
+  cover: {
     type: String,
     required: [true, 'title must not be empty'],
   },

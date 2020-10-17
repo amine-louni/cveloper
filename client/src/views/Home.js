@@ -1,4 +1,5 @@
 import React from 'react';
+import { post } from './../http';
 import NavBar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { Container, Grid, Typography } from '@material-ui/core';
@@ -9,6 +10,20 @@ import MyAside from '../components/common/MyAside';
 import PostCardSm from '../components/common/postCardSm';
 
 export default function Home() {
+  const [posts, setPosts] = React.useState([]);
+
+  React.useEffect(() => {
+    const getPosts = async () => {
+      try {
+        const res = await post.get('/');
+        setPosts(res.data.data.docs);
+      } catch (err) {
+        return <h4>Ops some thing went wrong , refresh the page 🙄</h4>;
+      }
+    };
+
+    getPosts();
+  }, []);
   return (
     <>
       <NavBar />
@@ -22,8 +37,15 @@ export default function Home() {
 
           <Grid item md={6}>
             <PostInput />
-            <Post />
-            <Post />
+            {posts.map((post) => (
+              <Post
+                cover={post.cover}
+                title={post.title}
+                tags={post.tags}
+                likes={post.likes}
+                comments={post.comments.length}
+              />
+            ))}
           </Grid>
           <Grid item md={3}>
             <Typography variant="h6" gutterBottom>

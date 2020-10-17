@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Post() {
+export default function Post(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -144,7 +144,7 @@ export default function Post() {
             component="img"
             alt="Contemplative Reptile"
             height="200"
-            image="https://source.unsplash.com/user/erondu/1600x900"
+            image={`http://localhost:9000/${props.cover}`}
             title="Contemplative Reptile"
           />
 
@@ -155,9 +155,9 @@ export default function Post() {
               color="textSecondary"
               component="h2"
             >
-              Where do you host server-side code?
+              {props.title}
             </Typography>
-            <div>#html #css #react #formik</div>
+            <div>{props.tags}</div>
           </CardContent>
           <CardActions className={classes.postActions}>
             <div
@@ -165,11 +165,13 @@ export default function Post() {
               className={classes.actionBtnLove}
             >
               <FavoriteBorder className={classes.marginRight} />
-              <Typography variant="subtitle1">141</Typography>
+              <Typography variant="subtitle1">{props.likes.length}</Typography>
             </div>
             <div className={classes.actionBtnComment} aria-label="share">
               <ChatBubbleOutlineIcon className={classes.marginRight} />
-              <Typography variant="subtitle1">30</Typography>
+              <Typography variant="subtitle1">
+                {props.comments.length}
+              </Typography>
             </div>
           </CardActions>
         </CardActionArea>
