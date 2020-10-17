@@ -8,10 +8,12 @@ import Post from '../components/Post/Post';
 import MyCard from '../components/common/myCard';
 import MyAside from '../components/common/MyAside';
 import PostCardSm from '../components/common/postCardSm';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 export default function Home() {
   const [posts, setPosts] = React.useState([]);
-
+  dayjs.extend(relativeTime);
   React.useEffect(() => {
     const getPosts = async () => {
       try {
@@ -40,7 +42,7 @@ export default function Home() {
             {posts.map((post) => (
               <Post
                 user={`${post.user.firstName}  ${post.user.lastName}`}
-                createdAt={post.createdAt}
+                createdAt={dayjs(post.createdAt).from(dayjs())}
                 cover={post.cover}
                 title={post.title}
                 tags={post.tags}
