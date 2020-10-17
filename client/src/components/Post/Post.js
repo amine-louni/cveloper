@@ -136,8 +136,8 @@ export default function Post(props) {
               </Menu>
             </>
           }
-          title="John Doe"
-          subheader="2 Days ago"
+          title={props.user}
+          subheader={props.createdAt}
         />
         <CardActionArea>
           <CardMedia

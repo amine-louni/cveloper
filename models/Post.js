@@ -64,11 +64,28 @@ postsSchema.pre(/^find/, function (next) {
   // this points to the current query
   this.populate({
     path: 'comments',
-    populate: { path: 'user', model: 'User', select: 'name avatar' },
-  }).populate({
-    path: 'likes',
-    populate: { path: 'user', model: 'User', select: 'name avatar' },
-  });
+    populate: {
+      path: 'user',
+      model: 'User',
+      select: 'firstName lastName userName avatar',
+    },
+  })
+    .populate({
+      path: 'likes',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: 'firstName lastName userName avatar',
+      },
+    })
+    .populate({
+      path: 'user',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: ['firstName', 'lastName', 'userName', 'avatar'],
+      },
+    });
 
   next();
 });

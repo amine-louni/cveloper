@@ -39,11 +39,13 @@ export default function Home() {
             <PostInput />
             {posts.map((post) => (
               <Post
+                user={`${post.user.firstName}  ${post.user.lastName}`}
+                createdAt={post.createdAt}
                 cover={post.cover}
                 title={post.title}
                 tags={post.tags}
                 likes={post.likes}
-                comments={post.comments.length}
+                comments={post.comments}
               />
             ))}
           </Grid>
