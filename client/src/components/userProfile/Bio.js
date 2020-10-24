@@ -3,7 +3,6 @@ import React from 'react';
 
 // MUI Dependencies
 import { Card, makeStyles, Typography, CardContent } from '@material-ui/core';
-import Skeleton from 'react-loading-skeleton';
 
 const useStyles = makeStyles((theme) => ({
   root: { marginTop: theme.spacing(2) },

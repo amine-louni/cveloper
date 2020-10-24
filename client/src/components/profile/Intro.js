@@ -1,5 +1,5 @@
 // React + Redux Dependencies
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 // 3rd party Dependencies
