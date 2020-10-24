@@ -22,6 +22,7 @@ import Toast from './components/common/Toast';
 import { loadUser } from './actions/authHandler';
 import { getCurrentUserProfile } from './actions';
 import setAuthToken from './http/setAuthToken';
+import UserProfile from './views/userProfile';
 
 if (localStorage.token) {
   console.log('token found!');
@@ -69,6 +70,7 @@ function App({ isDark, loadUser, getCurrentUserProfile }) {
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/reset-password/:resetToken" component={ResetPassword} />
           <Route path="/article/:slug" component={Article} />
+          <Route path="/user/:id" component={UserProfile} />
           <Route exact path="/" component={Home} />
           <Route component={NotFound} />
         </Switch>

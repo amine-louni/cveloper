@@ -100,7 +100,11 @@ export default function Post(props) {
               <BookmarkBorderIcon />
             </>
           }
-          title={props.user}
+          title={
+            <Link to={`/user/${props.userId}`} component={RouterLink}>
+              {props.user}
+            </Link>
+          }
           subheader={props.createdAt}
         />
         <Link

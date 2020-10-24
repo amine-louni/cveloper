@@ -1,5 +1,6 @@
-const crypto = require('crypto');
 const mongoose = require('mongoose');
+const crypto = require('crypto');
+const slugify = require('slugify');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
@@ -14,6 +15,7 @@ const userSchema = new mongoose.Schema(
       unique: [true, 'This username is already taken 😥😥'],
       trim: true,
     },
+    slug: String,
     firstName: {
       type: String,
       required: [true, 'first name is a required field'],
@@ -72,6 +74,7 @@ const userSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
 userSchema.virtual('userProfile', {
   ref: 'Profile',
   foreignField: 'user',
@@ -85,7 +88,7 @@ userSchema.pre('save', async function (next) {
 
   // Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
-
+  this.slug = `@${slugify(this.title, { lower: true })}`;
   next();
 });
 userSchema.pre('save', function (next) {

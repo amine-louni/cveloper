@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     display: 'none',
+    textDecoration: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
@@ -199,9 +200,11 @@ const Navbar = (props) => {
                 <MenuIcon />
               </IconButton>
               <MobileSideBar />
-              <Typography className={classes.title} variant="h6" noWrap>
-                devLink
-              </Typography>
+              <Link to="/">
+                <Typography className={classes.title} variant="h6" noWrap>
+                  devLink
+                </Typography>
+              </Link>
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <Search />

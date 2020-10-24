@@ -20,7 +20,14 @@ export default function Home() {
         const res = await post.get('/');
         setPosts(res.data.data.docs);
       } catch (err) {
-        return <h4>Ops some thing went wrong , refresh the page 🙄</h4>;
+        return (
+          <h4>
+            Ops some thing went wrong , refresh the page{' '}
+            <span role="img" aria-label="why">
+              🙄
+            </span>
+          </h4>
+        );
       }
     };
 
@@ -43,6 +50,7 @@ export default function Home() {
               <Post
                 user={`${post.user.firstName}  ${post.user.lastName}`}
                 slug={post.slug}
+                userId={post.user._id}
                 createdAt={dayjs(post.createdAt).from(dayjs())}
                 cover={post.cover}
                 title={post.title}

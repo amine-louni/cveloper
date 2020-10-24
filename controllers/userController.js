@@ -217,6 +217,23 @@ exports.removeFromReadingList = catchAsync(async (req, res, next) => {
     doc: currentUser,
   });
 });
+exports.getPostBySlug = catchAsync(async (req, res, next) => {
+  const doc = await Post.findOne({ slug: req.params.slug }).populate({
+    path: 'profile',
+  });
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: doc,
+    },
+  });
+});
+
 exports.getAllUsers = handlerFactory.getAll(User);
 exports.getOneUser = handlerFactory.getOne(User, {
   path: 'userProfile',

@@ -68,11 +68,19 @@ export default function Article(props) {
                 />
               )}
               <CardContent>
-                {/* <Box mb={4}>
-                  {article.tags.map((tag) => (
-                    <Chip className={classes.skill} size="small" label={tag} />
-                  ))}
-                </Box> */}
+                <Box mb={4}>
+                  {loading ? (
+                    <Skeleton variant="text" />
+                  ) : (
+                    article.tags.map((tag) => (
+                      <Chip
+                        className={classes.skill}
+                        size="small"
+                        label={tag}
+                      />
+                    ))
+                  )}
+                </Box>
                 <Typography gutterBottom variant="h4" component="h1">
                   {loading ? <Skeleton variant="text" /> : article.title}
                 </Typography>
