@@ -1,27 +1,21 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { Link as RouterLink } from 'react-router-dom';
 
+import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import { CardActionArea, CardMedia } from '@material-ui/core';
 
 import defaultAvatar from '../../assets/img/default.jpg';
-
-import { CardActionArea, CardMedia } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,15 +82,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Post(props) {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <>
       <Card className={classes.root}>
@@ -104,77 +90,68 @@ export default function Post(props) {
           avatar={
             <Avatar
               variant="rounded"
-              aria-label="recipe"
+              aria-label="article"
               className={classes.avatar}
               src={defaultAvatar}
             />
           }
           action={
             <>
-              <IconButton aria-label="settings" onClick={handleClick}>
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>
-                  <EditIcon className={classes.marginRight} /> Edit post
-                </MenuItem>
-
-                <MenuItem onClick={handleClose}>
-                  <BookmarkBorderIcon className={classes.marginRight} /> Save
-                  post
-                </MenuItem>
-                <MenuItem>
-                  <DeleteIcon color="error" className={classes.marginRight} />
-                  Delete post
-                </MenuItem>
-              </Menu>
+              <BookmarkBorderIcon />
             </>
           }
           title={props.user}
           subheader={props.createdAt}
         />
-        <CardActionArea>
-          <CardMedia
-            component="img"
-            alt="Contemplative Reptile"
-            height="200"
-            image={`http://localhost:9000/${props.cover}`}
-            title="Contemplative Reptile"
-          />
+        <Link
+          underline="none"
+          component={RouterLink}
+          to={`/article/${props.slug}`}
+        >
+          <CardActionArea style={{ textDecoration: 'none' }}>
+            <CardMedia
+              component="img"
+              alt="Contemplative Reptile"
+              height="200"
+              image={`http://localhost:9000/${props.cover}`}
+              title="Contemplative Reptile"
+            />
 
-          <CardContent>
-            <Typography
-              variant="h5"
-              className={classes.title}
-              color="textSecondary"
-              component="h2"
-            >
-              {props.title}
-            </Typography>
-            <div>{props.tags}</div>
-          </CardContent>
-          <CardActions className={classes.postActions}>
-            <div
-              aria-label="add to favorites"
-              className={classes.actionBtnLove}
-            >
-              <FavoriteBorder className={classes.marginRight} />
-              <Typography variant="subtitle1">{props.likes.length}</Typography>
-            </div>
-            <div className={classes.actionBtnComment} aria-label="share">
-              <ChatBubbleOutlineIcon className={classes.marginRight} />
-              <Typography variant="subtitle1">
-                {props.comments.length}
+            <CardContent>
+              <Typography
+                variant="h5"
+                className={classes.title}
+                color="textSecondary"
+                component="h2"
+              >
+                {props.title}
               </Typography>
-            </div>
-          </CardActions>
-        </CardActionArea>
+              <div style={{ textDecoration: 'none', color: '#333' }}>
+                {props.tags}
+              </div>
+            </CardContent>
+            <CardActions
+              style={{ textDecoration: 'none', color: '#333' }}
+              className={classes.postActions}
+            >
+              <div
+                aria-label="add to favorites"
+                className={classes.actionBtnLove}
+              >
+                <FavoriteBorder className={classes.marginRight} />
+                <Typography variant="subtitle1">
+                  {props.likes.length}
+                </Typography>
+              </div>
+              <div className={classes.actionBtnComment} aria-label="share">
+                <ChatBubbleOutlineIcon className={classes.marginRight} />
+                <Typography variant="subtitle1">
+                  {props.comments.length}
+                </Typography>
+              </div>
+            </CardActions>
+          </CardActionArea>
+        </Link>
       </Card>
     </>
   );

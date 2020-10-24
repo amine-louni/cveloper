@@ -195,6 +195,25 @@ exports.updateMyComment = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getPostBySlug = catchAsync(async (req, res, next) => {
+  console.log(req.params.slug);
+  const doc = await Post.findOne({ slug: req.params.slug }).populate({
+    path: 'user',
+    select: 'name avatar',
+  });
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: doc,
+    },
+  });
+});
+
 exports.getAllPosts = handlerFactory.getAll(Post, {
   path: 'user',
   select: 'name avatar',

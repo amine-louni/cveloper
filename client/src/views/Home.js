@@ -42,6 +42,7 @@ export default function Home() {
             {posts.map((post) => (
               <Post
                 user={`${post.user.firstName}  ${post.user.lastName}`}
+                slug={post.slug}
                 createdAt={dayjs(post.createdAt).from(dayjs())}
                 cover={post.cover}
                 title={post.title}

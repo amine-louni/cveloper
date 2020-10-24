@@ -1,9 +1,11 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import PrivateRoute from './components/routing/PrivateRoute';
+import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/core/styles';
 
+import PrivateRoute from './components/routing/PrivateRoute';
 import Home from './views/Home';
 import Profile from './views/Profile';
 import Register from './views/Register';
@@ -11,9 +13,8 @@ import Login from './views/Login';
 import ForgotPassword from './views/ForgotPassword';
 import MyAccount from './views/Myaccount';
 import ResetPassword from './views/ResetPassword';
+import Article from './views/Article';
 import NotFound from './views/Notfound';
-import { connect } from 'react-redux';
-import { createMuiTheme } from '@material-ui/core/styles';
 
 import { indigo, teal } from '@material-ui/core/colors';
 import Dashboard from './views/Dashboard';
@@ -67,6 +68,7 @@ function App({ isDark, loadUser, getCurrentUserProfile }) {
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/reset-password/:resetToken" component={ResetPassword} />
+          <Route path="/article/:slug" component={Article} />
           <Route exact path="/" component={Home} />
           <Route component={NotFound} />
         </Switch>

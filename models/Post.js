@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const postsSchema = new mongoose.Schema({
   user: {
@@ -9,8 +10,10 @@ const postsSchema = new mongoose.Schema({
   title: {
     type: String,
     required: [true, 'title must not be empty'],
+    unique: [true, 'title must not be unique'],
     trim: true,
   },
+  slug: String,
   cover: {
     type: String,
     required: [true, 'title must not be empty'],
@@ -58,6 +61,13 @@ const postsSchema = new mongoose.Schema({
 // Calc likes sum
 // Calc comments sum
 // Get 5 most popular posts
+
+// Doc Middlewares run with  save()  and create()  ( pre for before and post for after )
+postsSchema.pre('save', function (next) {
+  // 'this' point to the doc instance
+  this.slug = slugify(this.title, { lower: true });
+  next();
+});
 
 // populate user/likes users/comments users  on pre find
 postsSchema.pre(/^find/, function (next) {
