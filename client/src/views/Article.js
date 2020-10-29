@@ -1,10 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { post } from '../http';
 import Footer from '../components/common/Footer';
 import Navbar from '../components/common/Navbar';
 import { makeStyles } from '@material-ui/core/styles';
 import PostPreview from '../components/common/postPreview/PostPreview';
-
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import ShareIcon from '@material-ui/icons/Share';
 import defaultAvatar from '../assets/img/default.jpg';
 import {
   Avatar,
@@ -18,10 +22,14 @@ import {
   Chip,
   Container,
   Grid,
+  IconButton,
+  TextField,
   Typography,
 } from '@material-ui/core';
 import dayjs from 'dayjs';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { setAlert } from '../actions';
+import PostCommentComp from '../components/Post/PostComment';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,30 +41,98 @@ const useStyles = makeStyles((theme) => ({
   body: {
     fontFamily: 'Segoe UI',
   },
+  actions: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  action: {
+    marginBottom: 15,
+  },
 }));
 
-export default function Article(props) {
+function Article(props) {
   const [loading, setLoading] = React.useState(true);
   const [article, setArticle] = React.useState({});
+  const [liked, setLiked] = React.useState(false);
+  const [comment, setComment] = React.useState('');
 
   React.useEffect(() => {
     (async () => {
-      const res = await post.get(`/slug/${props.match.params.slug}`);
+      try {
+        const res = await post.get(`/slug/${props.match.params.slug}`);
 
-      const article = res.data.data.data;
-      document.title = article.title;
-      setArticle(article);
-      setLoading(false);
+        const article = res.data.data.data;
+        document.title = article.title;
+        setArticle(article);
+        setLoading(false);
+        article.likes.some((like) => like.user._id === props.user._id)
+          ? setLiked(true)
+          : setLiked(false);
+      } catch (err) {
+        console.log(err);
+      }
     })();
-  }, []);
+  }, [props]);
+
+  const likePost = async (id) => {
+    //{{URL}}/posts/likes/5f4e2b2aa601e13e640b7cce
+    try {
+      await post.patch(`/likes/${id}`);
+      setLiked(!liked);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const postComment = async (e, id) => {
+    //{{URL}}/posts/comments/5f4e2b2aa601e13e640b7cce
+    e.preventDefault();
+    try {
+      const res = await post.post(`/comments/${id}`, { text: comment });
+      setArticle({
+        ...article,
+        comments: res.data.doc,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const classes = useStyles();
   return (
     <>
       <Navbar />
       <Container className={classes.root}>
-        <Grid container spacing={3}>
-          <Grid item md={9}>
+        <Grid container spacing={2}>
+          <Grid item md={1}>
+            <div className={classes.actions}>
+              {liked ? (
+                <IconButton className={classes.action} aria-label="unlike">
+                  <FavoriteIcon
+                    onClick={() => {
+                      likePost(article._id);
+                    }}
+                  />
+                </IconButton>
+              ) : (
+                <IconButton aria-label="like" className={classes.action}>
+                  <FavoriteBorderIcon
+                    onClick={() => {
+                      likePost(article._id);
+                    }}
+                  />
+                </IconButton>
+              )}
+
+              <BookmarkBorderIcon className={classes.action} />
+              <ShareIcon className={classes.action} />
+            </div>
+          </Grid>
+
+          <Grid item md={8}>
             <Card>
               {loading ? (
                 <Skeleton variant="rect" height={340} />
@@ -91,6 +167,34 @@ export default function Article(props) {
                     <PostPreview markdown={article.text} />
                   )}
                 </Typography>
+              </CardContent>
+            </Card>
+
+            <Card style={{ marginTop: 25 }}>
+              <CardContent>
+                <form onSubmit={(e) => postComment(e, article._id)}>
+                  <TextField
+                    fullWidth
+                    name="comment"
+                    onChange={(e) => setComment(e.currentTarget.value)}
+                    value={comment}
+                    id="comment"
+                    label="Type your comment here ... 📝📝"
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                  />
+                  <Button
+                    type="submit"
+                    style={{ marginTop: 25 }}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    Submit
+                  </Button>
+                </form>
+
+                <PostCommentComp comments={article.comments} />
               </CardContent>
             </Card>
           </Grid>
@@ -132,3 +236,10 @@ export default function Article(props) {
     </>
   );
 }
+const mapStateToProps = ({ auth }) => {
+  return {
+    user: auth.user,
+    loading: auth.loading,
+  };
+};
+export default connect(mapStateToProps)(Article);

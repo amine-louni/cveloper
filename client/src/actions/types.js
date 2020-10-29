@@ -21,3 +21,4 @@ export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 export const UPDATE_USER = 'UPDATE_USER';
 export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
+export const FETCH_POST = 'FETCH_POST';
