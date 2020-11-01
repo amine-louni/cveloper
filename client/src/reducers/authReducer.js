@@ -9,6 +9,8 @@ import {
   UPDATE_USER,
   UPDATE_PASSWORD,
   RESET_PASSWORD,
+  BOOKMARK_POST,
+  UNBOOKMARK_POST,
 } from '../actions/types';
 
 const initialState = {
@@ -26,6 +28,13 @@ export default function (state = initialState, action) {
         isAuth: true,
         loading: false,
         user: action.payload.data,
+      };
+    case BOOKMARK_POST:
+    case UNBOOKMARK_POST:
+      return {
+        ...state,
+        loading: false,
+        user: action.payload,
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:

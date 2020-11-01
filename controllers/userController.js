@@ -188,12 +188,17 @@ exports.addToReadingList = catchAsync(async (req, res, next) => {
 
   // add to reading list !
 
-  await User.findByIdAndUpdate(req.currentUser.id, {
-    $push: { readingList: req.params.postId },
-  });
+  const updatedUser = await User.findByIdAndUpdate(
+    req.currentUser.id,
+    {
+      $push: { readingList: req.params.postId },
+    },
+    { new: true }
+  );
 
   return res.status(200).json({
     status: 'success',
+    doc: updatedUser,
   });
 });
 exports.removeFromReadingList = catchAsync(async (req, res, next) => {
@@ -208,13 +213,17 @@ exports.removeFromReadingList = catchAsync(async (req, res, next) => {
 
   // remove from
 
-  const currentUser = await User.findByIdAndUpdate(req.currentUser.id, {
-    $pull: { readingList: req.params.postId },
-  });
+  const updatedUser = await User.findByIdAndUpdate(
+    req.currentUser.id,
+    {
+      $pull: { readingList: req.params.postId },
+    },
+    { new: true }
+  );
 
   return res.status(200).json({
     status: 'success',
-    doc: currentUser,
+    doc: updatedUser,
   });
 });
 exports.getPostBySlug = catchAsync(async (req, res, next) => {

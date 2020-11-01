@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { post } from '../http';
+import { bookPost, unBookPost } from '../actions';
+import { post, user } from '../http';
 import Footer from '../components/common/Footer';
 import Navbar from '../components/common/Navbar';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,6 +9,7 @@ import PostPreview from '../components/common/postPreview/PostPreview';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ShareIcon from '@material-ui/icons/Share';
 import defaultAvatar from '../assets/img/default.jpg';
 import {
@@ -48,8 +50,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginTop: 40,
   },
+
   action: {
     marginBottom: 15,
+    cursor: 'pointer',
   },
 }));
 
@@ -57,6 +61,7 @@ function Article(props) {
   const [loading, setLoading] = React.useState(true);
   const [article, setArticle] = React.useState({});
   const [liked, setLiked] = React.useState(false);
+  const [book, setBook] = React.useState(null);
   const [comment, setComment] = React.useState('');
 
   React.useEffect(() => {
@@ -133,8 +138,22 @@ function Article(props) {
                   />
                 </IconButton>
               )}
+              {props.user && props.user.readingList.includes(article._id) ? (
+                <IconButton
+                  className={classes.action}
+                  onClick={() => props.unBookPost(article._id)}
+                >
+                  <BookmarkIcon />
+                </IconButton>
+              ) : (
+                <IconButton
+                  className={classes.action}
+                  onClick={() => props.bookPost(article._id)}
+                >
+                  <BookmarkBorderIcon />
+                </IconButton>
+              )}
 
-              <BookmarkBorderIcon className={classes.action} />
               <ShareIcon className={classes.action} />
             </div>
           </Grid>
@@ -255,4 +274,4 @@ const mapStateToProps = ({ auth }) => {
     loading: auth.loading,
   };
 };
-export default connect(mapStateToProps)(Article);
+export default connect(mapStateToProps, { bookPost, unBookPost })(Article);

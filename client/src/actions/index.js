@@ -20,6 +20,8 @@ import {
   delEdu,
   putEdu,
 } from './profileHandler';
+
+import { bookPost, unBookPost } from './userHandler';
 export {
   changeTheme,
   ToggleSideBar,
@@ -40,4 +42,6 @@ export {
   updateMyProfile,
   forgotPassword,
   resetPassword,
+  bookPost,
+  unBookPost,
 };

@@ -95,11 +95,6 @@ export default function Post(props) {
               src={defaultAvatar}
             />
           }
-          action={
-            <>
-              <BookmarkBorderIcon />
-            </>
-          }
           title={
             <Link to={`/user/${props.userId}`} component={RouterLink}>
               {props.user}
