@@ -51,7 +51,7 @@ router
   .post(authController.protect, postController.addComment);
 
 router
-  .route('/comments/:post_id/:comment_id')
+  .route('/:post_id/comments/:comment_id')
   .delete(authController.protect, postController.deleteMyComment)
   .patch(authController.protect, postController.updateMyComment);
 

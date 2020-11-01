@@ -88,7 +88,7 @@ userSchema.pre('save', async function (next) {
 
   // Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
-  this.slug = `@${slugify(this.title, { lower: true })}`;
+  this.slug = `${slugify(this.userName, { lower: true })}`;
   next();
 });
 userSchema.pre('save', function (next) {

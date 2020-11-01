@@ -65,7 +65,7 @@ function Article(props) {
         const res = await post.get(`/slug/${props.match.params.slug}`);
 
         const article = res.data.data.data;
-        document.title = article.title;
+        document.title = `DevLink 👩‍💻👩‍💻 | ${article.title}`;
         setArticle(article);
         setLoading(false);
         article.likes.some((like) => like.user._id === props.user._id)
@@ -94,8 +94,15 @@ function Article(props) {
       const res = await post.post(`/comments/${id}`, { text: comment });
       setArticle({
         ...article,
-        comments: res.data.doc,
+        comments: [
+          {
+            user: { ...props.user },
+            text: comment,
+          },
+          ...article.comments,
+        ],
       });
+      setComment('');
     } catch (err) {
       console.log(err);
     }
@@ -172,29 +179,34 @@ function Article(props) {
 
             <Card style={{ marginTop: 25 }}>
               <CardContent>
-                <form onSubmit={(e) => postComment(e, article._id)}>
-                  <TextField
-                    fullWidth
-                    name="comment"
-                    onChange={(e) => setComment(e.currentTarget.value)}
-                    value={comment}
-                    id="comment"
-                    label="Type your comment here ... 📝📝"
-                    multiline
-                    rows={4}
-                    variant="outlined"
-                  />
-                  <Button
-                    type="submit"
-                    style={{ marginTop: 25 }}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    Submit
-                  </Button>
-                </form>
+                {props.isAuth && (
+                  <form onSubmit={(e) => postComment(e, article._id)}>
+                    <TextField
+                      fullWidth
+                      name="comment"
+                      onChange={(e) => setComment(e.currentTarget.value)}
+                      value={comment}
+                      id="comment"
+                      label="Type your comment here ... 📝📝"
+                      multiline
+                      rows={4}
+                      variant="outlined"
+                    />
+                    <Button
+                      type="submit"
+                      style={{ marginTop: 25 }}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Submit
+                    </Button>
+                  </form>
+                )}
 
-                <PostCommentComp comments={article.comments} />
+                <PostCommentComp
+                  articleId={article && article._id}
+                  comments={article.comments}
+                />
               </CardContent>
             </Card>
           </Grid>
@@ -238,6 +250,7 @@ function Article(props) {
 }
 const mapStateToProps = ({ auth }) => {
   return {
+    isAuth: auth.isAuth,
     user: auth.user,
     loading: auth.loading,
   };

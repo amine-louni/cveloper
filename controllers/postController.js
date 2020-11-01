@@ -117,13 +117,11 @@ exports.addComment = catchAsync(async (req, res, next) => {
     text: req.body.text,
   };
 
-  post.comments.unshift(newComment);
-
+  await post.comments.unshift(newComment);
   await post.save();
 
   res.status(201).json({
     status: 'success',
-    doc: post.comments,
   });
 });
 
@@ -148,14 +146,13 @@ exports.deleteMyComment = catchAsync(async (req, res, next) => {
     );
 
   // Remove the comment
-  const removeIndex = post.comments
-    .map((comm) => comm.user.toString())
-    .indexOf(req.currentUser._id);
-  post.comments.splice(removeIndex, 1);
+  post.comments = post.comments.filter(
+    (comm) => comm.id !== req.params.comment_id
+  );
 
   await post.save();
 
-  res.status(204).json({
+  res.status(201).json({
     status: 'success',
     docs: post.comments,
   });
@@ -182,10 +179,8 @@ exports.updateMyComment = catchAsync(async (req, res, next) => {
     );
 
   // update the comment
-  const updateIndex = post.comments
-    .map((comm) => comm.user.toString())
-    .indexOf(req.currentUser._id);
-  post.comments[updateIndex].text = req.body.text;
+  const updatedComment = post.comments.id(req.params.comment_id); // returns a matching subdocument
+  updatedComment.set({ text: req.body.text }); // updates the address while keeping its schema
 
   await post.save();
 
@@ -196,7 +191,6 @@ exports.updateMyComment = catchAsync(async (req, res, next) => {
 });
 
 exports.getPostBySlug = catchAsync(async (req, res, next) => {
-  console.log(req.params.slug);
   const doc = await Post.findOne({ slug: req.params.slug }).populate({
     path: 'user',
     select: 'name avatar',
