@@ -1,4 +1,4 @@
-const AppError = require('../utils/AppError');
+const AppError = require('../utils/appError');
 
 const handleValidationResult = (validationResult) => {
   // Finds the validation errors in this request and wraps them in an object with handy functions

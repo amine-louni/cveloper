@@ -5,7 +5,7 @@ const Profile = require('../models/Profile');
 const Tag = require('../models/Tag');
 const handlerFactory = require('../utils/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/AppError');
+const AppError = require('../utils/appError');
 const Post = require('../models/Post');
 
 // const filterObj = (obj, ...allowedFields) => {

@@ -1,5 +1,5 @@
 const catchAsync = require('./catchAsync');
-const AppError = require('./AppError');
+const AppError = require('./appError');
 const APIFeatures = require('./ApiFeatures');
 
 exports.getAll = (Model, popOptions) =>

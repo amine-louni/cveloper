@@ -2,7 +2,7 @@ const request = require('request');
 const Profile = require('../models/Profile');
 const handlerFactory = require('../utils/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/AppError');
+const AppError = require('../utils/appError');
 
 exports.updateMyProfile = catchAsync(async (req, res, next) => {
   const profile = await Profile.findById(req.params.id);
