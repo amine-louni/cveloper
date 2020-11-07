@@ -48,6 +48,7 @@ export default function Home() {
             <PostInput />
             {posts.map((post) => (
               <Post
+                key={post._id}
                 user={`${post.user.firstName}  ${post.user.lastName}`}
                 slug={post.slug}
                 userId={post.user._id}

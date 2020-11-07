@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bookPost, unBookPost } from '../actions';
-import { post, user } from '../http';
+import { post } from '../http';
 import Footer from '../components/common/Footer';
 import Navbar from '../components/common/Navbar';
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,7 +30,7 @@ import {
 } from '@material-ui/core';
 import dayjs from 'dayjs';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { setAlert } from '../actions';
+
 import PostCommentComp from '../components/Post/PostComment';
 
 const useStyles = makeStyles((theme) => ({
@@ -61,7 +61,7 @@ function Article(props) {
   const [loading, setLoading] = React.useState(true);
   const [article, setArticle] = React.useState({});
   const [liked, setLiked] = React.useState(false);
-  const [book, setBook] = React.useState(null);
+
   const [comment, setComment] = React.useState('');
 
   React.useEffect(() => {
@@ -96,7 +96,7 @@ function Article(props) {
     //{{URL}}/posts/comments/5f4e2b2aa601e13e640b7cce
     e.preventDefault();
     try {
-      const res = await post.post(`/comments/${id}`, { text: comment });
+      await post.post(`/comments/${id}`, { text: comment });
       setArticle({
         ...article,
         comments: [
@@ -122,20 +122,24 @@ function Article(props) {
           <Grid item md={1}>
             <div className={classes.actions}>
               {liked ? (
-                <IconButton className={classes.action} aria-label="unlike">
-                  <FavoriteIcon
-                    onClick={() => {
-                      likePost(article._id);
-                    }}
-                  />
+                <IconButton
+                  onClick={() => {
+                    likePost(article._id);
+                  }}
+                  className={classes.action}
+                  aria-label="unlike"
+                >
+                  <FavoriteIcon />
                 </IconButton>
               ) : (
-                <IconButton aria-label="like" className={classes.action}>
-                  <FavoriteBorderIcon
-                    onClick={() => {
-                      likePost(article._id);
-                    }}
-                  />
+                <IconButton
+                  onClick={() => {
+                    likePost(article._id);
+                  }}
+                  aria-label="like"
+                  className={classes.action}
+                >
+                  <FavoriteBorderIcon />
                 </IconButton>
               )}
               {props.user && props.user.readingList.includes(article._id) ? (
@@ -165,7 +169,7 @@ function Article(props) {
               ) : (
                 <CardMedia
                   className={classes.media}
-                  image={`http://localhost:9000/${article.cover}`}
+                  image={`http://localhost:9000/assets${article.cover}`}
                   title="Contemplative Reptile"
                 />
               )}
@@ -174,8 +178,9 @@ function Article(props) {
                   {loading ? (
                     <Skeleton variant="text" />
                   ) : (
-                    article.tags.map((tag) => (
+                    article.tags.map((tag, i) => (
                       <Chip
+                        key={i}
                         className={classes.skill}
                         size="small"
                         label={tag}
@@ -186,7 +191,7 @@ function Article(props) {
                 <Typography gutterBottom variant="h4" component="h1">
                   {loading ? <Skeleton variant="text" /> : article.title}
                 </Typography>
-                <Typography component="p" className={classes.body}>
+                <Typography component="div" className={classes.body}>
                   {loading ? (
                     <Skeleton variant="text" />
                   ) : (

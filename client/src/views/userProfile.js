@@ -21,7 +21,7 @@ export default function UserProfile(props) {
       console.log(currentUser);
       setLoading(false);
     })();
-  }, []);
+  }, [currentUser, props.match.params.id]);
   return (
     <>
       <NavBar />

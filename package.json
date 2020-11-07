@@ -6,15 +6,15 @@
   "author": "amine louni",
   "license": "MIT",
   "scripts": {
-    "start": "node server",
     "server": "nodemon server",
+    "start": "node server",
+    "client": "npm run start --prefix ./client",
+    "dev": "concurrently  \"npm run client\"   \"npm run server\"",
     "debug": "ndb server",
-    "client": "cd client && yarn start",
-    "dev": "concurrently  \"yarn client\"   \"yarn server\""
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false  npm install --prefix client && npm run build --prefix client"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
-    "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
@@ -30,6 +30,7 @@
     "cors": "^2.8.5",
     "customize-cra": "^1.0.0",
     "dotenv": "^8.2.0",
+    "eslint": "^7.13.0",
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "express-validator": "^6.6.1",

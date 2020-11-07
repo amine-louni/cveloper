@@ -25,7 +25,6 @@ import setAuthToken from './http/setAuthToken';
 import UserProfile from './views/userProfile';
 
 if (localStorage.token) {
-  console.log('token found!');
   setAuthToken(localStorage.token);
 }
 function App({ isDark, loadUser, getCurrentUserProfile }) {
@@ -54,7 +53,7 @@ function App({ isDark, loadUser, getCurrentUserProfile }) {
   React.useEffect(() => {
     loadUser();
     getCurrentUserProfile();
-  }, [loadUser]);
+  }, [loadUser, getCurrentUserProfile]);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

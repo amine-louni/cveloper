@@ -11,7 +11,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import { CardActionArea, CardMedia } from '@material-ui/core';
 
@@ -112,7 +111,7 @@ export default function Post(props) {
               component="img"
               alt="Contemplative Reptile"
               height="200"
-              image={`http://localhost:9000/${props.cover}`}
+              image={`http://localhost:9000/assets${props.cover}`}
               title="Contemplative Reptile"
             />
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { post } from '../../http';
 import { makeStyles } from '@material-ui/core/styles';
@@ -77,9 +77,8 @@ function a11yProps(index) {
 
 function CreatePostDialog(props) {
   const { open, onClose } = props;
-  console.log(open);
+
   const classes = useStyles();
-  const [photoUploadProgress, setPhotoUploadProgress] = useState(0);
 
   const [value, setValue] = React.useState(0);
 
@@ -106,13 +105,12 @@ function CreatePostDialog(props) {
           onSubmit={async (values, { setSubmitting, resetForm }) => {
             // await props.login(values);
             try {
-              const res = await post.post('/', values);
+              await post.post('/', values);
               setSubmitting(false);
 
               onClose();
               resetForm();
             } catch (err) {
-              console.log(err.response.data.message);
               props.setAlert(`Ops! ${err.response.data.message}`, 'error');
             }
           }}

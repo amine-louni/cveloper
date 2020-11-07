@@ -27,14 +27,25 @@ app.enable('trust proxy');
 
 // Global middlewares
 app.use(express.json({ extended: false, limit: '10kb' }));
-// Serving static files
-app.use(express.static(path.join(__dirname, 'public')));
+
 // Mounting routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/posts', postsRouter);
 app.use('/api/v1/profiles', profilesRouter);
 app.use('/api/v1/tags', tagsRouter);
+
+// Serving images
+app.use('/assets', express.static(path.join(__dirname, 'public')));
+
+// Serving static files
+if (process.env.NODE_ENV === 'production') {
+  app.use('/', express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 // Handle not handled routes
 app.use('*', (req, res) => {
