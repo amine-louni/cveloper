@@ -91,14 +91,12 @@ exports.likesHandler = catchAsync(async (req, res, next) => {
     post.likes.filter((like) => like.user.equals(req.currentUser._id)).length >
     0
   ) {
-    console.log('dislike');
     filteredLikes = post.likes.filter(
       (like) => !like.user.equals(req.currentUser._id)
     );
     post.likes = filteredLikes;
   } else {
     post.likes.unshift({ user: req.currentUser._id });
-    console.log('like');
   }
 
   await post.save();
