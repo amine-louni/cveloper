@@ -21,7 +21,7 @@ function Bio(props) {
           {props.loading && props.profile === null ? (
             <Skeleton />
           ) : (
-            props.profile.bio || '404 Bio not found ⚠'
+          props.profile &&  props.profile.bio || '404 Bio not found ⚠'
           )}
         </Typography>
       </CardContent>
