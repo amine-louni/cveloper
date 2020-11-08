@@ -8,10 +8,7 @@
   "scripts": {
     "server": "nodemon server",
     "start": "node server",
-    "client": "npm run start --prefix ./client",
-    "dev": "concurrently  \"npm run client\"   \"npm run server\"",
-    "debug": "ndb server",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false  npm install --prefix client && npm run build --prefix client"
+    "debug": "ndb server"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
