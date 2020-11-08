@@ -38,15 +38,7 @@ app.use('/api/v1/tags', tagsRouter);
 // Serving images
 app.use('/assets', express.static(path.join(__dirname, 'public')));
 
-// Serving static files
-if (process.env.NODE_ENV === 'production') {
-  app.use('/', express.static('client/build'));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
-
+ 
 // Handle not handled routes
 app.use('*', (req, res) => {
   res.status(404).json({
