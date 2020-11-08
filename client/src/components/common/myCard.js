@@ -16,8 +16,8 @@ function MyCard(props) {
     <Card className={classes.root}>
       <CardHeader
         avatar={<Avatar variant="rounded" src={defaultAvatar} />}
-        title={`${user.firstName} ${user.lastName}`}
-        subheader={`@${user.userName}`}
+        title={`${user && user.firstName} ${user && user.lastName}`}
+        subheader={`@${user && user.userName}`}
       />
     </Card>
   ) : (
