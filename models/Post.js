@@ -1,65 +1,69 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 
-const postsSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'post must belong to a user'],
-  },
-  title: {
-    type: String,
-    required: [true, 'title must not be empty'],
-    unique: [true, 'title must not be unique'],
-    trim: true,
-  },
-  slug: String,
-  cover: {
-    type: String,
-    required: [true, 'title must not be empty'],
-  },
-  tags: {
-    type: [String],
-  },
-  text: {
-    type: String,
-    required: [true, 'post must not be empty'],
-    trim: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  likes: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
+const postsSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'post must belong to a user'],
     },
-  ],
-  comments: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+    title: {
+      type: String,
+      required: [true, 'title must not be empty'],
+      unique: [true, 'title must not be unique'],
+      trim: true,
+    },
+    slug: String,
+    cover: {
+      type: String,
+      required: [true, 'title must not be empty'],
+    },
+    tags: {
+      type: [String],
+    },
+    text: {
+      type: String,
+      required: [true, 'post must not be empty'],
+      trim: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    likes: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
       },
+    ],
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
 
-      text: {
-        type: String,
-        required: [true, 'text comment is a required field'],
+        text: {
+          type: String,
+          required: [true, 'text comment is a required field'],
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
       },
-      createdAt: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
-});
+    ],
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 //@TODO
-// Calc likes sum
-// Calc comments sum
 // Get 5 most popular posts
 
 // Doc Middlewares run with  save()  and create()  ( pre for before and post for after )
@@ -72,29 +76,20 @@ postsSchema.pre('save', function (next) {
 // populate user/likes users/comments users  on pre find
 postsSchema.pre(/^find/, function (next) {
   // this points to the current query
+
   this.populate({
     path: 'comments',
-    populate: {
-      path: 'user',
-      model: 'User',
-      select: 'firstName lastName userName avatar',
-    },
+    model: 'User',
+    select: 'firstName',
   })
     .populate({
       path: 'likes',
-      populate: {
-        path: 'user',
-        model: 'User',
-        select: 'firstName lastName userName avatar',
-      },
+      model: 'User',
     })
     .populate({
       path: 'user',
-      populate: {
-        path: 'user',
-        model: 'User',
-        select: ['firstName', 'lastName', 'userName', 'avatar'],
-      },
+      model: 'User',
+      select: '-readingList',
     });
 
   next();

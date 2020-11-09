@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema(
     },
     followingUsers: [mongoose.Schema.Types.ObjectId],
     followingTags: [mongoose.Schema.Types.ObjectId],
-    readingList: [mongoose.Schema.Types.ObjectId],
+    readingList: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }],
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -100,7 +100,14 @@ userSchema.pre('save', function (next) {
 
 userSchema.pre(/^find/, function (next) {
   // this points to the current query
-  this.find({ active: { $ne: false } });
+  this.populate({
+    path: 'readingList',
+
+    model: 'Post',
+    select: '-user',
+  });
+
+  console.log('end pop');
   next();
 });
 // delete a profile when deleting its user

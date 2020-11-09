@@ -226,6 +226,7 @@ exports.removeFromReadingList = catchAsync(async (req, res, next) => {
     doc: updatedUser,
   });
 });
+
 exports.getPostBySlug = catchAsync(async (req, res, next) => {
   const doc = await Post.findOne({ slug: req.params.slug }).populate({
     path: 'profile',
