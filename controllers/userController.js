@@ -74,7 +74,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       runValidators: true,
     }
   );
-  console.log(req.body);
+
   res.status(200).json({
     status: 'success',
     data: {
@@ -138,7 +138,7 @@ exports.unfollowUser = catchAsync(async (req, res, next) => {
 
 exports.followTag = catchAsync(async (req, res, next) => {
   // check if tag id valid
-  console.log(req.params.tagId);
+
   const tag = await Tag.findById(req.params.tagId);
   if (!tag) return next(new AppError('There is not tag with this id', 403));
   // check if user id it not already followed
