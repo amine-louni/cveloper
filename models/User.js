@@ -51,7 +51,8 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: 'default.jpg',
+      default:
+        'https://young-bayou-54809.herokuapp.com/assets/img/users/default.jpg',
     },
     createdAt: {
       type: Date,
