@@ -44,7 +44,10 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
     .jpeg({ quality: 90 })
     .toFile(`public/img/users/${req.file.filename}`);
 
-  next();
+  return res.status(200).json({
+    status: 'success',
+    data: `public/img/users/${req.file.filename}`,
+  });
 });
 
 exports.updateMe = catchAsync(async (req, res, next) => {

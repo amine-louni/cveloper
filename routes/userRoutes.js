@@ -23,11 +23,14 @@ router
 
 router
   .route('/update-me')
-  .patch(
+  .patch(authController.protect, userController.updateMe);
+
+router
+  .route('/upload-avatar')
+  .post(
     authController.protect,
     userController.uploadUserPhoto,
-    userController.resizeUserPhoto,
-    userController.updateMe
+    userController.resizeUserPhoto
   );
 
 router

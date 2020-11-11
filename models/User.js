@@ -107,7 +107,6 @@ userSchema.pre(/^find/, function (next) {
     select: '-user',
   });
 
-  console.log('end pop');
   next();
 });
 // delete a profile when deleting its user
