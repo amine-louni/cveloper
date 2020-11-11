@@ -208,8 +208,8 @@ exports.removeFromReadingList = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.currentUser._id);
   if (!user) return next(new AppError('there is no user with this id', 404));
 
-  if (req.currentUser.readingList.indexOf(req.params.postId) < 0)
-    return next(new AppError('this post is not the reading list', 403));
+  // if (!req.currentUser.readingList.some((item) => item._id === postId))
+  //   return next(new AppError('this post is not the reading list', 403));
 
   // remove from
 
