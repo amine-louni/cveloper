@@ -149,6 +149,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const resetURL = `${req.protocol}://young-bayou-54809.herokuapp.com/${resetToken}`;
   try {
     await new Email(user, resetURL).sendPasswordReset();
+
     res.status(200).json({
       status: 'success',
       message: `Token sent to email to ${req.body.email} !`,

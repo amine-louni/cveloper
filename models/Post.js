@@ -78,19 +78,14 @@ postsSchema.pre(/^find/, function (next) {
   // this points to the current query
 
   this.populate({
-    path: 'comments',
+    path: 'comments.user',
     model: 'User',
-    select: 'firstName',
-  })
-    .populate({
-      path: 'likes',
-      model: 'User',
-    })
-    .populate({
-      path: 'user',
-      model: 'User',
-      select: '-readingList',
-    });
+    select: '-readingList',
+  }).populate({
+    path: 'user',
+    model: 'User',
+    select: '-readingList',
+  });
 
   next();
 });
