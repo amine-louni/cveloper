@@ -41,8 +41,8 @@ exports.resizeCoverPost = catchAsync(async (req, res, next) => {
 
 exports.updateMyPost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id, {
-    new: false,
-    runValidators: false,
+    new: true,
+    runValidators: true,
   });
   if (!post) return next(new AppError('No document found with that ID', 404));
 
@@ -55,7 +55,10 @@ exports.updateMyPost = catchAsync(async (req, res, next) => {
     );
   }
 
+  post.title = req.body.title;
   post.text = req.body.text;
+  post.cover = req.body.cover;
+  post.tags = req.body.tags;
   const updatedPost = await post.save();
 
   res.status(201).json({
