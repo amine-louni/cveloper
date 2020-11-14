@@ -40,7 +40,10 @@ exports.resizeCoverPost = catchAsync(async (req, res, next) => {
 });
 
 exports.updateMyPost = catchAsync(async (req, res, next) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id, {
+    new: true,
+    runValidators: false,
+  });
   if (!post) return next(new AppError('No document found with that ID', 404));
 
   if (!post.user.equals(req.currentUser._id)) {
