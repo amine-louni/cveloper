@@ -99,17 +99,26 @@ exports.followUser = catchAsync(async (req, res, next) => {
   if (!user) return next(new AppError('There is not user with this id', 403));
   // check if user id it not already followed
 
-  if (req.currentUser.followingUsers.indexOf(req.params.userId) > 0)
+  if (req.currentUser.followingUsers.includes(req.params.userId))
     return next(new AppError('this user already followed', 403));
 
+  // You can not follow your self
+
+  if (req.currentUser.id === req.params.userId)
+    return next(new AppError('You can not follow your self', 403));
   // follow !
 
-  await User.findByIdAndUpdate(req.currentUser.id, {
-    $push: { followingUsers: req.params.userId },
-  });
+  const doc = await User.findByIdAndUpdate(
+    req.currentUser.id,
+    {
+      $push: { followingUsers: req.params.userId },
+    },
+    { new: true }
+  );
 
   res.status(201).json({
     status: 'success',
+    doc,
   });
 });
 
@@ -122,17 +131,19 @@ exports.unfollowUser = catchAsync(async (req, res, next) => {
     return next(new AppError('You can not follow your self', 403));
   // check if user id it not already followed
 
-  if (req.currentUser.followingUsers.indexOf(req.params.userId) < 0)
-    return next(new AppError('this user is not followed', 403));
-
   // unfollow !
 
-  await User.findByIdAndUpdate(req.currentUser.id, {
-    $pull: { followingUsers: req.params.userId },
-  });
+  const doc = await User.findByIdAndUpdate(
+    req.currentUser.id,
+    {
+      $pull: { followingUsers: req.params.userId },
+    },
+    { new: true }
+  );
 
   res.status(201).json({
     status: 'success',
+    doc,
   });
 });
 
@@ -148,30 +159,38 @@ exports.followTag = catchAsync(async (req, res, next) => {
 
   // follow !
 
-  await User.findByIdAndUpdate(req.currentUser.id, {
-    $push: { followingTags: req.params.tagId },
-  });
+  await User.findByIdAndUpdate(
+    req.currentUser.id,
+    {
+      $push: { followingTags: req.params.tagId },
+    },
+    { new: true }
+  );
 
   res.status(201).json({
     status: 'success',
   });
 });
 
-exports.unfollowUser = catchAsync(async (req, res, next) => {
+exports.unfollowTag = catchAsync(async (req, res, next) => {
   // check if user id valid
 
   const tag = await Tag.findById(req.params.tagId);
   if (!tag) return next(new AppError('There is not user with this id', 403));
   // check if user id it not already followed
 
-  if (req.currentUser.followingTags.indexOf(req.params.tagId) < 0)
+  if (!req.currentUser.followingTags.includes(req.params.tagId))
     return next(new AppError('this tag is not followed', 403));
 
   // unfollow !
 
-  const currentUser = await User.findByIdAndUpdate(req.currentUser.id, {
-    $pull: { followingTags: req.params.tagId },
-  });
+  const currentUser = await User.findByIdAndUpdate(
+    req.currentUser.id,
+    {
+      $pull: { followingTags: req.params.tagId },
+    },
+    { new: true }
+  );
 
   res.status(201).json({
     status: 'success',

@@ -214,6 +214,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   // Check if token exits with the req
+
   let token;
   if (
     req.headers.authorization &&

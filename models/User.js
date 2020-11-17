@@ -58,9 +58,10 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    followingUsers: [mongoose.Schema.Types.ObjectId],
+
     followingTags: [mongoose.Schema.Types.ObjectId],
     readingList: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }],
+    followingUsers: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -106,6 +107,13 @@ userSchema.pre(/^find/, function (next) {
 
     model: 'Post',
     select: '-user',
+  });
+
+  this.populate({
+    path: 'followingUsers',
+
+    model: 'User',
+    select: '-readingList',
   });
 
   next();

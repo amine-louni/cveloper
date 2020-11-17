@@ -20,7 +20,8 @@ router
     profileController.getAllProfiles
   )
   .post(authController.protect, setIdParam, profileController.createProfile);
-
+// [ GET] /profiles/user/:userId
+router.route('/user/:userId').get(profileController.getMyProfileByUserId);
 // [ GET | PATCH ] /profiles/me/(:id)
 router
   .route('/me')

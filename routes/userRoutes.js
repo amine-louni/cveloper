@@ -9,13 +9,7 @@ const router = express.Router();
 router.use('/:userId/profiles', profileRouter);
 router.use('/:userId/posts', postRouter);
 
-router
-  .route('/')
-  .get(
-    authController.protect,
-    authController.restrictTo('admin'),
-    userController.getAllUsers
-  );
+router.route('/').get(userController.getAllUsers);
 
 router
   .route('/me')
